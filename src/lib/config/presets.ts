@@ -54,7 +54,7 @@ export const DEFAULT_CONFIG: ExerciseConfig = {
 	columns: 2,
 	countPerPage: 20,
 	totalCount: 20,
-	showAnswerPage: true
+	showAnswerPage: false
 };
 
 /** 竖式默认每页题数 */
