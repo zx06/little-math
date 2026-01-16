@@ -1,0 +1,366 @@
+<script lang="ts">
+	import type { Problem } from '$lib/types';
+	import { OP_SYMBOLS } from '$lib/types';
+	import { zh } from '$lib/i18n/zh';
+
+	interface Props {
+		problems: Problem[];
+		countPerPage: number;
+		showAnswers: boolean;
+		isVertical: boolean;
+		columns?: 2 | 3;
+	}
+
+	let { problems, countPerPage, showAnswers, isVertical, columns = 2 }: Props = $props();
+
+	const t = zh.print;
+
+	const pages = $derived(() => {
+		const result: Problem[][] = [];
+		const perPage = countPerPage > 0 ? countPerPage : 20;
+		for (let i = 0; i < problems.length; i += perPage) {
+			result.push(problems.slice(i, i + perPage));
+		}
+		return result;
+	});
+
+	function getProblemParts(
+		p: Problem,
+		showAnswer: boolean
+	): { first: string; op: string; second: string; result: string } {
+		const op = OP_SYMBOLS[p.op];
+		const blank = '(\u00a0\u00a0\u00a0\u00a0)';
+
+		if (showAnswer) {
+			return { first: String(p.a), op, second: String(p.b), result: String(p.result) };
+		}
+
+		switch (p.blank) {
+			case 'first':
+				return { first: blank, op, second: String(p.b), result: String(p.result) };
+			case 'second':
+				return { first: String(p.a), op, second: blank, result: String(p.result) };
+			case 'result':
+				return { first: String(p.a), op, second: String(p.b), result: blank };
+		}
+	}
+
+	function padNumber(n: number | string, len: number): string {
+		return String(n).padStart(len, ' ');
+	}
+</script>
+
+<div class="sheet-container">
+	{#each pages() as page, pageIndex}
+		<div class="page" class:answer-page={showAnswers}>
+			<div class="page-header">
+				<h1>{t.exerciseTitle}{showAnswers ? ` - ${t.answerTitle}` : ''}</h1>
+				{#if !showAnswers}
+					<div class="info-row">
+						<div class="info-item">
+							<span class="info-label">{t.name}</span>
+							<span class="info-line"></span>
+						</div>
+						<div class="info-item">
+							<span class="info-label">{t.date}</span>
+							<span class="info-line"></span>
+						</div>
+						<div class="info-item">
+							<span class="info-label">{t.score}</span>
+							<span class="info-line short"></span>
+						</div>
+					</div>
+				{/if}
+			</div>
+
+			{#if isVertical}
+				<div class="vertical-grid">
+					{#each page as problem, idx}
+						{@const maxLen = Math.max(
+							String(problem.a).length,
+							String(problem.b).length,
+							String(problem.result).length
+						)}
+						<div class="vertical-problem">
+							<div class="problem-number">{pageIndex * countPerPage + idx + 1}.</div>
+							<div class="vertical-calc">
+								<div class="v-row top">
+									{#if showAnswers || problem.blank !== 'first'}
+										{padNumber(problem.a, maxLen)}
+									{:else}
+										<span class="v-blank">{' '.repeat(maxLen)}</span>
+									{/if}
+								</div>
+								<div class="v-row middle">
+									<span class="v-op">{OP_SYMBOLS[problem.op]}</span>
+									{#if showAnswers || problem.blank !== 'second'}
+										{padNumber(problem.b, maxLen)}
+									{:else}
+										<span class="v-blank">{' '.repeat(maxLen)}</span>
+									{/if}
+								</div>
+								<div class="v-line"></div>
+								<div class="v-row bottom">
+									{#if showAnswers || problem.blank !== 'result'}
+										{padNumber(problem.result, maxLen)}
+									{:else}
+										<span class="v-blank">{' '.repeat(maxLen)}</span>
+									{/if}
+								</div>
+							</div>
+						</div>
+					{/each}
+				</div>
+			{:else}
+				<div class="horizontal-grid" class:cols-2={columns === 2} class:cols-3={columns === 3}>
+					{#each page as problem, idx}
+						{@const parts = getProblemParts(problem, showAnswers)}
+						<div class="problem" class:problem-large={columns === 2}>
+							<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
+							<span class="part first">{parts.first}</span>
+							<span class="part op">{parts.op}</span>
+							<span class="part second">{parts.second}</span>
+							<span class="part eq">=</span>
+							<span class="part result">{parts.result}</span>
+						</div>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	{/each}
+</div>
+
+<style>
+	.sheet-container {
+		background: white;
+		font-family: 'Comic Sans MS', 'PingFang SC', 'Microsoft YaHei', cursive, sans-serif;
+	}
+
+	.page {
+		padding: 2rem 2.5rem;
+		min-height: 100vh;
+		box-sizing: border-box;
+		background: linear-gradient(180deg, #fff9e6 0%, #ffffff 100%);
+	}
+
+	.page-header {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	.page-header h1 {
+		font-size: 2rem;
+		font-weight: 700;
+		margin: 0 0 1rem;
+		color: #ff6b6b;
+		text-shadow: 2px 2px 0 #ffe066;
+		letter-spacing: 0.15em;
+	}
+
+	.page-header h1::before {
+		content: '🌟 ';
+	}
+
+	.page-header h1::after {
+		content: ' 🌟';
+	}
+
+	.info-row {
+		display: flex;
+		justify-content: center;
+		gap: 2.5rem;
+		font-size: 1.1rem;
+		color: #5a4a3a;
+	}
+
+	.info-item {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+	}
+
+	.info-label {
+		color: #ff9f43;
+		font-weight: 600;
+	}
+
+	.info-line {
+		display: inline-block;
+		width: 5rem;
+		border-bottom: 2px dashed #ffc078;
+	}
+
+	.info-line.short {
+		width: 3rem;
+	}
+
+	/* 横式网格 */
+	.horizontal-grid {
+		display: grid;
+	}
+
+	.horizontal-grid.cols-2 {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.5rem 4rem;
+	}
+
+	.horizontal-grid.cols-3 {
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem 2rem;
+	}
+
+	.problem {
+		display: flex;
+		align-items: baseline;
+		font-size: 1.3rem;
+		font-family: 'Comic Sans MS', 'PingFang SC', cursive, sans-serif;
+		line-height: 1.8;
+		white-space: nowrap;
+		color: #4a4a4a;
+		padding: 0.3rem 0.5rem;
+		border-radius: 8px;
+		transition: background 0.2s;
+	}
+
+	.problem:hover {
+		background: #fff3cd;
+	}
+
+	.problem.problem-large {
+		font-size: 1.6rem;
+		line-height: 2.2;
+	}
+
+	.problem-number {
+		color: #ff6b6b;
+		min-width: 2em;
+		text-align: right;
+		margin-right: 0.5em;
+		font-weight: 700;
+		font-size: 1em;
+	}
+
+	.part {
+		text-align: center;
+	}
+
+	.part.first,
+	.part.second {
+		min-width: 2em;
+		text-align: right;
+		color: #5c7cfa;
+		font-weight: 600;
+	}
+
+	.part.result {
+		min-width: 2.5em;
+		text-align: center;
+		color: #51cf66;
+		font-weight: 600;
+	}
+
+	.problem-large .part.first,
+	.problem-large .part.second {
+		min-width: 2.5em;
+	}
+
+	.problem-large .part.result {
+		min-width: 3em;
+	}
+
+	.part.op {
+		min-width: 1.5em;
+		text-align: center;
+		color: #ff922b;
+		font-weight: 700;
+	}
+
+	.part.eq {
+		min-width: 1.5em;
+		text-align: center;
+		color: #ff922b;
+		font-weight: 700;
+	}
+
+	/* 竖式网格 */
+	.vertical-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2rem;
+	}
+
+	.vertical-problem {
+		display: flex;
+		gap: 0.5rem;
+		font-family: 'Courier New', monospace;
+		font-size: 1.25rem;
+	}
+
+	.vertical-calc {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+	}
+
+	.v-row {
+		white-space: pre;
+		min-width: 3rem;
+		text-align: right;
+	}
+
+	.v-row.middle {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.v-op {
+		margin-right: auto;
+	}
+
+	.v-line {
+		width: 100%;
+		height: 2px;
+		background: #333;
+		margin: 0.25rem 0;
+	}
+
+	.v-blank {
+		display: inline-block;
+		border-bottom: 2px solid #333;
+		min-width: 2rem;
+	}
+
+	/* 打印样式 */
+	@page {
+		margin: 0;
+		size: A4;
+	}
+
+	@media print {
+		.sheet-container {
+			background: transparent;
+		}
+
+		.page {
+			page-break-after: always;
+			padding: 1.5cm;
+			min-height: 100vh;
+			width: 100vw;
+			box-sizing: border-box;
+			-webkit-print-color-adjust: exact !important;
+			print-color-adjust: exact !important;
+		}
+
+		.page:last-child {
+			page-break-after: avoid;
+		}
+
+		.answer-page {
+			page-break-before: always;
+		}
+
+		.problem:hover {
+			background: transparent !important;
+		}
+	}
+</style>
