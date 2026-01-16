@@ -23,8 +23,13 @@ src/
 │   ├── config/
 │   │   └── presets.ts    # 年级预设配置
 │   ├── components/       # UI 组件
-│   │   ├── ConfigPanel.svelte  # 左侧配置面板
-│   │   └── ExerciseSheet.svelte # 练习题显示/打印
+│   │   ├── ConfigPanel.svelte      # 左侧配置面板
+│   │   ├── ExerciseSheet.svelte    # 练习题显示/打印
+│   │   └── StatisticsPanel.svelte  # 统计面板
+│   ├── actions/          # Svelte actions
+│   │   └── track.ts      # 统计埋点 action
+│   ├── services/         # 业务服务
+│   │   └── statistics.ts # 统计服务（localStorage）
 │   ├── i18n/             # 国际化预留
 │   │   └── zh.ts         # 中文文本
 │   └── types.ts          # 类型定义
@@ -63,6 +68,16 @@ interface ExerciseConfig {
   totalCount: number;
   showAnswerPage: boolean;
 }
+
+interface StatisticsData {
+  totalVisits: number;
+  totalGenerations: number;
+  totalPrints: number;
+  operationsCount: Record<Operation, number>;
+  gradePresetCount: Record<string, number>;
+  lastVisitDate: string;
+  dailyStats: Record<string, { visits: number; generations: number; prints: number }>;
+}
 ```
 
 ## 题目生成约束
@@ -91,6 +106,26 @@ interface ExerciseConfig {
 - 使用 `@page { margin: 0 }` 让背景覆盖整页
 - 打印时隐藏配置面板，只显示练习题
 - 答案页通过 `page-break-before: always` 分页
+
+## 统计功能
+
+- 使用 localStorage 存储统计数据
+- 统计内容：
+  - 页面访问次数
+  - 练习题生成次数
+  - 打印次数
+  - 各运算类型使用次数
+  - 各年级预设使用次数
+  - 最近7天每日数据
+- 埋点实现：
+  - 使用 Svelte action (`use:track`) 声明式埋点
+  - 页面加载时调用 `trackVisit()`
+  - 生成按钮点击时自动记录
+  - 打印按钮点击时自动记录
+- 统计面板：
+  - 右下角浮动按钮（📊）打开
+  - 显示总览、运算类型分布、最近7天数据
+  - 支持重置统计
 
 ## 国际化预留
 

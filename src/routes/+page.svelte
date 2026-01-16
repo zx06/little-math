@@ -4,7 +4,9 @@
 	import { generateProblems } from '$lib/generators/arithmetic';
 	import ConfigPanel from '$lib/components/ConfigPanel.svelte';
 	import ExerciseSheet from '$lib/components/ExerciseSheet.svelte';
+	import StatisticsPanel from '$lib/components/StatisticsPanel.svelte';
 	import { zh } from '$lib/i18n/zh';
+	import { trackVisit } from '$lib/services/statistics';
 
 	let config: ExerciseConfig = $state({ ...DEFAULT_CONFIG });
 	let problems: Problem[] = $state([]);
@@ -22,6 +24,7 @@
 		}, 100);
 	}
 
+	trackVisit();
 	handleGenerate();
 </script>
 
@@ -67,6 +70,8 @@
 			{/if}
 		</section>
 	</main>
+
+	<StatisticsPanel />
 </div>
 
 <style>

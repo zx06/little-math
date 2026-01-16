@@ -48,3 +48,25 @@ export const OP_NAMES: Record<Operation, string> = {
 	mul: '乘法',
 	div: '除法'
 };
+
+/** 统计数据接口 */
+export interface StatisticsData {
+	totalVisits: number;
+	totalGenerations: number;
+	totalPrints: number;
+	operationsCount: Record<Operation, number>;
+	gradePresetCount: Record<string, number>;
+	lastVisitDate: string;
+	dailyStats: Record<string, { visits: number; generations: number; prints: number }>;
+}
+
+/** 初始化统计数据 */
+export const INITIAL_STATS: StatisticsData = {
+	totalVisits: 0,
+	totalGenerations: 0,
+	totalPrints: 0,
+	operationsCount: { add: 0, sub: 0, mul: 0, div: 0 },
+	gradePresetCount: {},
+	lastVisitDate: '',
+	dailyStats: {}
+};

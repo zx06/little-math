@@ -15,6 +15,7 @@
   - `3 + ( ) = 8`（第二个数留空）
   - `3 + 5 = ( )`（结果留空）
 - **答案页**：可选生成答案页，方便批改
+- **使用统计**：实时记录访问、生成、打印次数，支持查看运算类型使用分布和最近7天数据
 - **儿童化设计**：彩色界面、可爱字体、趣味装饰
 - **打印友好**：保留彩色样式，背景覆盖整页
 
@@ -64,8 +65,13 @@ src/
 │   ├── config/
 │   │   └── presets.ts    # 年级预设配置
 │   ├── components/       # UI 组件
-│   │   ├── ConfigPanel.svelte
-│   │   └── ExerciseSheet.svelte
+│   │   ├── ConfigPanel.svelte      # 左侧配置面板
+│   │   ├── ExerciseSheet.svelte    # 练习题显示/打印
+│   │   └── StatisticsPanel.svelte  # 统计面板
+│   ├── actions/          # Svelte actions
+│   │   └── track.ts      # 统计埋点 action
+│   ├── services/         # 业务服务
+│   │   └── statistics.ts # 统计服务
 │   ├── i18n/             # 国际化（预留）
 │   └── types.ts          # 类型定义
 ├── routes/

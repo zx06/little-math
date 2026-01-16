@@ -8,6 +8,7 @@
 		VERTICAL_COUNT_PER_PAGE
 	} from '$lib/config/presets';
 	import { zh } from '$lib/i18n/zh';
+	import { track } from '$lib/actions/track';
 
 	interface Props {
 		config: ExerciseConfig;
@@ -184,8 +185,19 @@
 	</div>
 
 	<div class="button-group">
-		<button class="btn primary" onclick={onGenerate}>{zh.buttons.generate}</button>
-		<button class="btn secondary" onclick={onPrint}>{zh.buttons.print}</button>
+		<button
+			class="btn primary"
+			onclick={onGenerate}
+			use:track={{
+				type: 'generation',
+				data: { operations: config.operations, gradePreset: config.gradePreset }
+			}}
+		>
+			{zh.buttons.generate}
+		</button>
+		<button class="btn secondary" onclick={onPrint} use:track={{ type: 'print' }}>
+			{zh.buttons.print}
+		</button>
 	</div>
 </div>
 
