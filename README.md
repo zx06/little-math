@@ -54,6 +54,14 @@ pnpm check
 - [TypeScript](https://www.typescriptlang.org/) - 类型安全
 - [Vite](https://vitejs.dev/) - 构建工具
 
+## 🔒 安全
+
+- **依赖安全**：使用 pnpm.overrides 强制升级 `cookie` 包到安全版本
+  - 修复 CVE-2024-47764 漏洞
+  - 原因：`@sveltejs/kit` 2.x 系列依赖的 `cookie ^0.6.0` 存在 XSS 漏洞
+  - 解决方案：通过 overrides 强制使用 `cookie ^0.7.0`（当前版本 0.7.2）
+  - 参考：https://github.com/advisories/GHSA-pxg6-pf52-xh8x
+
 ## 📁 项目结构
 
 ```

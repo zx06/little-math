@@ -136,3 +136,42 @@ interface StatisticsData {
 
 - 目标平台：Vercel
 - 使用 @sveltejs/adapter-auto（Vercel 自动识别）
+
+## 安全
+
+### 依赖安全
+
+- 使用 pnpm.overrides 强制升级 `cookie` 包到安全版本
+- 修复 CVE-2024-47764 漏洞
+
+### CVE-2024-47764 说明
+
+**漏洞详情：**
+- 影响范围：`cookie` 包版本 < 0.7.0
+- 漏洞类型：XSS（跨站脚本攻击）
+- 影响：cookie 名称、路径和域名的验证不严格，可能导致攻击者注入恶意代码
+
+**修复方案：**
+```json
+{
+  "pnpm": {
+    "overrides": {
+      "cookie": "^0.7.0"
+    }
+  }
+}
+```
+
+**为什么需要 overrides：**
+- `@sveltejs/kit` 2.x 系列的所有版本都依赖 `cookie ^0.6.0`
+- 即使升级到最新版本的 `@sveltejs/kit`，也无法直接解决此漏洞
+- 使用 pnpm.overrides 可以强制覆盖依赖树中的 cookie 版本
+
+**验证：**
+```bash
+pnpm why cookie  # 应显示 cookie 0.7.2
+```
+
+**参考：**
+- GitHub Advisory: https://github.com/advisories/GHSA-pxg6-pf52-xh8x
+- CVE Details: https://nvd.nist.gov/vuln/detail/CVE-2024-47764
