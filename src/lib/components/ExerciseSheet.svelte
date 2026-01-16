@@ -31,17 +31,13 @@
 		const op = OP_SYMBOLS[p.op];
 		const blank = '(\u00a0\u00a0\u00a0\u00a0)';
 
-		if (showAnswer) {
-			return { first: String(p.a), op, second: String(p.b), result: String(p.result) };
-		}
-
 		switch (p.blank) {
 			case 'first':
-				return { first: blank, op, second: String(p.b), result: String(p.result) };
+				return { first: showAnswer ? `(${p.a})` : blank, op, second: String(p.b), result: String(p.result) };
 			case 'second':
-				return { first: String(p.a), op, second: blank, result: String(p.result) };
+				return { first: String(p.a), op, second: showAnswer ? `(${p.b})` : blank, result: String(p.result) };
 			case 'result':
-				return { first: String(p.a), op, second: String(p.b), result: blank };
+				return { first: String(p.a), op, second: String(p.b), result: showAnswer ? `(${p.result})` : blank };
 		}
 	}
 
@@ -85,24 +81,30 @@
 							<div class="problem-number">{pageIndex * countPerPage + idx + 1}.</div>
 							<div class="vertical-calc">
 								<div class="v-row top">
-									{#if showAnswers || problem.blank !== 'first'}
+									{#if problem.blank !== 'first'}
 										{padNumber(problem.a, maxLen)}
+									{:else if showAnswers}
+										<span class="v-answer">({padNumber(problem.a, maxLen)})</span>
 									{:else}
 										<span class="v-blank">{' '.repeat(maxLen)}</span>
 									{/if}
 								</div>
 								<div class="v-row middle">
 									<span class="v-op">{OP_SYMBOLS[problem.op]}</span>
-									{#if showAnswers || problem.blank !== 'second'}
+									{#if problem.blank !== 'second'}
 										{padNumber(problem.b, maxLen)}
+									{:else if showAnswers}
+										<span class="v-answer">({padNumber(problem.b, maxLen)})</span>
 									{:else}
 										<span class="v-blank">{' '.repeat(maxLen)}</span>
 									{/if}
 								</div>
 								<div class="v-line"></div>
 								<div class="v-row bottom">
-									{#if showAnswers || problem.blank !== 'result'}
+									{#if problem.blank !== 'result'}
 										{padNumber(problem.result, maxLen)}
+									{:else if showAnswers}
+										<span class="v-answer">({padNumber(problem.result, maxLen)})</span>
 									{:else}
 										<span class="v-blank">{' '.repeat(maxLen)}</span>
 									{/if}
