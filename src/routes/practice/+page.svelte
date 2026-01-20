@@ -14,6 +14,13 @@
 	import { browser } from '$app/environment';
 	import { addWrongRecord, generateWrongReview } from '$lib/services/wrongBook';
 
+	interface AnswerRecord {
+		problem: AnyProblem;
+		userAnswer: number;
+		correctAnswer: number;
+		isCorrect: boolean;
+	}
+
 	let config: ExerciseConfig = $state({ ...DEFAULT_CONFIG, totalCount: 10 });
 	let problems: AnyProblem[] = $state([]);
 	let currentIndex = $state(0);
@@ -21,6 +28,7 @@
 	let phase: 'config' | 'practice' | 'result' = $state('config');
 	let timerRunning = $state(false);
 	let finalTime = $state(0);
+	let answerRecords: AnswerRecord[] = $state([]);
 
 	let timerRef: { reset: () => void; getSeconds: () => number } | undefined;
 	let answerInputRef: { focus: () => void; clear: () => void } | undefined;
@@ -45,6 +53,7 @@
 		problems = generateAllProblems();
 		currentIndex = 0;
 		correctCount = 0;
+		answerRecords = [];
 		phase = 'practice';
 		timerRunning = true;
 		timerRef?.reset();
@@ -85,7 +94,16 @@
 
 	function handleAnswer(answer: number) {
 		const correct = getCorrectAnswer(problems[currentIndex]);
-		if (answer === correct) {
+		const isCorrect = answer === correct;
+
+		answerRecords.push({
+			problem: problems[currentIndex],
+			userAnswer: answer,
+			correctAnswer: correct,
+			isCorrect
+		});
+
+		if (isCorrect) {
 			correctCount++;
 		} else {
 			addWrongRecord(problems[currentIndex], answer, correct);
@@ -138,6 +156,7 @@
 				total={problems.length}
 				correct={correctCount}
 				timeSpent={finalTime}
+				records={answerRecords}
 				onRestart={handleRestart}
 				onBackHome={handleBackHome}
 			/>

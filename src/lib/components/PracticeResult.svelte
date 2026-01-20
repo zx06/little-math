@@ -1,13 +1,24 @@
 <script lang="ts">
+	import type { AnyProblem, Problem, MakeTargetProblem, ChainProblem, CompareProblem } from '$lib/types';
+	import { OP_SYMBOLS } from '$lib/types';
+
+	interface AnswerRecord {
+		problem: AnyProblem;
+		userAnswer: number;
+		correctAnswer: number;
+		isCorrect: boolean;
+	}
+
 	interface Props {
 		total: number;
 		correct: number;
 		timeSpent: number; // 秒
+		records: AnswerRecord[];
 		onRestart: () => void;
 		onBackHome: () => void;
 	}
 
-	let { total, correct, timeSpent, onRestart, onBackHome }: Props = $props();
+	let { total, correct, timeSpent, records, onRestart, onBackHome }: Props = $props();
 
 	let accuracy = $derived(total > 0 ? Math.round((correct / total) * 100) : 0);
 
@@ -22,6 +33,41 @@
 		if (accuracy >= 70) return '⭐';
 		if (accuracy >= 50) return '👍';
 		return '💪';
+	}
+
+	function formatExpression(a: number, b: number, op: string): string {
+		return `${a} ${op} ${b}`;
+	}
+
+	function formatProblem(problem: AnyProblem): string {
+		if ('type' in problem) {
+			if (problem.type === 'makeTarget') {
+				const p = problem as MakeTargetProblem;
+				return p.blankFirst ? `___ + ${p.a} = ${p.target}` : `${p.a} + ___ = ${p.target}`;
+			}
+			if (problem.type === 'chain') {
+				const p = problem as ChainProblem;
+				let str = '';
+				for (let i = 0; i < p.numbers.length; i++) {
+					str += p.numbers[i];
+					if (i < p.ops.length) {
+						str += ` ${OP_SYMBOLS[p.ops[i]]} `;
+					}
+				}
+				return str + ' = ___';
+			}
+			if (problem.type === 'compare') {
+				const p = problem as CompareProblem;
+				const left = formatExpression(p.left.a, p.left.b, OP_SYMBOLS[p.left.op]);
+				const right = formatExpression(p.right.a, p.right.b, OP_SYMBOLS[p.right.op]);
+				return `${left} ___ ${right}`;
+			}
+		}
+		const p = problem as Problem;
+		const first = p.blank === 'first' ? '___' : p.a;
+		const second = p.blank === 'second' ? '___' : p.b;
+		const result = p.blank === 'result' ? '___' : p.result;
+		return `${first} ${OP_SYMBOLS[p.op]} ${second} = ${result}`;
 	}
 </script>
 
@@ -42,6 +88,23 @@
 			<span class="value">{formatTime(timeSpent)}</span>
 		</div>
 	</div>
+	<div class="details">
+		<h3>答题详情</h3>
+		<div class="records-list">
+			{#each records as record, idx}
+				<div class="record-item" class:correct={record.isCorrect} class:wrong={!record.isCorrect}>
+					<span class="index">{idx + 1}.</span>
+					<span class="problem">{formatProblem(record.problem)}</span>
+					<span class="status">{record.isCorrect ? '✓' : '✗'}</span>
+					{#if !record.isCorrect}
+						<span class="your-answer">你的答案: {record.userAnswer}</span>
+						<span class="correct-answer">正确: {record.correctAnswer}</span>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	</div>
+
 	<div class="actions">
 		<button class="primary" onclick={onRestart}>再来一次</button>
 		<button class="secondary" onclick={onBackHome}>返回首页</button>
@@ -102,5 +165,59 @@
 	.secondary {
 		background: linear-gradient(135deg, #51cf66, #20c997);
 		color: white;
+	}
+	.details {
+		margin-top: 2rem;
+		padding-top: 1.5rem;
+		border-top: 2px dashed #eee;
+	}
+	.details h3 {
+		text-align: center;
+		color: #666;
+		margin-bottom: 1rem;
+	}
+	.records-list {
+		max-height: 300px;
+		overflow-y: auto;
+	}
+	.record-item {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.5rem 1rem;
+		border-radius: 8px;
+		margin-bottom: 0.5rem;
+		font-size: 1rem;
+	}
+	.record-item.correct {
+		background: #e8f5e9;
+	}
+	.record-item.wrong {
+		background: #ffebee;
+	}
+	.index {
+		color: #999;
+		width: 2rem;
+	}
+	.problem {
+		flex: 1;
+		color: #333;
+	}
+	.status {
+		font-size: 1.25rem;
+	}
+	.record-item.correct .status {
+		color: #51cf66;
+	}
+	.record-item.wrong .status {
+		color: #ff6b6b;
+	}
+	.your-answer {
+		color: #ff6b6b;
+		font-size: 0.875rem;
+	}
+	.correct-answer {
+		color: #51cf66;
+		font-size: 0.875rem;
 	}
 </style>
