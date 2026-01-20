@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Problem, MakeTargetProblem, ChainProblem } from '$lib/types';
+	import type { Problem, MakeTargetProblem, ChainProblem, CompareProblem } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 
 	interface Props {
-		problem: Problem | MakeTargetProblem | ChainProblem;
+		problem: Problem | MakeTargetProblem | ChainProblem | CompareProblem;
 	}
 
 	let { problem }: Props = $props();
@@ -31,6 +31,12 @@
 				str += ' = ';
 				str += p.blank === 'result' ? '___' : p.result;
 				return str;
+			}
+			if (problem.type === 'compare') {
+				const p = problem as CompareProblem;
+				const left = `${p.left.a} ${OP_SYMBOLS[p.left.op]} ${p.left.b}`;
+				const right = `${p.right.a} ${OP_SYMBOLS[p.right.op]} ${p.right.b}`;
+				return `${left} ○ ${right}`;
 			}
 		}
 		// 普通题目

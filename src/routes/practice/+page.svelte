@@ -1,11 +1,13 @@
 <script lang="ts">
-	import type { ExerciseConfig, Problem, MakeTargetProblem, ChainProblem, AnyProblem } from '$lib/types';
+	import type { ExerciseConfig, Problem, MakeTargetProblem, ChainProblem, CompareProblem, AnyProblem, CompareSymbol } from '$lib/types';
 	import { DEFAULT_CONFIG } from '$lib/config/presets';
 	import { generateProblems } from '$lib/generators/arithmetic';
 	import { generateMakeTargetProblems } from '$lib/generators/makeTarget';
 	import { generateChainProblems } from '$lib/generators/chain';
+	import { generateCompareProblems } from '$lib/generators/compare';
 	import Timer from '$lib/components/Timer.svelte';
 	import AnswerInput from '$lib/components/AnswerInput.svelte';
+	import CompareInput from '$lib/components/CompareInput.svelte';
 	import ProblemDisplay from '$lib/components/ProblemDisplay.svelte';
 	import PracticeResult from '$lib/components/PracticeResult.svelte';
 	import PracticeConfig from '$lib/components/PracticeConfig.svelte';
@@ -16,8 +18,8 @@
 
 	interface AnswerRecord {
 		problem: AnyProblem;
-		userAnswer: number;
-		correctAnswer: number;
+		userAnswer: number | CompareSymbol;
+		correctAnswer: number | CompareSymbol;
 		isCorrect: boolean;
 	}
 
@@ -46,7 +48,19 @@
 				config.totalCount
 			);
 		}
+		if (config.problemMode === 'compare') {
+			return generateCompareProblems(
+				config.range.min,
+				config.range.max,
+				config.operations,
+				config.totalCount
+			);
+		}
 		return generateProblems(config);
+	}
+
+	function isCompareProblem(p: AnyProblem): p is CompareProblem {
+		return 'type' in p && p.type === 'compare';
 	}
 
 	function handleStart() {
@@ -109,6 +123,28 @@
 			addWrongRecord(problems[currentIndex], answer, correct);
 		}
 
+		moveToNext();
+	}
+
+	function handleCompareAnswer(answer: CompareSymbol) {
+		const problem = problems[currentIndex] as CompareProblem;
+		const isCorrect = answer === problem.answer;
+
+		answerRecords.push({
+			problem: problems[currentIndex],
+			userAnswer: answer,
+			correctAnswer: problem.answer,
+			isCorrect
+		});
+
+		if (isCorrect) {
+			correctCount++;
+		}
+
+		moveToNext();
+	}
+
+	function moveToNext() {
 		if (currentIndex < problems.length - 1) {
 			currentIndex++;
 			answerInputRef?.clear();
@@ -149,7 +185,11 @@
 					<Timer bind:this={timerRef} running={timerRunning} />
 				</div>
 				<ProblemDisplay problem={problems[currentIndex]} />
-				<AnswerInput bind:this={answerInputRef} onSubmit={handleAnswer} />
+				{#if isCompareProblem(problems[currentIndex])}
+					<CompareInput onSubmit={handleCompareAnswer} />
+				{:else}
+					<AnswerInput bind:this={answerInputRef} onSubmit={handleAnswer} />
+				{/if}
 			</div>
 		{:else if phase === 'result'}
 			<PracticeResult

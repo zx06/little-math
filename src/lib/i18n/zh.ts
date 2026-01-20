@@ -35,7 +35,8 @@ export const zh = {
 		chainMode: '连续运算',
 		chainLength: '运算个数',
 		chainLength3: '3个数',
-		chainLength4: '4个数'
+		chainLength4: '4个数',
+		compareMode: '比较大小'
 	},
 
 	// 按钮

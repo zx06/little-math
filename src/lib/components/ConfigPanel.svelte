@@ -81,6 +81,7 @@
 				<option value="normal">{t.normalMode}</option>
 				<option value="makeTarget">{t.makeTargetMode}</option>
 				<option value="chain">{t.chainMode}</option>
+				<option value="compare">{t.compareMode}</option>
 			</select>
 		</label>
 	</div>
@@ -110,6 +111,7 @@
 		</div>
 	{/if}
 
+	{#if config.problemMode !== 'compare'}
 	<div class="config-section">
 		<label>
 			{t.exerciseType}
@@ -119,6 +121,7 @@
 			</select>
 		</label>
 	</div>
+{/if}
 
 	{#if !config.isVertical}
 		<div class="config-section">
@@ -132,7 +135,7 @@
 		</div>
 	{/if}
 
-	{#if config.problemMode === 'normal' || config.problemMode === 'chain'}
+	{#if config.problemMode === 'normal' || config.problemMode === 'chain' || config.problemMode === 'compare'}
 		<div class="config-section">
 			<span class="label">{t.operations}</span>
 			<div class="checkbox-group">

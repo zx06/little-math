@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Problem, MakeTargetProblem, ChainProblem } from '$lib/types';
+	import type { Problem, MakeTargetProblem, ChainProblem, CompareProblem } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 	import { zh } from '$lib/i18n/zh';
 
-	type AnyProblem = Problem | MakeTargetProblem | ChainProblem;
+	type AnyProblem = Problem | MakeTargetProblem | ChainProblem | CompareProblem;
 
 	interface Props {
 		problems: AnyProblem[];
@@ -52,6 +52,17 @@
 
 	function isChainProblem(p: AnyProblem): p is ChainProblem {
 		return 'type' in p && p.type === 'chain';
+	}
+
+	function isCompareProblem(p: AnyProblem): p is CompareProblem {
+		return 'type' in p && p.type === 'compare';
+	}
+
+	function getCompareDisplay(p: CompareProblem, showAnswer: boolean): { left: string; symbol: string; right: string } {
+		const left = `${p.left.a} ${OP_SYMBOLS[p.left.op]} ${p.left.b}`;
+		const right = `${p.right.a} ${OP_SYMBOLS[p.right.op]} ${p.right.b}`;
+		const symbol = showAnswer ? p.answer : '○';
+		return { left, symbol, right };
 	}
 
 	function getMakeTargetParts(
@@ -147,7 +158,7 @@
 			{#if isVertical}
 				<div class="vertical-grid">
 					{#each page as problem, idx}
-						{#if !isMakeTargetProblem(problem) && !isChainProblem(problem)}
+						{#if !isMakeTargetProblem(problem) && !isChainProblem(problem) && !isCompareProblem(problem)}
 							{@const maxLen = Math.max(
 								String(problem.a).length,
 								String(problem.b).length,
@@ -193,7 +204,15 @@
 			{:else}
 				<div class="horizontal-grid" class:cols-2={columns === 2} class:cols-3={columns === 3}>
 					{#each page as problem, idx}
-						{#if isChainProblem(problem)}
+						{#if isCompareProblem(problem)}
+							{@const compare = getCompareDisplay(problem, showAnswers)}
+							<div class="problem compare-problem" class:problem-large={columns === 2}>
+								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
+								<span class="compare-left">{compare.left}</span>
+								<span class="compare-symbol" class:compare-answer={showAnswers}>{compare.symbol}</span>
+								<span class="compare-right">{compare.right}</span>
+							</div>
+						{:else if isChainProblem(problem)}
 							<div class="problem chain-problem" class:problem-large={columns === 2}>
 								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
 								<span class="chain-expr">{getChainDisplay(problem, showAnswers)}</span>
@@ -378,6 +397,28 @@
 	.chain-problem .chain-expr {
 		color: #5c7cfa;
 		font-weight: 600;
+	}
+
+	/* 比较大小题目 */
+	.compare-problem .compare-left,
+	.compare-problem .compare-right {
+		color: #5c7cfa;
+		font-weight: 600;
+	}
+
+	.compare-symbol {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 2em;
+		margin: 0 0.5em;
+		font-size: 1.2em;
+		color: #ff922b;
+		font-weight: 700;
+	}
+
+	.compare-symbol.compare-answer {
+		color: #51cf66;
 	}
 
 	/* 竖式网格 */

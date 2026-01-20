@@ -51,6 +51,7 @@
 				<option value="normal">普通计算</option>
 				<option value="makeTarget">凑数练习</option>
 				<option value="chain">连续运算</option>
+				<option value="compare">比较大小</option>
 			</select>
 		</label>
 	</div>

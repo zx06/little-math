@@ -5,7 +5,10 @@ export type Operation = 'add' | 'sub' | 'mul' | 'div';
 export type BlankPosition = 'first' | 'second' | 'result';
 
 /** 题目模式 */
-export type ProblemMode = 'normal' | 'makeTarget' | 'chain';
+export type ProblemMode = 'normal' | 'makeTarget' | 'chain' | 'compare';
+
+/** 比较符号 */
+export type CompareSymbol = '>' | '<' | '=';
 
 /** 凑数目标 */
 export type MakeTargetValue = 10 | 20 | 100;
@@ -26,6 +29,24 @@ export interface ChainProblem {
 	ops: Operation[];
 	result: number;
 	blank: 'result' | number;
+}
+
+/** 比较大小题目 */
+export interface CompareProblem {
+	type: 'compare';
+	left: {
+		a: number;
+		b: number;
+		op: Operation;
+		result: number;
+	};
+	right: {
+		a: number;
+		b: number;
+		op: Operation;
+		result: number;
+	};
+	answer: CompareSymbol;
 }
 
 /** 单道题目 */
@@ -91,7 +112,7 @@ export interface StatisticsData {
 }
 
 /** 任意题目类型 */
-export type AnyProblem = Problem | MakeTargetProblem | ChainProblem;
+export type AnyProblem = Problem | MakeTargetProblem | ChainProblem | CompareProblem;
 
 /** 错题记录 */
 export interface WrongRecord {

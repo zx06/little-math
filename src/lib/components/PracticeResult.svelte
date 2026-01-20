@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { AnyProblem, Problem, MakeTargetProblem, ChainProblem, CompareProblem } from '$lib/types';
+	import type { AnyProblem, Problem, MakeTargetProblem, ChainProblem, CompareProblem, CompareSymbol } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 
 	interface AnswerRecord {
 		problem: AnyProblem;
-		userAnswer: number;
-		correctAnswer: number;
+		userAnswer: number | CompareSymbol;
+		correctAnswer: number | CompareSymbol;
 		isCorrect: boolean;
 	}
 
