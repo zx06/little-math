@@ -9,6 +9,7 @@
 	import Timer from '$lib/components/Timer.svelte';
 	import AnswerInput from '$lib/components/AnswerInput.svelte';
 	import CompareInput from '$lib/components/CompareInput.svelte';
+	import RemainderInput from '$lib/components/RemainderInput.svelte';
 	import ProblemDisplay from '$lib/components/ProblemDisplay.svelte';
 	import PracticeResult from '$lib/components/PracticeResult.svelte';
 	import PracticeConfig from '$lib/components/PracticeConfig.svelte';
@@ -35,6 +36,7 @@
 
 	let timerRef: { reset: () => void; getSeconds: () => number } | undefined = $state();
 	let answerInputRef: { focus: () => void; clear: () => void } | undefined = $state();
+	let remainderInputRef: { focus: () => void; clear: () => void } | undefined = $state();
 
 	function generateAllProblems(): AnyProblem[] {
 		if (config.problemMode === 'makeTarget') {
@@ -70,6 +72,10 @@
 
 	function isCompareProblem(p: AnyProblem): p is CompareProblem {
 		return 'type' in p && p.type === 'compare';
+	}
+
+	function isRemainderProblem(p: AnyProblem): p is RemainderProblem {
+		return 'type' in p && p.type === 'remainder';
 	}
 
 	function handleStart() {
@@ -119,6 +125,21 @@
 		}
 	});
 
+	$effect(() => {
+		if (phase === 'practice' && problems.length > 0) {
+			const currentProblem = problems[currentIndex];
+
+			// 使用 setTimeout 确保组件已渲染
+			setTimeout(() => {
+				if (isRemainderProblem(currentProblem)) {
+					remainderInputRef?.focus();
+				} else if (!isCompareProblem(currentProblem)) {
+					answerInputRef?.focus();
+				}
+			}, 0);
+		}
+	});
+
 	function handleAnswer(answer: number) {
 		const correct = getCorrectAnswer(problems[currentIndex]);
 		const isCorrect = answer === correct;
@@ -134,6 +155,54 @@
 			correctCount++;
 		} else {
 			addWrongRecord(problems[currentIndex], answer, correct);
+		}
+
+		moveToNext();
+	}
+
+	function handleRemainderAnswer(answer: { quotient: number; remainder: number }) {
+		const problem = problems[currentIndex] as RemainderProblem;
+		let isCorrect = true;
+
+		// 根据留空位置检查答案
+		if (problem.blank === 'quotient' || problem.blank === 'both') {
+			if (answer.quotient !== problem.quotient) {
+				isCorrect = false;
+			}
+		}
+		if (problem.blank === 'remainder' || problem.blank === 'both') {
+			if (answer.remainder !== problem.remainder) {
+				isCorrect = false;
+			}
+		}
+
+		// 构造用户答案字符串用于记录
+		const userAnswerStr =
+			problem.blank === 'both'
+				? `${answer.quotient}...${answer.remainder}`
+				: problem.blank === 'quotient'
+					? `${answer.quotient}`
+					: `...${answer.remainder}`;
+
+		// 构造正确答案字符串
+		const correctAnswerStr =
+			problem.blank === 'both'
+				? `${problem.quotient}...${problem.remainder}`
+				: problem.blank === 'quotient'
+					? `${problem.quotient}`
+					: `...${problem.remainder}`;
+
+		answerRecords.push({
+			problem: problems[currentIndex],
+			userAnswer: userAnswerStr as any,
+			correctAnswer: correctAnswerStr as any,
+			isCorrect
+		});
+
+		if (isCorrect) {
+			correctCount++;
+		} else {
+			addWrongRecord(problems[currentIndex], userAnswerStr as any, correctAnswerStr as any);
 		}
 
 		moveToNext();
@@ -160,8 +229,17 @@
 	function moveToNext() {
 		if (currentIndex < problems.length - 1) {
 			currentIndex++;
-			answerInputRef?.clear();
-			answerInputRef?.focus();
+			const nextProblem = problems[currentIndex];
+
+			if (isRemainderProblem(nextProblem)) {
+				remainderInputRef?.clear();
+				remainderInputRef?.focus();
+			} else if (isCompareProblem(nextProblem)) {
+				// CompareInput 不需要 focus
+			} else {
+				answerInputRef?.clear();
+				answerInputRef?.focus();
+			}
 		} else {
 			timerRunning = false;
 			finalTime = timerRef?.getSeconds() ?? 0;
@@ -200,6 +278,12 @@
 				<ProblemDisplay problem={problems[currentIndex]} />
 				{#if isCompareProblem(problems[currentIndex])}
 					<CompareInput onSubmit={handleCompareAnswer} />
+				{:else if isRemainderProblem(problems[currentIndex])}
+					<RemainderInput
+						bind:this={remainderInputRef}
+						blank={(problems[currentIndex] as RemainderProblem).blank}
+						onSubmit={handleRemainderAnswer}
+					/>
 				{:else}
 					<AnswerInput bind:this={answerInputRef} onSubmit={handleAnswer} />
 				{/if}

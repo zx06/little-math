@@ -84,7 +84,7 @@
 		</div>
 	{/if}
 
-	{#if config.problemMode !== 'makeTarget'}
+	{#if config.problemMode !== 'makeTarget' && config.problemMode !== 'remainder'}
 		<div class="config-row">
 			<span>运算</span>
 			<div class="checkbox-group">
