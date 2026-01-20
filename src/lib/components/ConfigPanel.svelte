@@ -80,9 +80,22 @@
 			<select bind:value={config.problemMode}>
 				<option value="normal">{t.normalMode}</option>
 				<option value="makeTarget">{t.makeTargetMode}</option>
+				<option value="chain">{t.chainMode}</option>
 			</select>
 		</label>
 	</div>
+
+	{#if config.problemMode === 'chain'}
+		<div class="config-section">
+			<label>
+				{t.chainLength}
+				<select bind:value={config.chainLength}>
+					<option value={3}>{t.chainLength3}</option>
+					<option value={4}>{t.chainLength4}</option>
+				</select>
+			</label>
+		</div>
+	{/if}
 
 	{#if config.problemMode === 'makeTarget'}
 		<div class="config-section">
@@ -119,7 +132,7 @@
 		</div>
 	{/if}
 
-	{#if config.problemMode === 'normal'}
+	{#if config.problemMode === 'normal' || config.problemMode === 'chain'}
 		<div class="config-section">
 			<span class="label">{t.operations}</span>
 			<div class="checkbox-group">
@@ -149,7 +162,9 @@
 				</label>
 			</div>
 		</div>
+	{/if}
 
+	{#if config.problemMode === 'normal'}
 		<div class="config-section">
 			<span class="label">{t.blankPosition}</span>
 		<div class="ratio-inputs">

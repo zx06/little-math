@@ -5,7 +5,7 @@ export type Operation = 'add' | 'sub' | 'mul' | 'div';
 export type BlankPosition = 'first' | 'second' | 'result';
 
 /** 题目模式 */
-export type ProblemMode = 'normal' | 'makeTarget';
+export type ProblemMode = 'normal' | 'makeTarget' | 'chain';
 
 /** 凑数目标 */
 export type MakeTargetValue = 10 | 20 | 100;
@@ -17,6 +17,15 @@ export interface MakeTargetProblem {
 	target: number;
 	answer: number;
 	blankFirst: boolean;
+}
+
+/** 连续运算题目 */
+export interface ChainProblem {
+	type: 'chain';
+	numbers: number[];
+	ops: Operation[];
+	result: number;
+	blank: 'result' | number;
 }
 
 /** 单道题目 */
@@ -51,6 +60,7 @@ export interface ExerciseConfig {
 	showDate?: boolean;
 	problemMode: ProblemMode;
 	makeTargetValue: MakeTargetValue;
+	chainLength: 3 | 4;
 }
 
 /** 运算符显示映射 */

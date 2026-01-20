@@ -31,7 +31,11 @@ export const zh = {
 		problemMode: '练习模式',
 		normalMode: '普通计算',
 		makeTargetMode: '凑数练习',
-		makeTargetValue: '凑数目标'
+		makeTargetValue: '凑数目标',
+		chainMode: '连续运算',
+		chainLength: '运算个数',
+		chainLength3: '3个数',
+		chainLength4: '4个数'
 	},
 
 	// 按钮

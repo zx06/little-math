@@ -1,8 +1,9 @@
 <script lang="ts">
-	import type { ExerciseConfig, Problem, MakeTargetProblem } from '$lib/types';
+	import type { ExerciseConfig, Problem, MakeTargetProblem, ChainProblem } from '$lib/types';
 	import { DEFAULT_CONFIG } from '$lib/config/presets';
 	import { generateProblems } from '$lib/generators/arithmetic';
 	import { generateMakeTargetProblems } from '$lib/generators/makeTarget';
+	import { generateChainProblems } from '$lib/generators/chain';
 	import ConfigPanel from '$lib/components/ConfigPanel.svelte';
 	import ExerciseSheet from '$lib/components/ExerciseSheet.svelte';
 	import StatisticsPanel from '$lib/components/StatisticsPanel.svelte';
@@ -12,7 +13,7 @@
 	import { browser } from '$app/environment';
 
 	let config: ExerciseConfig = $state(browser ? loadConfig() : { ...DEFAULT_CONFIG });
-	let problems: (Problem | MakeTargetProblem)[] = $state([]);
+	let problems: (Problem | MakeTargetProblem | ChainProblem)[] = $state([]);
 
 	$effect(() => {
 		if (browser) {
@@ -21,7 +22,15 @@
 	});
 
 	function handleGenerate() {
-		if (config.problemMode === 'makeTarget') {
+		if (config.problemMode === 'chain') {
+			problems = generateChainProblems(
+				config.range.min,
+				config.range.max,
+				config.operations,
+				config.chainLength,
+				config.totalCount
+			);
+		} else if (config.problemMode === 'makeTarget') {
 			problems = generateMakeTargetProblems(config.makeTargetValue, config.totalCount);
 		} else {
 			problems = generateProblems(config);

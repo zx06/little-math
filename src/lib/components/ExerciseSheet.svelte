@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Problem, MakeTargetProblem } from '$lib/types';
+	import type { Problem, MakeTargetProblem, ChainProblem } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 	import { zh } from '$lib/i18n/zh';
 
-	type AnyProblem = Problem | MakeTargetProblem;
+	type AnyProblem = Problem | MakeTargetProblem | ChainProblem;
 
 	interface Props {
 		problems: AnyProblem[];
@@ -50,6 +50,10 @@
 		return 'type' in p && p.type === 'makeTarget';
 	}
 
+	function isChainProblem(p: AnyProblem): p is ChainProblem {
+		return 'type' in p && p.type === 'chain';
+	}
+
 	function getMakeTargetParts(
 		p: MakeTargetProblem,
 		showAnswer: boolean
@@ -83,6 +87,31 @@
 
 	function padNumber(n: number | string, len: number): string {
 		return String(n).padStart(len, ' ');
+	}
+
+	function getChainDisplay(p: ChainProblem, showAnswer: boolean): string {
+		const blank = '(\u00a0\u00a0\u00a0\u00a0)';
+		const parts: string[] = [];
+
+		for (let i = 0; i < p.numbers.length; i++) {
+			if (p.blank === i) {
+				parts.push(showAnswer ? `(${p.numbers[i]})` : blank);
+			} else {
+				parts.push(String(p.numbers[i]));
+			}
+			if (i < p.ops.length) {
+				parts.push(OP_SYMBOLS[p.ops[i]]);
+			}
+		}
+
+		parts.push('=');
+		if (p.blank === 'result') {
+			parts.push(showAnswer ? `(${p.result})` : blank);
+		} else {
+			parts.push(String(p.result));
+		}
+
+		return parts.join(' ');
 	}
 </script>
 
@@ -118,7 +147,7 @@
 			{#if isVertical}
 				<div class="vertical-grid">
 					{#each page as problem, idx}
-						{#if !isMakeTargetProblem(problem)}
+						{#if !isMakeTargetProblem(problem) && !isChainProblem(problem)}
 							{@const maxLen = Math.max(
 								String(problem.a).length,
 								String(problem.b).length,
@@ -164,17 +193,24 @@
 			{:else}
 				<div class="horizontal-grid" class:cols-2={columns === 2} class:cols-3={columns === 3}>
 					{#each page as problem, idx}
-						{@const parts = isMakeTargetProblem(problem)
-							? getMakeTargetParts(problem, showAnswers)
-							: getProblemParts(problem, showAnswers)}
-						<div class="problem" class:problem-large={columns === 2}>
-							<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
-							<span class="part first">{parts.first}</span>
-							<span class="part op">{parts.op}</span>
-							<span class="part second">{parts.second}</span>
-							<span class="part eq">=</span>
-							<span class="part result">{parts.result}</span>
-						</div>
+						{#if isChainProblem(problem)}
+							<div class="problem chain-problem" class:problem-large={columns === 2}>
+								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
+								<span class="chain-expr">{getChainDisplay(problem, showAnswers)}</span>
+							</div>
+						{:else}
+							{@const parts = isMakeTargetProblem(problem)
+								? getMakeTargetParts(problem, showAnswers)
+								: getProblemParts(problem, showAnswers)}
+							<div class="problem" class:problem-large={columns === 2}>
+								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
+								<span class="part first">{parts.first}</span>
+								<span class="part op">{parts.op}</span>
+								<span class="part second">{parts.second}</span>
+								<span class="part eq">=</span>
+								<span class="part result">{parts.result}</span>
+							</div>
+						{/if}
 					{/each}
 				</div>
 			{/if}
@@ -337,6 +373,11 @@
 		text-align: center;
 		color: #ff922b;
 		font-weight: 700;
+	}
+
+	.chain-problem .chain-expr {
+		color: #5c7cfa;
+		font-weight: 600;
 	}
 
 	/* 竖式网格 */
