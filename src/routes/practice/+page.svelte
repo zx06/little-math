@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ExerciseConfig, Problem, MakeTargetProblem, ChainProblem } from '$lib/types';
+	import type { ExerciseConfig, Problem, MakeTargetProblem, ChainProblem, AnyProblem } from '$lib/types';
 	import { DEFAULT_CONFIG } from '$lib/config/presets';
 	import { generateProblems } from '$lib/generators/arithmetic';
 	import { generateMakeTargetProblems } from '$lib/generators/makeTarget';
@@ -10,8 +10,9 @@
 	import PracticeResult from '$lib/components/PracticeResult.svelte';
 	import PracticeConfig from '$lib/components/PracticeConfig.svelte';
 	import { goto } from '$app/navigation';
-
-	type AnyProblem = Problem | MakeTargetProblem | ChainProblem;
+	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
+	import { addWrongRecord, generateWrongReview } from '$lib/services/wrongBook';
 
 	let config: ExerciseConfig = $state({ ...DEFAULT_CONFIG, totalCount: 10 });
 	let problems: AnyProblem[] = $state([]);
@@ -70,10 +71,24 @@
 		}
 	}
 
+	$effect(() => {
+		if (browser && $page.url.searchParams.get('mode') === 'wrong-review') {
+			const wrongProblems = generateWrongReview(10);
+			if (wrongProblems.length > 0) {
+				problems = wrongProblems;
+				config.totalCount = wrongProblems.length;
+				phase = 'practice';
+				timerRunning = true;
+			}
+		}
+	});
+
 	function handleAnswer(answer: number) {
 		const correct = getCorrectAnswer(problems[currentIndex]);
 		if (answer === correct) {
 			correctCount++;
+		} else {
+			addWrongRecord(problems[currentIndex], answer, correct);
 		}
 
 		if (currentIndex < problems.length - 1) {

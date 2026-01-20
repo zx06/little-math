@@ -90,6 +90,18 @@ export interface StatisticsData {
 	dailyStats: Record<string, { visits: number; generations: number; prints: number }>;
 }
 
+/** 任意题目类型 */
+export type AnyProblem = Problem | MakeTargetProblem | ChainProblem;
+
+/** 错题记录 */
+export interface WrongRecord {
+	problem: AnyProblem;
+	wrongAnswer: number;
+	correctAnswer: number;
+	timestamp: number;
+	reviewCount: number;
+}
+
 /** 初始化统计数据 */
 export const INITIAL_STATS: StatisticsData = {
 	totalVisits: 0,

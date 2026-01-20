@@ -59,7 +59,10 @@
 	<header class="app-header no-print">
 		<h1>{zh.appName}</h1>
 		<p>{zh.appSubtitle}</p>
-		<a href="/practice" class="practice-link">🎯 在线练习</a>
+		<div class="header-links">
+			<a href="/practice" class="practice-link">🎯 在线练习</a>
+			<a href="/wrong-book" class="wrong-book-link">📕 错题本</a>
+		</div>
 	</header>
 
 	<main class="app-main">
@@ -147,9 +150,16 @@
 		font-size: 1rem;
 	}
 
-	.practice-link {
-		display: inline-block;
+	.header-links {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
 		margin-top: 0.75rem;
+	}
+
+	.practice-link,
+	.wrong-book-link {
+		display: inline-block;
 		padding: 0.5rem 1.25rem;
 		background: rgba(255, 255, 255, 0.25);
 		color: white;
@@ -159,7 +169,8 @@
 		transition: background 0.2s;
 	}
 
-	.practice-link:hover {
+	.practice-link:hover,
+	.wrong-book-link:hover {
 		background: rgba(255, 255, 255, 0.4);
 	}
 
