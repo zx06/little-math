@@ -43,4 +43,30 @@
 	.symbol-btn:active {
 		transform: scale(0.95);
 	}
+
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		.compare-input {
+			gap: 1rem;
+		}
+
+		.symbol-btn {
+			width: 65px;
+			height: 65px;
+			font-size: 2.5rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.compare-input {
+			gap: 0.75rem;
+		}
+
+		.symbol-btn {
+			width: 55px;
+			height: 55px;
+			font-size: 2rem;
+			border-radius: 12px;
+		}
+	}
 </style>

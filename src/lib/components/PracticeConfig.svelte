@@ -156,4 +156,90 @@
 		transform: translateY(-2px);
 		box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
 	}
+
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		.practice-config {
+			max-width: 350px;
+			margin: 1.5rem auto;
+			padding: 1.5rem;
+			border-radius: 16px;
+		}
+
+		h2 {
+			font-size: 1.5rem;
+			margin-bottom: 1.25rem;
+		}
+
+		.config-row {
+			margin-bottom: 0.875rem;
+		}
+
+		.config-row > label {
+			font-size: 0.9rem;
+		}
+
+		select,
+		input[type='number'] {
+			padding: 0.6rem;
+			font-size: 0.95rem;
+		}
+
+		.checkbox-group {
+			gap: 0.75rem;
+		}
+
+		.checkbox-group label {
+			font-size: 0.9rem;
+		}
+
+		.start-btn {
+			margin-top: 1.25rem;
+			padding: 0.875rem;
+			font-size: 1.25rem;
+			min-height: 48px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.practice-config {
+			max-width: 100%;
+			margin: 1rem auto;
+			padding: 1.25rem;
+			border-radius: 12px;
+		}
+
+		h2 {
+			font-size: 1.35rem;
+			margin-bottom: 1rem;
+		}
+
+		.config-row {
+			margin-bottom: 0.75rem;
+		}
+
+		.config-row > label {
+			font-size: 0.85rem;
+		}
+
+		select,
+		input[type='number'] {
+			padding: 0.5rem;
+			font-size: 0.9rem;
+		}
+
+		.checkbox-group {
+			gap: 0.5rem;
+		}
+
+		.checkbox-group label {
+			font-size: 0.85rem;
+		}
+
+		.start-btn {
+			margin-top: 1rem;
+			padding: 0.75rem;
+			font-size: 1.1rem;
+		}
+	}
 </style>

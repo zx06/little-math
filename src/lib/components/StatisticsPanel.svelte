@@ -342,6 +342,207 @@
 		background: #fa5252;
 	}
 
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		.stats-container {
+			bottom: 15px;
+			right: 15px;
+		}
+
+		.stats-toggle {
+			width: 48px;
+			height: 48px;
+			font-size: 22px;
+		}
+
+		.stats-panel {
+			width: 340px;
+			max-height: 75vh;
+			bottom: 55px;
+		}
+
+		.stats-header {
+			padding: 14px 16px;
+		}
+
+		.stats-header h3 {
+			font-size: 16px;
+		}
+
+		.close-btn {
+			width: 26px;
+			height: 26px;
+			font-size: 22px;
+		}
+
+		.stats-content {
+			padding: 14px 16px;
+			max-height: calc(75vh - 55px);
+		}
+
+		.stats-section {
+			margin-bottom: 16px;
+		}
+
+		.stats-section h4 {
+			font-size: 13px;
+		}
+
+		.stats-grid {
+			gap: 10px;
+		}
+
+		.stat-card {
+			padding: 10px 6px;
+		}
+
+		.stat-value {
+			font-size: 20px;
+		}
+
+		.stat-label {
+			font-size: 11px;
+		}
+
+		.operation-item {
+			gap: 10px;
+		}
+
+		.operation-name {
+			width: 36px;
+			font-size: 12px;
+		}
+
+		.operation-count {
+			font-size: 11px;
+			min-width: 60px;
+		}
+
+		.day-item {
+			padding: 6px 10px;
+		}
+
+		.day-date {
+			font-size: 12px;
+		}
+
+		.day-metrics {
+			gap: 10px;
+		}
+
+		.metric {
+			font-size: 11px;
+		}
+
+		.stats-footer {
+			padding-top: 14px;
+		}
+
+		.last-visit {
+			font-size: 11px;
+		}
+
+		.reset-btn {
+			padding: 5px 10px;
+			font-size: 11px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.stats-container {
+			bottom: 10px;
+			right: 10px;
+		}
+
+		.stats-toggle {
+			width: 44px;
+			height: 44px;
+			font-size: 20px;
+		}
+
+		.stats-panel {
+			width: calc(100vw - 20px);
+			max-width: 320px;
+			max-height: 70vh;
+			bottom: 50px;
+			right: -10px;
+		}
+
+		.stats-header {
+			padding: 12px 14px;
+		}
+
+		.stats-header h3 {
+			font-size: 15px;
+		}
+
+		.stats-content {
+			padding: 12px 14px;
+			max-height: calc(70vh - 50px);
+		}
+
+		.stats-grid {
+			grid-template-columns: repeat(3, 1fr);
+			gap: 8px;
+		}
+
+		.stat-card {
+			padding: 8px 4px;
+		}
+
+		.stat-value {
+			font-size: 18px;
+		}
+
+		.stat-label {
+			font-size: 10px;
+		}
+
+		.operation-item {
+			gap: 8px;
+		}
+
+		.operation-name {
+			width: 32px;
+			font-size: 11px;
+		}
+
+		.operation-count {
+			font-size: 10px;
+			min-width: 55px;
+		}
+
+		.day-item {
+			padding: 6px 8px;
+		}
+
+		.day-date {
+			font-size: 11px;
+		}
+
+		.day-metrics {
+			gap: 8px;
+		}
+
+		.metric {
+			font-size: 10px;
+		}
+
+		.stats-footer {
+			flex-direction: column;
+			gap: 8px;
+			align-items: stretch;
+		}
+
+		.last-visit {
+			text-align: center;
+		}
+
+		.reset-btn {
+			width: 100%;
+		}
+	}
+
 	@media print {
 		.stats-container {
 			display: none !important;

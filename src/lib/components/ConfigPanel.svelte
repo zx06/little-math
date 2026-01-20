@@ -403,6 +403,86 @@
 		box-shadow: 0 4px 12px rgba(81, 207, 102, 0.5);
 	}
 
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		.config-panel {
+			padding: 1rem;
+			border-radius: 12px;
+		}
+
+		h2 {
+			font-size: 1.2rem;
+			margin-bottom: 1rem;
+		}
+
+		.config-section {
+			margin-bottom: 1rem;
+		}
+
+		.config-section > label,
+		.label {
+			font-size: 0.8rem;
+		}
+
+		select,
+		input[type='number'],
+		input[type='text'] {
+			padding: 0.6rem;
+			font-size: 0.9rem;
+		}
+
+		.checkbox-group {
+			gap: 0.5rem;
+		}
+
+		.checkbox-label {
+			font-size: 0.8rem;
+		}
+
+		.range-inputs {
+			grid-template-columns: 1fr;
+			gap: 0.5rem;
+		}
+
+		.ratio-inputs label {
+			grid-template-columns: 60px 1fr 35px;
+			gap: 0.4rem;
+			font-size: 0.7rem;
+		}
+
+		.button-group {
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+
+		.btn {
+			padding: 0.8rem 1rem;
+			font-size: 0.95rem;
+			min-height: 44px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.config-panel {
+			padding: 0.75rem;
+			border-radius: 8px;
+		}
+
+		h2 {
+			font-size: 1.1rem;
+		}
+
+		.ratio-inputs label {
+			grid-template-columns: 50px 1fr 30px;
+			font-size: 0.65rem;
+		}
+
+		.btn {
+			padding: 0.75rem;
+			font-size: 0.9rem;
+		}
+	}
+
 	@media print {
 		.config-panel {
 			display: none;

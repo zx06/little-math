@@ -469,6 +469,123 @@
 		min-width: 2rem;
 	}
 
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		.page {
+			padding: 1.5rem 1.25rem;
+		}
+
+		.page-header {
+			margin-bottom: 1.5rem;
+		}
+
+		.page-header h1 {
+			font-size: 1.5rem;
+			letter-spacing: 0.1em;
+		}
+
+		.info-row {
+			gap: 1.5rem;
+			font-size: 0.95rem;
+			flex-wrap: wrap;
+		}
+
+		.info-line {
+			width: 4rem;
+		}
+
+		.horizontal-grid.cols-2 {
+			grid-template-columns: 1fr;
+			gap: 1rem 2rem;
+		}
+
+		.horizontal-grid.cols-3 {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 0.8rem 1.5rem;
+		}
+
+		.problem {
+			font-size: 1.1rem;
+			line-height: 1.6;
+			padding: 0.25rem 0.4rem;
+		}
+
+		.problem.problem-large {
+			font-size: 1.3rem;
+			line-height: 1.8;
+		}
+
+		.vertical-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+
+		.vertical-problem {
+			font-size: 1.1rem;
+		}
+
+		.compare-symbol {
+			margin: 0 0.3em;
+			font-size: 1.1em;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.page {
+			padding: 1rem 0.75rem;
+		}
+
+		.page-header h1 {
+			font-size: 1.3rem;
+			margin-bottom: 0.75rem;
+		}
+
+		.info-row {
+			gap: 1rem;
+			font-size: 0.85rem;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.info-line {
+			width: 3rem;
+		}
+
+		.horizontal-grid.cols-2 {
+			gap: 0.75rem 1.5rem;
+		}
+
+		.horizontal-grid.cols-3 {
+			grid-template-columns: 1fr;
+			gap: 0.75rem;
+		}
+
+		.problem {
+			font-size: 1rem;
+			line-height: 1.5;
+			padding: 0.2rem 0.3rem;
+		}
+
+		.problem.problem-large {
+			font-size: 1.15rem;
+			line-height: 1.6;
+		}
+
+		.problem-number {
+			min-width: 1.5em;
+			margin-right: 0.3em;
+		}
+
+		.vertical-problem {
+			font-size: 1rem;
+		}
+
+		.compare-symbol {
+			margin: 0 0.2em;
+			font-size: 1em;
+		}
+	}
+
 	/* 打印样式 */
 	@page {
 		margin: 0;

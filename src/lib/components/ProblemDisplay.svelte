@@ -84,4 +84,19 @@
 		text-align: center;
 		padding: 2rem;
 	}
+
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		.problem-display {
+			font-size: 2.5rem;
+			padding: 1.5rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.problem-display {
+			font-size: 2rem;
+			padding: 1rem;
+		}
+	}
 </style>

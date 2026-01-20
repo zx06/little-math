@@ -81,4 +81,40 @@
 	button:hover {
 		transform: translateY(-2px);
 	}
+
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		input {
+			font-size: 1.5rem;
+			width: 120px;
+			padding: 0.625rem 0.875rem;
+		}
+
+		button {
+			font-size: 1.1rem;
+			padding: 0.625rem 1.25rem;
+			min-height: 44px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.answer-input {
+			flex-direction: column;
+			gap: 0.75rem;
+		}
+
+		input {
+			font-size: 1.25rem;
+			width: 100%;
+			max-width: 200px;
+			padding: 0.5rem 0.75rem;
+		}
+
+		button {
+			font-size: 1rem;
+			padding: 0.75rem 1rem;
+			width: 100%;
+			max-width: 200px;
+		}
+	}
 </style>
