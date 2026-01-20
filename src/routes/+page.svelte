@@ -59,6 +59,7 @@
 	<header class="app-header no-print">
 		<h1>{zh.appName}</h1>
 		<p>{zh.appSubtitle}</p>
+		<a href="/practice" class="practice-link">🎯 在线练习</a>
 	</header>
 
 	<main class="app-main">
@@ -144,6 +145,22 @@
 		margin: 0.5rem 0 0;
 		opacity: 0.95;
 		font-size: 1rem;
+	}
+
+	.practice-link {
+		display: inline-block;
+		margin-top: 0.75rem;
+		padding: 0.5rem 1.25rem;
+		background: rgba(255, 255, 255, 0.25);
+		color: white;
+		text-decoration: none;
+		border-radius: 20px;
+		font-size: 1rem;
+		transition: background 0.2s;
+	}
+
+	.practice-link:hover {
+		background: rgba(255, 255, 255, 0.4);
 	}
 
 	.app-main {
