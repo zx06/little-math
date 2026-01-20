@@ -2,6 +2,7 @@
 	import type { ExerciseConfig, Operation } from '$lib/types';
 	import { OP_NAMES } from '$lib/types';
 	import { GRADE_PRESETS } from '$lib/config/presets';
+	import { zh } from '$lib/i18n/zh';
 
 	interface Props {
 		config: ExerciseConfig;
@@ -48,13 +49,27 @@
 		<label
 			>模式
 			<select bind:value={config.problemMode}>
-				<option value="normal">普通计算</option>
-				<option value="makeTarget">凑数练习</option>
-				<option value="chain">连续运算</option>
-				<option value="compare">比较大小</option>
+				<option value="normal">{zh.config.normalMode}</option>
+				<option value="makeTarget">{zh.config.makeTargetMode}</option>
+				<option value="chain">{zh.config.chainMode}</option>
+				<option value="compare">{zh.config.compareMode}</option>
+				<option value="remainder">{zh.config.remainderMode}</option>
 			</select>
 		</label>
 	</div>
+
+	{#if config.problemMode === 'remainder'}
+		<div class="config-row">
+			<label
+				>{zh.config.remainderBlank}
+				<select bind:value={config.remainderBlank}>
+					<option value="quotient">{zh.config.remainderBlankQuotient}</option>
+					<option value="remainder">{zh.config.remainderBlankRemainder}</option>
+					<option value="both">{zh.config.remainderBlankBoth}</option>
+				</select>
+			</label>
+		</div>
+	{/if}
 
 	{#if config.problemMode === 'makeTarget'}
 		<div class="config-row">

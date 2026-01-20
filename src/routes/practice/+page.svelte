@@ -61,7 +61,8 @@
 			return generateRemainderProblems(
 				config.range.min,
 				config.range.max,
-				config.totalCount
+				config.totalCount,
+				config.remainderBlank
 			);
 		}
 		return generateProblems(config);
