@@ -22,7 +22,10 @@ export const zh = {
 		columns3: '3列（紧凑）',
 		countPerPage: '每页题数',
 		totalCount: '总题数',
-		showAnswerPage: '生成答案页'
+		showAnswerPage: '生成答案页',
+		customTitle: '自定义标题',
+		studentName: '学生姓名',
+		showDate: '显示日期'
 	},
 
 	// 按钮

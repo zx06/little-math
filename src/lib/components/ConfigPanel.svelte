@@ -178,6 +178,27 @@
 	</div>
 
 	<div class="config-section">
+		<label>
+			{t.customTitle}
+			<input type="text" bind:value={config.customTitle} placeholder="数学练习" />
+		</label>
+	</div>
+
+	<div class="config-section">
+		<label>
+			{t.studentName}
+			<input type="text" bind:value={config.studentName} placeholder="请输入姓名" />
+		</label>
+	</div>
+
+	<div class="config-section">
+		<label class="checkbox-label">
+			<input type="checkbox" bind:checked={config.showDate} />
+			{t.showDate}
+		</label>
+	</div>
+
+	<div class="config-section">
 		<label class="checkbox-label">
 			<input type="checkbox" bind:checked={config.showAnswerPage} />
 			{t.showAnswerPage}
@@ -242,7 +263,8 @@
 	}
 
 	select,
-	input[type='number'] {
+	input[type='number'],
+	input[type='text'] {
 		padding: 0.5rem;
 		border: 1px solid #ddd;
 		border-radius: 4px;

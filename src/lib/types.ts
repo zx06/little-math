@@ -31,6 +31,9 @@ export interface ExerciseConfig {
 	countPerPage: number;
 	totalCount: number;
 	showAnswerPage: boolean;
+	customTitle?: string;
+	studentName?: string;
+	showDate?: boolean;
 }
 
 /** 运算符显示映射 */

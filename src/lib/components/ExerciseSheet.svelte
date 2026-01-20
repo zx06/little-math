@@ -9,9 +9,29 @@
 		showAnswers: boolean;
 		isVertical: boolean;
 		columns?: 2 | 3;
+		customTitle?: string;
+		studentName?: string;
+		showDate?: boolean;
 	}
 
-	let { problems, countPerPage, showAnswers, isVertical, columns = 2 }: Props = $props();
+	let {
+		problems,
+		countPerPage,
+		showAnswers,
+		isVertical,
+		columns = 2,
+		customTitle = '',
+		studentName = '',
+		showDate = true
+	}: Props = $props();
+
+	function formatDate(): string {
+		const now = new Date();
+		const year = now.getFullYear();
+		const month = now.getMonth() + 1;
+		const day = now.getDate();
+		return `${year}年${month}月${day}日`;
+	}
 
 	const t = zh.print;
 
@@ -50,17 +70,23 @@
 	{#each pages() as page, pageIndex}
 		<div class="page" class:answer-page={showAnswers}>
 			<div class="page-header">
-				<h1>{t.exerciseTitle}{showAnswers ? ` - ${t.answerTitle}` : ''}</h1>
+				<h1>{customTitle || t.exerciseTitle}{showAnswers ? ` - ${t.answerTitle}` : ''}</h1>
 				{#if !showAnswers}
 					<div class="info-row">
 						<div class="info-item">
 							<span class="info-label">{t.name}</span>
-							<span class="info-line"></span>
+							{#if studentName}
+								<span class="info-value">{studentName}</span>
+							{:else}
+								<span class="info-line"></span>
+							{/if}
 						</div>
-						<div class="info-item">
-							<span class="info-label">{t.date}</span>
-							<span class="info-line"></span>
-						</div>
+						{#if showDate}
+							<div class="info-item">
+								<span class="info-label">{t.date}</span>
+								<span class="info-value">{formatDate()}</span>
+							</div>
+						{/if}
 						<div class="info-item">
 							<span class="info-label">{t.score}</span>
 							<span class="info-line short"></span>
@@ -194,6 +220,11 @@
 
 	.info-line.short {
 		width: 3rem;
+	}
+
+	.info-value {
+		color: #5c7cfa;
+		font-weight: 600;
 	}
 
 	/* 横式网格 */

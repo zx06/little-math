@@ -52,6 +52,9 @@
 					showAnswers={false}
 					isVertical={config.isVertical}
 					columns={config.columns}
+					customTitle={config.customTitle}
+					studentName={config.studentName}
+					showDate={config.showDate}
 				/>
 
 				{#if config.showAnswerPage}
@@ -61,6 +64,9 @@
 						showAnswers={true}
 						isVertical={config.isVertical}
 						columns={config.columns}
+						customTitle={config.customTitle}
+						studentName={config.studentName}
+						showDate={config.showDate}
 					/>
 				{/if}
 			{:else}
