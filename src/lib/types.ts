@@ -5,7 +5,7 @@ export type Operation = 'add' | 'sub' | 'mul' | 'div';
 export type BlankPosition = 'first' | 'second' | 'result';
 
 /** 题目模式 */
-export type ProblemMode = 'normal' | 'makeTarget' | 'chain' | 'compare';
+export type ProblemMode = 'normal' | 'makeTarget' | 'chain' | 'compare' | 'remainder';
 
 /** 比较符号 */
 export type CompareSymbol = '>' | '<' | '=';
@@ -47,6 +47,16 @@ export interface CompareProblem {
 		result: number;
 	};
 	answer: CompareSymbol;
+}
+
+/** 有余数除法题目 */
+export interface RemainderProblem {
+	type: 'remainder';
+	dividend: number;
+	divisor: number;
+	quotient: number;
+	remainder: number;
+	blank: 'quotient' | 'remainder' | 'both';
 }
 
 /** 单道题目 */
@@ -112,7 +122,7 @@ export interface StatisticsData {
 }
 
 /** 任意题目类型 */
-export type AnyProblem = Problem | MakeTargetProblem | ChainProblem | CompareProblem;
+export type AnyProblem = Problem | MakeTargetProblem | ChainProblem | CompareProblem | RemainderProblem;
 
 /** 错题记录 */
 export interface WrongRecord {

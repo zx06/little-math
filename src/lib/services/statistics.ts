@@ -113,3 +113,78 @@ export function getLast7DaysStats() {
 
 	return result;
 }
+
+/** 练习进度记录 */
+interface PracticeProgress {
+	date: string;
+	totalProblems: number;
+	correctProblems: number;
+	timeSpent: number; // 秒
+}
+
+/** 存储练习进度 */
+export function savePracticeProgress(progress: PracticeProgress): void {
+	const stats = getStats();
+	const today = getToday();
+
+	if (!stats.dailyStats[today]) {
+		stats.dailyStats[today] = { visits: 0, generations: 0, prints: 0 };
+	}
+
+	// 扩展 dailyStats 以包含练习进度
+	if (!('practiceProgress' in stats.dailyStats[today])) {
+		(stats.dailyStats[today] as any).practiceProgress = [];
+	}
+
+	(stats.dailyStats[today] as any).practiceProgress.push({
+		totalProblems: progress.totalProblems,
+		correctProblems: progress.correctProblems,
+		timeSpent: progress.timeSpent
+	});
+
+	saveStats(stats);
+}
+
+/** 获取每日进度数据 */
+export function getDailyProgress(days: number = 7): Array<{
+	date: string;
+	totalProblems: number;
+	correctProblems: number;
+	correctRate: number;
+	timeSpent: number;
+	avgTimePerProblem: number;
+}> {
+	const stats = getStats();
+	const result: Array<{
+		date: string;
+		totalProblems: number;
+		correctProblems: number;
+		correctRate: number;
+		timeSpent: number;
+		avgTimePerProblem: number;
+	}> = [];
+
+	for (let i = days - 1; i >= 0; i--) {
+		const date = new Date();
+		date.setDate(date.getDate() - i);
+		const dateStr = date.toISOString().split('T')[0];
+
+		const dayStats = stats.dailyStats[dateStr] as any;
+		const progressList = dayStats?.practiceProgress || [];
+
+		const totalProblems = progressList.reduce((sum: number, p: PracticeProgress) => sum + p.totalProblems, 0);
+		const correctProblems = progressList.reduce((sum: number, p: PracticeProgress) => sum + p.correctProblems, 0);
+		const timeSpent = progressList.reduce((sum: number, p: PracticeProgress) => sum + p.timeSpent, 0);
+
+		result.push({
+			date: dateStr,
+			totalProblems,
+			correctProblems,
+			correctRate: totalProblems > 0 ? Math.round((correctProblems / totalProblems) * 100) : 0,
+			timeSpent,
+			avgTimePerProblem: totalProblems > 0 ? Math.round(timeSpent / totalProblems) : 0
+		});
+	}
+
+	return result;
+}

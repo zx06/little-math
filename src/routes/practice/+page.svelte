@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { ExerciseConfig, Problem, MakeTargetProblem, ChainProblem, CompareProblem, AnyProblem, CompareSymbol } from '$lib/types';
+	import type { ExerciseConfig, Problem, MakeTargetProblem, ChainProblem, CompareProblem, RemainderProblem, AnyProblem, CompareSymbol } from '$lib/types';
 	import { DEFAULT_CONFIG } from '$lib/config/presets';
 	import { generateProblems } from '$lib/generators/arithmetic';
 	import { generateMakeTargetProblems } from '$lib/generators/makeTarget';
 	import { generateChainProblems } from '$lib/generators/chain';
 	import { generateCompareProblems } from '$lib/generators/compare';
+	import { generateRemainderProblems } from '$lib/generators/remainder';
 	import Timer from '$lib/components/Timer.svelte';
 	import AnswerInput from '$lib/components/AnswerInput.svelte';
 	import CompareInput from '$lib/components/CompareInput.svelte';
@@ -32,8 +33,8 @@
 	let finalTime = $state(0);
 	let answerRecords: AnswerRecord[] = $state([]);
 
-	let timerRef: { reset: () => void; getSeconds: () => number } | undefined;
-	let answerInputRef: { focus: () => void; clear: () => void } | undefined;
+	let timerRef: { reset: () => void; getSeconds: () => number } | undefined = $state();
+	let answerInputRef: { focus: () => void; clear: () => void } | undefined = $state();
 
 	function generateAllProblems(): AnyProblem[] {
 		if (config.problemMode === 'makeTarget') {
@@ -53,6 +54,13 @@
 				config.range.min,
 				config.range.max,
 				config.operations,
+				config.totalCount
+			);
+		}
+		if (config.problemMode === 'remainder') {
+			return generateRemainderProblems(
+				config.range.min,
+				config.range.max,
 				config.totalCount
 			);
 		}
@@ -81,6 +89,10 @@
 			if (problem.type === 'chain') {
 				const p = problem as ChainProblem;
 				return p.blank === 'result' ? p.result : p.numbers[p.blank as number];
+			}
+			if (problem.type === 'remainder') {
+				const p = problem as RemainderProblem;
+				return p.blank === 'quotient' ? p.quotient : p.remainder;
 			}
 		}
 		const p = problem as Problem;

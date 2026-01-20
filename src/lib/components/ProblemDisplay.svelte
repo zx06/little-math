@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Problem, MakeTargetProblem, ChainProblem, CompareProblem } from '$lib/types';
+	import type { Problem, MakeTargetProblem, ChainProblem, CompareProblem, RemainderProblem } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 
 	interface Props {
-		problem: Problem | MakeTargetProblem | ChainProblem | CompareProblem;
+		problem: Problem | MakeTargetProblem | ChainProblem | CompareProblem | RemainderProblem;
 	}
 
 	let { problem }: Props = $props();
@@ -38,6 +38,25 @@
 				const right = `${p.right.a} ${OP_SYMBOLS[p.right.op]} ${p.right.b}`;
 				return `${left} ○ ${right}`;
 			}
+			if (problem.type === 'remainder') {
+				const p = problem as RemainderProblem;
+				const blank = '___';
+				let quotient: string;
+				let remainder: string;
+
+				if (p.blank === 'quotient') {
+					quotient = blank;
+					remainder = String(p.remainder);
+				} else if (p.blank === 'remainder') {
+					quotient = String(p.quotient);
+					remainder = blank;
+				} else {
+					quotient = blank;
+					remainder = blank;
+				}
+
+				return `${p.dividend} ÷ ${p.divisor} = ${quotient} ... ${remainder}`;
+			}
 		}
 		// 普通题目
 		const p = problem as Problem;
@@ -56,6 +75,10 @@
 			if (problem.type === 'chain') {
 				const p = problem as ChainProblem;
 				return p.blank === 'result' ? p.result : p.numbers[p.blank as number];
+			}
+			if (problem.type === 'remainder') {
+				const p = problem as RemainderProblem;
+				return p.blank === 'quotient' ? p.quotient : p.remainder;
 			}
 		}
 		const p = problem as Problem;
