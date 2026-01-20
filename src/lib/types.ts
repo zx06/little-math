@@ -93,6 +93,8 @@ export interface ExerciseConfig {
 	makeTargetValue: MakeTargetValue;
 	chainLength: 3 | 4;
 	remainderBlank: 'quotient' | 'remainder' | 'both';
+	enableGridPaper: boolean;
+	gridPaperType: 'tian' | 'mi';
 }
 
 /** 运算符显示映射 */

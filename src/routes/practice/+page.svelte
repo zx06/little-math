@@ -17,6 +17,10 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { addWrongRecord, generateWrongReview } from '$lib/services/wrongBook';
+	import { checkAchievements, type Achievement } from '$lib/services/achievements';
+	import { speakProblem, stopSpeaking, isSpeechSupported } from '$lib/services/speech';
+	import { trackGeneration } from '$lib/services/statistics';
+	import AchievementToast from '$lib/components/AchievementToast.svelte';
 
 	interface AnswerRecord {
 		problem: AnyProblem;
@@ -37,6 +41,8 @@
 	let timerRef: { reset: () => void; getSeconds: () => number } | undefined = $state();
 	let answerInputRef: { focus: () => void; clear: () => void } | undefined = $state();
 	let remainderInputRef: { focus: () => void; clear: () => void } | undefined = $state();
+	let unlockedAchievements = $state<Achievement[]>([]);
+	let showSpeechButton = $state(isSpeechSupported());
 
 	function generateAllProblems(): AnyProblem[] {
 		if (config.problemMode === 'makeTarget') {
@@ -86,6 +92,13 @@
 		phase = 'practice';
 		timerRunning = true;
 		timerRef?.reset();
+
+		// 检查成就
+		const stats = { totalGenerations: 0, totalVisits: 0, totalPrints: 0, operationsCount: { add: 0, sub: 0, mul: 0, div: 0 }, gradePresetCount: {}, lastVisitDate: '', dailyStats: {} };
+		const newAchievements = checkAchievements(stats);
+		if (newAchievements.length > 0) {
+			unlockedAchievements = [...unlockedAchievements, ...newAchievements];
+		}
 	}
 
 	function getCorrectAnswer(problem: AnyProblem): number {
@@ -268,7 +281,14 @@
 			<div class="practice-area">
 				<div class="top-bar">
 					<div class="progress">第 {currentIndex + 1} / {problems.length} 题</div>
-					<Timer bind:this={timerRef} running={timerRunning} />
+					<div class="top-bar-right">
+						{#if showSpeechButton}
+							<button class="speech-btn" onclick={() => speakProblem(problems[currentIndex])} title="读题">
+								🔊
+							</button>
+						{/if}
+						<Timer bind:this={timerRef} running={timerRunning} />
+					</div>
 				</div>
 				<ProblemDisplay problem={problems[currentIndex]} />
 				{#if isCompareProblem(problems[currentIndex])}
@@ -294,6 +314,13 @@
 			/>
 		{/if}
 	</main>
+
+	<!-- 成就提示 -->
+	{#each unlockedAchievements as achievement}
+		<AchievementToast achievement={achievement} onClose={() => {
+			unlockedAchievements = unlockedAchievements.filter((a) => a.id !== achievement.id);
+		}} />
+	{/each}
 </div>
 
 <style>
@@ -344,6 +371,28 @@
 	.progress {
 		font-size: 1.25rem;
 		color: #666;
+	}
+	.top-bar-right {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+	.speech-btn {
+		padding: 0.5rem 1rem;
+		font-size: 1.5rem;
+		background: linear-gradient(135deg, #667eea, #764ba2);
+		color: white;
+		border: none;
+		border-radius: 8px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+	.speech-btn:hover {
+		transform: scale(1.05);
+		box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+	}
+	.speech-btn:active {
+		transform: scale(0.95);
 	}
 
 	/* 移动端适配 */

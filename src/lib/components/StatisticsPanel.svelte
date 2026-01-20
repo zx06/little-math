@@ -4,6 +4,7 @@
 	import { getStats, getLast7DaysStats, resetStats, getDailyProgress } from '$lib/services/statistics';
 	import { OP_NAMES } from '$lib/types';
 	import ProgressChart from '$lib/components/ProgressChart.svelte';
+	import { downloadStatisticsJSON, downloadStatisticsCSV } from '$lib/services/export';
 
 	let stats: StatisticsData = $state<StatisticsData>(getStats());
 	let last7Days = $state(getLast7DaysStats());
@@ -114,7 +115,11 @@
 
 				<div class="stats-footer">
 					<div class="last-visit">最后访问: {stats.lastVisitDate || '无'}</div>
-					<button class="reset-btn" onclick={handleReset}>重置统计</button>
+					<div class="footer-buttons">
+						<button class="export-btn" onclick={downloadStatisticsJSON}>导出 JSON</button>
+						<button class="export-btn" onclick={downloadStatisticsCSV}>导出 CSV</button>
+						<button class="reset-btn" onclick={handleReset}>重置统计</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -323,8 +328,8 @@
 
 	.stats-footer {
 		display: flex;
-		align-items: center;
-		justify-content: space-between;
+		flex-direction: column;
+		gap: 12px;
 		padding-top: 16px;
 		border-top: 1px solid #e9ecef;
 	}
@@ -332,6 +337,27 @@
 	.last-visit {
 		font-size: 12px;
 		color: #999;
+	}
+
+	.footer-buttons {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+
+	.export-btn {
+		padding: 6px 12px;
+		background: #5c7cfa;
+		color: white;
+		border: none;
+		border-radius: 4px;
+		font-size: 12px;
+		cursor: pointer;
+		transition: background 0.2s;
+	}
+
+	.export-btn:hover {
+		background: #4263eb;
 	}
 
 	.reset-btn {
