@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { AnyProblem, Problem, MakeTargetProblem, ChainProblem, CompareProblem, CompareSymbol } from '$lib/types';
+	import type { AnyProblem, Problem, MakeTargetProblem, ChainProblem, CompareProblem, RemainderProblem, CompareSymbol } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 
 	interface AnswerRecord {
 		problem: AnyProblem;
-		userAnswer: number | CompareSymbol;
-		correctAnswer: number | CompareSymbol;
+		userAnswer: number | CompareSymbol | string;
+		correctAnswer: number | CompareSymbol | string;
 		isCorrect: boolean;
 	}
 
@@ -61,6 +61,29 @@
 				const left = formatExpression(p.left.a, p.left.b, OP_SYMBOLS[p.left.op]);
 				const right = formatExpression(p.right.a, p.right.b, OP_SYMBOLS[p.right.op]);
 				return `${left} ___ ${right}`;
+			}
+			if (problem.type === 'remainder') {
+				const p = problem as RemainderProblem;
+				let str = '';
+				if (p.blank === 'quotient' || p.blank === 'both') {
+					str += p.blank === 'quotient' ? '___' : p.quotient;
+				} else {
+					str += p.quotient;
+				}
+				str += ` ÷ ${p.divisor} = `;
+				if (p.blank === 'remainder' || p.blank === 'both') {
+					str += p.blank === 'remainder' ? '___' : p.remainder;
+				} else {
+					str += p.remainder;
+				}
+				if (p.blank === 'quotient') {
+					str += ' ... ' + p.remainder;
+				} else if (p.blank === 'remainder') {
+					str += ' ... ' + p.quotient;
+				} else {
+					str += ' ... ___';
+				}
+				return str;
 			}
 		}
 		const p = problem as Problem;
