@@ -92,6 +92,7 @@ export interface ExerciseConfig {
 	problemMode: ProblemMode;
 	makeTargetValue: MakeTargetValue;
 	chainLength: 3 | 4;
+	remainderBlank: 'quotient' | 'remainder' | 'both';
 }
 
 /** 运算符显示映射 */

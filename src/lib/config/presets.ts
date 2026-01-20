@@ -60,7 +60,8 @@ export const DEFAULT_CONFIG: ExerciseConfig = {
 	showDate: true,
 	problemMode: 'normal',
 	makeTargetValue: 10,
-	chainLength: 3
+	chainLength: 3,
+	remainderBlank: 'quotient'
 };
 
 /** 竖式默认每页题数 */

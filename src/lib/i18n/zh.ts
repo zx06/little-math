@@ -36,7 +36,12 @@ export const zh = {
 		chainLength: '运算个数',
 		chainLength3: '3个数',
 		chainLength4: '4个数',
-		compareMode: '比较大小'
+		compareMode: '比较大小',
+		remainderMode: '有余数除法',
+		remainderBlank: '留空位置',
+		remainderBlankQuotient: '商',
+		remainderBlankRemainder: '余数',
+		remainderBlankBoth: '商和余数'
 	},
 
 	// 按钮

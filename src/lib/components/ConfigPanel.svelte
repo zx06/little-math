@@ -89,9 +89,23 @@
 				<option value="makeTarget">{t.makeTargetMode}</option>
 				<option value="chain">{t.chainMode}</option>
 				<option value="compare">{t.compareMode}</option>
+				<option value="remainder">{t.remainderMode}</option>
 			</select>
 		</label>
 	</div>
+
+	{#if config.problemMode === 'remainder'}
+		<div class="config-section">
+			<label>
+				{t.remainderBlank}
+				<select bind:value={config.remainderBlank}>
+					<option value="quotient">{t.remainderBlankQuotient}</option>
+					<option value="remainder">{t.remainderBlankRemainder}</option>
+					<option value="both">{t.remainderBlankBoth}</option>
+				</select>
+			</label>
+		</div>
+	{/if}
 
 	{#if config.problemMode === 'chain'}
 		<div class="config-section">
