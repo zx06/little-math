@@ -225,4 +225,160 @@
 		cursor: pointer;
 		font-size: 0.8rem;
 	}
+
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		header {
+			padding: 0.875rem 1.5rem;
+			gap: 1.5rem;
+		}
+
+		.back-link {
+			font-size: 0.9rem;
+		}
+
+		h1 {
+			font-size: 1.25rem;
+		}
+
+		main {
+			padding: 1.5rem;
+			max-width: 100%;
+		}
+
+		.empty {
+			padding: 3rem 1.5rem;
+			border-radius: 16px;
+		}
+
+		.empty .emoji {
+			font-size: 3rem;
+		}
+
+		.empty p {
+			font-size: 1.1rem;
+		}
+
+		.start-link {
+			padding: 0.625rem 1.5rem;
+			font-size: 1rem;
+		}
+
+		.actions {
+			gap: 0.75rem;
+			margin-bottom: 1.25rem;
+		}
+
+		.review-btn {
+			padding: 0.875rem;
+			font-size: 1.1rem;
+		}
+
+		.clear-btn {
+			padding: 0.875rem 1.25rem;
+			font-size: 0.9rem;
+		}
+
+		.record-card {
+			padding: 0.875rem 1.25rem;
+		}
+
+		.problem {
+			font-size: 1.25rem;
+		}
+
+		.answers {
+			gap: 1.5rem;
+			font-size: 0.85rem;
+		}
+
+		.meta {
+			gap: 0.75rem;
+			font-size: 0.75rem;
+			flex-wrap: wrap;
+		}
+
+		.remove-btn {
+			margin-left: 0;
+			padding: 0.25rem 0.5rem;
+			font-size: 0.75rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		header {
+			padding: 0.75rem 1rem;
+			gap: 1rem;
+		}
+
+		.back-link {
+			font-size: 0.85rem;
+		}
+
+		h1 {
+			font-size: 1.1rem;
+		}
+
+		main {
+			padding: 1rem;
+		}
+
+		.empty {
+			padding: 2rem 1rem;
+			border-radius: 12px;
+		}
+
+		.empty .emoji {
+			font-size: 2.5rem;
+		}
+
+		.empty p {
+			font-size: 1rem;
+		}
+
+		.start-link {
+			padding: 0.5rem 1.25rem;
+			font-size: 0.9rem;
+		}
+
+		.actions {
+			flex-direction: column;
+			gap: 0.5rem;
+			margin-bottom: 1rem;
+		}
+
+		.review-btn {
+			padding: 0.75rem;
+			font-size: 1rem;
+		}
+
+		.clear-btn {
+			padding: 0.75rem;
+			font-size: 0.85rem;
+		}
+
+		.record-card {
+			padding: 0.75rem 1rem;
+		}
+
+		.problem {
+			font-size: 1.1rem;
+		}
+
+		.answers {
+			gap: 1rem;
+			font-size: 0.8rem;
+			flex-direction: column;
+		}
+
+		.meta {
+			gap: 0.5rem;
+			font-size: 0.7rem;
+		}
+
+		.remove-btn {
+			padding: 0.2rem 0.5rem;
+			font-size: 0.7rem;
+		}
+	}
 </style>

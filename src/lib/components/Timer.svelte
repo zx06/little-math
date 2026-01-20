@@ -45,4 +45,27 @@
 	.icon {
 		font-size: 1.25rem;
 	}
+
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		.timer {
+			font-size: 1.25rem;
+			gap: 0.4rem;
+		}
+
+		.icon {
+			font-size: 1.1rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.timer {
+			font-size: 1.1rem;
+			gap: 0.35rem;
+		}
+
+		.icon {
+			font-size: 1rem;
+		}
+	}
 </style>

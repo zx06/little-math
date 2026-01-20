@@ -247,12 +247,76 @@
 	}
 
 	@media (max-width: 768px) {
+		.app-header {
+			padding: 1rem 1.5rem;
+		}
+
+		.app-header h1 {
+			font-size: 1.5rem;
+		}
+
+		.app-header p {
+			font-size: 0.9rem;
+		}
+
+		.header-links {
+			gap: 0.75rem;
+			margin-top: 0.625rem;
+		}
+
+		.practice-link,
+		.wrong-book-link {
+			padding: 0.4rem 1rem;
+			font-size: 0.9rem;
+		}
+
 		.app-main {
 			grid-template-columns: 1fr;
+			padding: 1rem;
+			gap: 1rem;
 		}
 
 		.sidebar {
 			position: static;
+		}
+
+		.empty-state {
+			min-height: 300px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.app-header {
+			padding: 0.875rem 1rem;
+		}
+
+		.app-header h1 {
+			font-size: 1.25rem;
+		}
+
+		.app-header p {
+			font-size: 0.85rem;
+		}
+
+		.header-links {
+			gap: 0.5rem;
+			margin-top: 0.5rem;
+			flex-wrap: wrap;
+		}
+
+		.practice-link,
+		.wrong-book-link {
+			padding: 0.375rem 0.875rem;
+			font-size: 0.85rem;
+		}
+
+		.app-main {
+			padding: 0.75rem;
+			gap: 0.75rem;
+		}
+
+		.empty-state {
+			min-height: 250px;
 		}
 	}
 </style>

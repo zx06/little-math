@@ -253,4 +253,75 @@
 		font-size: 1.25rem;
 		color: #666;
 	}
+
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		header {
+			padding: 0.875rem 1.5rem;
+			gap: 1.5rem;
+		}
+
+		.back-link {
+			font-size: 0.9rem;
+		}
+
+		h1 {
+			font-size: 1.25rem;
+		}
+
+		main {
+			padding: 1.5rem;
+		}
+
+		.practice-area {
+			max-width: 100%;
+			padding: 1.5rem;
+			border-radius: 16px;
+		}
+
+		.top-bar {
+			margin-bottom: 1.5rem;
+			padding-bottom: 0.875rem;
+		}
+
+		.progress {
+			font-size: 1.1rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		header {
+			padding: 0.75rem 1rem;
+			gap: 1rem;
+		}
+
+		.back-link {
+			font-size: 0.85rem;
+		}
+
+		h1 {
+			font-size: 1.1rem;
+		}
+
+		main {
+			padding: 1rem;
+		}
+
+		.practice-area {
+			padding: 1.25rem;
+			border-radius: 12px;
+		}
+
+		.top-bar {
+			margin-bottom: 1.25rem;
+			padding-bottom: 0.75rem;
+			flex-direction: column;
+			gap: 0.5rem;
+			align-items: flex-start;
+		}
+
+		.progress {
+			font-size: 1rem;
+		}
+	}
 </style>

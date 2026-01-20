@@ -220,4 +220,129 @@
 		color: #51cf66;
 		font-size: 0.875rem;
 	}
+
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		.result {
+			padding: 1.5rem;
+		}
+
+		.emoji {
+			font-size: 4rem;
+			margin-bottom: 0.875rem;
+		}
+
+		h2 {
+			font-size: 1.5rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.stats {
+			gap: 2rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.label {
+			font-size: 0.9rem;
+		}
+
+		.value {
+			font-size: 1.75rem;
+		}
+
+		.actions {
+			gap: 0.75rem;
+			flex-wrap: wrap;
+		}
+
+		button {
+			padding: 0.625rem 1.5rem;
+			font-size: 1.1rem;
+		}
+
+		.details {
+			margin-top: 1.5rem;
+			padding-top: 1.25rem;
+		}
+
+		.details h3 {
+			font-size: 1.1rem;
+		}
+
+		.record-item {
+			font-size: 0.9rem;
+			padding: 0.4rem 0.75rem;
+		}
+
+		.your-answer,
+		.correct-answer {
+			font-size: 0.8rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.result {
+			padding: 1rem;
+		}
+
+		.emoji {
+			font-size: 3rem;
+			margin-bottom: 0.75rem;
+		}
+
+		h2 {
+			font-size: 1.35rem;
+			margin-bottom: 1.25rem;
+		}
+
+		.stats {
+			gap: 1.5rem;
+			margin-bottom: 1.25rem;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.label {
+			font-size: 0.85rem;
+		}
+
+		.value {
+			font-size: 1.5rem;
+		}
+
+		.actions {
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+
+		button {
+			width: 100%;
+			padding: 0.75rem;
+			font-size: 1rem;
+		}
+
+		.details {
+			margin-top: 1.25rem;
+			padding-top: 1rem;
+		}
+
+		.details h3 {
+			font-size: 1rem;
+		}
+
+		.record-item {
+			font-size: 0.85rem;
+			padding: 0.375rem 0.5rem;
+			gap: 0.5rem;
+		}
+
+		.index {
+			width: 1.5rem;
+		}
+
+		.your-answer,
+		.correct-answer {
+			font-size: 0.75rem;
+		}
+	}
 </style>
