@@ -1,18 +1,48 @@
 <script lang="ts">
-	import type { ExerciseConfig, Problem } from '$lib/types';
+	import type { ExerciseConfig, Problem, MakeTargetProblem, ChainProblem, CompareProblem } from '$lib/types';
 	import { DEFAULT_CONFIG } from '$lib/config/presets';
 	import { generateProblems } from '$lib/generators/arithmetic';
+	import { generateMakeTargetProblems } from '$lib/generators/makeTarget';
+	import { generateChainProblems } from '$lib/generators/chain';
+	import { generateCompareProblems } from '$lib/generators/compare';
 	import ConfigPanel from '$lib/components/ConfigPanel.svelte';
 	import ExerciseSheet from '$lib/components/ExerciseSheet.svelte';
 	import StatisticsPanel from '$lib/components/StatisticsPanel.svelte';
 	import { zh } from '$lib/i18n/zh';
 	import { trackVisit } from '$lib/services/statistics';
+	import { loadConfig, saveConfig } from '$lib/services/configStorage';
+	import { browser } from '$app/environment';
 
-	let config: ExerciseConfig = $state({ ...DEFAULT_CONFIG });
-	let problems: Problem[] = $state([]);
+	let config: ExerciseConfig = $state(browser ? loadConfig() : { ...DEFAULT_CONFIG });
+	let problems: (Problem | MakeTargetProblem | ChainProblem | CompareProblem)[] = $state([]);
+
+	$effect(() => {
+		if (browser) {
+			saveConfig(config);
+		}
+	});
 
 	function handleGenerate() {
-		problems = generateProblems(config);
+		if (config.problemMode === 'compare') {
+			problems = generateCompareProblems(
+				config.range.min,
+				config.range.max,
+				config.operations,
+				config.totalCount
+			);
+		} else if (config.problemMode === 'chain') {
+			problems = generateChainProblems(
+				config.range.min,
+				config.range.max,
+				config.operations,
+				config.chainLength,
+				config.totalCount
+			);
+		} else if (config.problemMode === 'makeTarget') {
+			problems = generateMakeTargetProblems(config.makeTargetValue, config.totalCount);
+		} else {
+			problems = generateProblems(config);
+		}
 	}
 
 	function handlePrint() {
@@ -37,6 +67,10 @@
 	<header class="app-header no-print">
 		<h1>{zh.appName}</h1>
 		<p>{zh.appSubtitle}</p>
+		<div class="header-links">
+			<a href="/practice" class="practice-link">🎯 在线练习</a>
+			<a href="/wrong-book" class="wrong-book-link">📕 错题本</a>
+		</div>
 	</header>
 
 	<main class="app-main">
@@ -52,6 +86,9 @@
 					showAnswers={false}
 					isVertical={config.isVertical}
 					columns={config.columns}
+					customTitle={config.customTitle}
+					studentName={config.studentName}
+					showDate={config.showDate}
 				/>
 
 				{#if config.showAnswerPage}
@@ -61,6 +98,9 @@
 						showAnswers={true}
 						isVertical={config.isVertical}
 						columns={config.columns}
+						customTitle={config.customTitle}
+						studentName={config.studentName}
+						showDate={config.showDate}
 					/>
 				{/if}
 			{:else}
@@ -116,6 +156,30 @@
 		margin: 0.5rem 0 0;
 		opacity: 0.95;
 		font-size: 1rem;
+	}
+
+	.header-links {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		margin-top: 0.75rem;
+	}
+
+	.practice-link,
+	.wrong-book-link {
+		display: inline-block;
+		padding: 0.5rem 1.25rem;
+		background: rgba(255, 255, 255, 0.25);
+		color: white;
+		text-decoration: none;
+		border-radius: 20px;
+		font-size: 1rem;
+		transition: background 0.2s;
+	}
+
+	.practice-link:hover,
+	.wrong-book-link:hover {
+		background: rgba(255, 255, 255, 0.4);
 	}
 
 	.app-main {

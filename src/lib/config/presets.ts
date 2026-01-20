@@ -54,7 +54,13 @@ export const DEFAULT_CONFIG: ExerciseConfig = {
 	columns: 2,
 	countPerPage: 20,
 	totalCount: 20,
-	showAnswerPage: false
+	showAnswerPage: false,
+	customTitle: '',
+	studentName: '',
+	showDate: true,
+	problemMode: 'normal',
+	makeTargetValue: 10,
+	chainLength: 3
 };
 
 /** 竖式默认每页题数 */

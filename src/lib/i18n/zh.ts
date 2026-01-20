@@ -22,13 +22,28 @@ export const zh = {
 		columns3: '3列（紧凑）',
 		countPerPage: '每页题数',
 		totalCount: '总题数',
-		showAnswerPage: '生成答案页'
+		showAnswerPage: '生成答案页',
+		customTitle: '自定义标题',
+		studentName: '学生姓名',
+		showDate: '显示日期',
+		savePreset: '保存预设',
+		presetName: '预设名称',
+		problemMode: '练习模式',
+		normalMode: '普通计算',
+		makeTargetMode: '凑数练习',
+		makeTargetValue: '凑数目标',
+		chainMode: '连续运算',
+		chainLength: '运算个数',
+		chainLength3: '3个数',
+		chainLength4: '4个数',
+		compareMode: '比较大小'
 	},
 
 	// 按钮
 	buttons: {
 		generate: '生成',
-		print: '打印'
+		print: '打印',
+		savePreset: '保存当前配置'
 	},
 
 	// 打印

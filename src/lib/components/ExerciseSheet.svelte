@@ -1,28 +1,83 @@
 <script lang="ts">
-	import type { Problem } from '$lib/types';
+	import type { Problem, MakeTargetProblem, ChainProblem, CompareProblem } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 	import { zh } from '$lib/i18n/zh';
 
+	type AnyProblem = Problem | MakeTargetProblem | ChainProblem | CompareProblem;
+
 	interface Props {
-		problems: Problem[];
+		problems: AnyProblem[];
 		countPerPage: number;
 		showAnswers: boolean;
 		isVertical: boolean;
 		columns?: 2 | 3;
+		customTitle?: string;
+		studentName?: string;
+		showDate?: boolean;
 	}
 
-	let { problems, countPerPage, showAnswers, isVertical, columns = 2 }: Props = $props();
+	let {
+		problems,
+		countPerPage,
+		showAnswers,
+		isVertical,
+		columns = 2,
+		customTitle = '',
+		studentName = '',
+		showDate = true
+	}: Props = $props();
+
+	function formatDate(): string {
+		const now = new Date();
+		const year = now.getFullYear();
+		const month = now.getMonth() + 1;
+		const day = now.getDate();
+		return `${year}年${month}月${day}日`;
+	}
 
 	const t = zh.print;
 
 	const pages = $derived(() => {
-		const result: Problem[][] = [];
+		const result: AnyProblem[][] = [];
 		const perPage = countPerPage > 0 ? countPerPage : 20;
 		for (let i = 0; i < problems.length; i += perPage) {
 			result.push(problems.slice(i, i + perPage));
 		}
 		return result;
 	});
+
+	function isMakeTargetProblem(p: AnyProblem): p is MakeTargetProblem {
+		return 'type' in p && p.type === 'makeTarget';
+	}
+
+	function isChainProblem(p: AnyProblem): p is ChainProblem {
+		return 'type' in p && p.type === 'chain';
+	}
+
+	function isCompareProblem(p: AnyProblem): p is CompareProblem {
+		return 'type' in p && p.type === 'compare';
+	}
+
+	function getCompareDisplay(p: CompareProblem, showAnswer: boolean): { left: string; symbol: string; right: string } {
+		const left = `${p.left.a} ${OP_SYMBOLS[p.left.op]} ${p.left.b}`;
+		const right = `${p.right.a} ${OP_SYMBOLS[p.right.op]} ${p.right.b}`;
+		const symbol = showAnswer ? p.answer : '○';
+		return { left, symbol, right };
+	}
+
+	function getMakeTargetParts(
+		p: MakeTargetProblem,
+		showAnswer: boolean
+	): { first: string; op: string; second: string; result: string } {
+		const blank = '(\u00a0\u00a0\u00a0\u00a0)';
+		const answerDisplay = showAnswer ? `(${p.answer})` : blank;
+
+		if (p.blankFirst) {
+			return { first: answerDisplay, op: '+', second: String(p.a), result: String(p.target) };
+		} else {
+			return { first: String(p.a), op: '+', second: answerDisplay, result: String(p.target) };
+		}
+	}
 
 	function getProblemParts(
 		p: Problem,
@@ -44,23 +99,54 @@
 	function padNumber(n: number | string, len: number): string {
 		return String(n).padStart(len, ' ');
 	}
+
+	function getChainDisplay(p: ChainProblem, showAnswer: boolean): string {
+		const blank = '(\u00a0\u00a0\u00a0\u00a0)';
+		const parts: string[] = [];
+
+		for (let i = 0; i < p.numbers.length; i++) {
+			if (p.blank === i) {
+				parts.push(showAnswer ? `(${p.numbers[i]})` : blank);
+			} else {
+				parts.push(String(p.numbers[i]));
+			}
+			if (i < p.ops.length) {
+				parts.push(OP_SYMBOLS[p.ops[i]]);
+			}
+		}
+
+		parts.push('=');
+		if (p.blank === 'result') {
+			parts.push(showAnswer ? `(${p.result})` : blank);
+		} else {
+			parts.push(String(p.result));
+		}
+
+		return parts.join(' ');
+	}
 </script>
 
 <div class="sheet-container">
 	{#each pages() as page, pageIndex}
 		<div class="page" class:answer-page={showAnswers}>
 			<div class="page-header">
-				<h1>{t.exerciseTitle}{showAnswers ? ` - ${t.answerTitle}` : ''}</h1>
+				<h1>{customTitle || t.exerciseTitle}{showAnswers ? ` - ${t.answerTitle}` : ''}</h1>
 				{#if !showAnswers}
 					<div class="info-row">
 						<div class="info-item">
 							<span class="info-label">{t.name}</span>
-							<span class="info-line"></span>
+							{#if studentName}
+								<span class="info-value">{studentName}</span>
+							{:else}
+								<span class="info-line"></span>
+							{/if}
 						</div>
-						<div class="info-item">
-							<span class="info-label">{t.date}</span>
-							<span class="info-line"></span>
-						</div>
+						{#if showDate}
+							<div class="info-item">
+								<span class="info-label">{t.date}</span>
+								<span class="info-value">{formatDate()}</span>
+							</div>
+						{/if}
 						<div class="info-item">
 							<span class="info-label">{t.score}</span>
 							<span class="info-line short"></span>
@@ -72,59 +158,78 @@
 			{#if isVertical}
 				<div class="vertical-grid">
 					{#each page as problem, idx}
-						{@const maxLen = Math.max(
-							String(problem.a).length,
-							String(problem.b).length,
-							String(problem.result).length
-						)}
-						<div class="vertical-problem">
-							<div class="problem-number">{pageIndex * countPerPage + idx + 1}.</div>
-							<div class="vertical-calc">
-								<div class="v-row top">
-									{#if problem.blank !== 'first'}
-										{padNumber(problem.a, maxLen)}
-									{:else if showAnswers}
-										<span class="v-answer">({padNumber(problem.a, maxLen)})</span>
-									{:else}
-										<span class="v-blank">{' '.repeat(maxLen)}</span>
-									{/if}
-								</div>
-								<div class="v-row middle">
-									<span class="v-op">{OP_SYMBOLS[problem.op]}</span>
-									{#if problem.blank !== 'second'}
-										{padNumber(problem.b, maxLen)}
-									{:else if showAnswers}
-										<span class="v-answer">({padNumber(problem.b, maxLen)})</span>
-									{:else}
-										<span class="v-blank">{' '.repeat(maxLen)}</span>
-									{/if}
-								</div>
-								<div class="v-line"></div>
-								<div class="v-row bottom">
-									{#if problem.blank !== 'result'}
-										{padNumber(problem.result, maxLen)}
-									{:else if showAnswers}
-										<span class="v-answer">({padNumber(problem.result, maxLen)})</span>
-									{:else}
-										<span class="v-blank">{' '.repeat(maxLen)}</span>
-									{/if}
+						{#if !isMakeTargetProblem(problem) && !isChainProblem(problem) && !isCompareProblem(problem)}
+							{@const maxLen = Math.max(
+								String(problem.a).length,
+								String(problem.b).length,
+								String(problem.result).length
+							)}
+							<div class="vertical-problem">
+								<div class="problem-number">{pageIndex * countPerPage + idx + 1}.</div>
+								<div class="vertical-calc">
+									<div class="v-row top">
+										{#if problem.blank !== 'first'}
+											{padNumber(problem.a, maxLen)}
+										{:else if showAnswers}
+											<span class="v-answer">({padNumber(problem.a, maxLen)})</span>
+										{:else}
+											<span class="v-blank">{' '.repeat(maxLen)}</span>
+										{/if}
+									</div>
+									<div class="v-row middle">
+										<span class="v-op">{OP_SYMBOLS[problem.op]}</span>
+										{#if problem.blank !== 'second'}
+											{padNumber(problem.b, maxLen)}
+										{:else if showAnswers}
+											<span class="v-answer">({padNumber(problem.b, maxLen)})</span>
+										{:else}
+											<span class="v-blank">{' '.repeat(maxLen)}</span>
+										{/if}
+									</div>
+									<div class="v-line"></div>
+									<div class="v-row bottom">
+										{#if problem.blank !== 'result'}
+											{padNumber(problem.result, maxLen)}
+										{:else if showAnswers}
+											<span class="v-answer">({padNumber(problem.result, maxLen)})</span>
+										{:else}
+											<span class="v-blank">{' '.repeat(maxLen)}</span>
+										{/if}
+									</div>
 								</div>
 							</div>
-						</div>
+						{/if}
 					{/each}
 				</div>
 			{:else}
 				<div class="horizontal-grid" class:cols-2={columns === 2} class:cols-3={columns === 3}>
 					{#each page as problem, idx}
-						{@const parts = getProblemParts(problem, showAnswers)}
-						<div class="problem" class:problem-large={columns === 2}>
-							<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
-							<span class="part first">{parts.first}</span>
-							<span class="part op">{parts.op}</span>
-							<span class="part second">{parts.second}</span>
-							<span class="part eq">=</span>
-							<span class="part result">{parts.result}</span>
-						</div>
+						{#if isCompareProblem(problem)}
+							{@const compare = getCompareDisplay(problem, showAnswers)}
+							<div class="problem compare-problem" class:problem-large={columns === 2}>
+								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
+								<span class="compare-left">{compare.left}</span>
+								<span class="compare-symbol" class:compare-answer={showAnswers}>{compare.symbol}</span>
+								<span class="compare-right">{compare.right}</span>
+							</div>
+						{:else if isChainProblem(problem)}
+							<div class="problem chain-problem" class:problem-large={columns === 2}>
+								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
+								<span class="chain-expr">{getChainDisplay(problem, showAnswers)}</span>
+							</div>
+						{:else}
+							{@const parts = isMakeTargetProblem(problem)
+								? getMakeTargetParts(problem, showAnswers)
+								: getProblemParts(problem, showAnswers)}
+							<div class="problem" class:problem-large={columns === 2}>
+								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
+								<span class="part first">{parts.first}</span>
+								<span class="part op">{parts.op}</span>
+								<span class="part second">{parts.second}</span>
+								<span class="part eq">=</span>
+								<span class="part result">{parts.result}</span>
+							</div>
+						{/if}
 					{/each}
 				</div>
 			{/if}
@@ -194,6 +299,11 @@
 
 	.info-line.short {
 		width: 3rem;
+	}
+
+	.info-value {
+		color: #5c7cfa;
+		font-weight: 600;
 	}
 
 	/* 横式网格 */
@@ -282,6 +392,33 @@
 		text-align: center;
 		color: #ff922b;
 		font-weight: 700;
+	}
+
+	.chain-problem .chain-expr {
+		color: #5c7cfa;
+		font-weight: 600;
+	}
+
+	/* 比较大小题目 */
+	.compare-problem .compare-left,
+	.compare-problem .compare-right {
+		color: #5c7cfa;
+		font-weight: 600;
+	}
+
+	.compare-symbol {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 2em;
+		margin: 0 0.5em;
+		font-size: 1.2em;
+		color: #ff922b;
+		font-weight: 700;
+	}
+
+	.compare-symbol.compare-answer {
+		color: #51cf66;
 	}
 
 	/* 竖式网格 */

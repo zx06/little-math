@@ -4,6 +4,51 @@ export type Operation = 'add' | 'sub' | 'mul' | 'div';
 /** 留空位置 */
 export type BlankPosition = 'first' | 'second' | 'result';
 
+/** 题目模式 */
+export type ProblemMode = 'normal' | 'makeTarget' | 'chain' | 'compare';
+
+/** 比较符号 */
+export type CompareSymbol = '>' | '<' | '=';
+
+/** 凑数目标 */
+export type MakeTargetValue = 10 | 20 | 100;
+
+/** 凑数练习题目 */
+export interface MakeTargetProblem {
+	type: 'makeTarget';
+	a: number;
+	target: number;
+	answer: number;
+	blankFirst: boolean;
+}
+
+/** 连续运算题目 */
+export interface ChainProblem {
+	type: 'chain';
+	numbers: number[];
+	ops: Operation[];
+	result: number;
+	blank: 'result' | number;
+}
+
+/** 比较大小题目 */
+export interface CompareProblem {
+	type: 'compare';
+	left: {
+		a: number;
+		b: number;
+		op: Operation;
+		result: number;
+	};
+	right: {
+		a: number;
+		b: number;
+		op: Operation;
+		result: number;
+	};
+	answer: CompareSymbol;
+}
+
 /** 单道题目 */
 export interface Problem {
 	a: number;
@@ -31,6 +76,12 @@ export interface ExerciseConfig {
 	countPerPage: number;
 	totalCount: number;
 	showAnswerPage: boolean;
+	customTitle?: string;
+	studentName?: string;
+	showDate?: boolean;
+	problemMode: ProblemMode;
+	makeTargetValue: MakeTargetValue;
+	chainLength: 3 | 4;
 }
 
 /** 运算符显示映射 */
@@ -58,6 +109,18 @@ export interface StatisticsData {
 	gradePresetCount: Record<string, number>;
 	lastVisitDate: string;
 	dailyStats: Record<string, { visits: number; generations: number; prints: number }>;
+}
+
+/** 任意题目类型 */
+export type AnyProblem = Problem | MakeTargetProblem | ChainProblem | CompareProblem;
+
+/** 错题记录 */
+export interface WrongRecord {
+	problem: AnyProblem;
+	wrongAnswer: number;
+	correctAnswer: number;
+	timestamp: number;
+	reviewCount: number;
 }
 
 /** 初始化统计数据 */

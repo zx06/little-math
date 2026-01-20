@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ExerciseConfig, Operation, BlankPosition } from '$lib/types';
+	import type { ExerciseConfig, Operation, BlankPosition, MakeTargetValue } from '$lib/types';
 	import { OP_NAMES } from '$lib/types';
 	import {
 		GRADE_PRESETS,
@@ -9,6 +9,8 @@
 	} from '$lib/config/presets';
 	import { zh } from '$lib/i18n/zh';
 	import { track } from '$lib/actions/track';
+
+	const MAKE_TARGET_OPTIONS: MakeTargetValue[] = [10, 20, 100];
 
 	interface Props {
 		config: ExerciseConfig;
@@ -74,6 +76,44 @@
 
 	<div class="config-section">
 		<label>
+			{t.problemMode}
+			<select bind:value={config.problemMode}>
+				<option value="normal">{t.normalMode}</option>
+				<option value="makeTarget">{t.makeTargetMode}</option>
+				<option value="chain">{t.chainMode}</option>
+				<option value="compare">{t.compareMode}</option>
+			</select>
+		</label>
+	</div>
+
+	{#if config.problemMode === 'chain'}
+		<div class="config-section">
+			<label>
+				{t.chainLength}
+				<select bind:value={config.chainLength}>
+					<option value={3}>{t.chainLength3}</option>
+					<option value={4}>{t.chainLength4}</option>
+				</select>
+			</label>
+		</div>
+	{/if}
+
+	{#if config.problemMode === 'makeTarget'}
+		<div class="config-section">
+			<label>
+				{t.makeTargetValue}
+				<select bind:value={config.makeTargetValue}>
+					{#each MAKE_TARGET_OPTIONS as value}
+						<option {value}>凑 {value}</option>
+					{/each}
+				</select>
+			</label>
+		</div>
+	{/if}
+
+	{#if config.problemMode !== 'compare'}
+	<div class="config-section">
+		<label>
 			{t.exerciseType}
 			<select bind:value={config.isVertical} onchange={handleVerticalChange}>
 				<option value={false}>{t.horizontal}</option>
@@ -81,6 +121,7 @@
 			</select>
 		</label>
 	</div>
+{/if}
 
 	{#if !config.isVertical}
 		<div class="config-section">
@@ -94,38 +135,41 @@
 		</div>
 	{/if}
 
-	<div class="config-section">
-		<span class="label">{t.operations}</span>
-		<div class="checkbox-group">
-			{#each Object.entries(OP_NAMES) as [op, name]}
-				<label class="checkbox-label">
-					<input
-						type="checkbox"
-						checked={config.operations.includes(op as Operation)}
-						onchange={() => toggleOperation(op as Operation)}
-					/>
-					{name}
+	{#if config.problemMode === 'normal' || config.problemMode === 'chain' || config.problemMode === 'compare'}
+		<div class="config-section">
+			<span class="label">{t.operations}</span>
+			<div class="checkbox-group">
+				{#each Object.entries(OP_NAMES) as [op, name]}
+					<label class="checkbox-label">
+						<input
+							type="checkbox"
+							checked={config.operations.includes(op as Operation)}
+							onchange={() => toggleOperation(op as Operation)}
+						/>
+						{name}
+					</label>
+				{/each}
+			</div>
+		</div>
+
+		<div class="config-section">
+			<span class="label">{t.range}</span>
+			<div class="range-inputs">
+				<label>
+					{t.rangeMin}
+					<input type="number" bind:value={config.range.min} min="0" max="999" />
 				</label>
-			{/each}
+				<label>
+					{t.rangeMax}
+					<input type="number" bind:value={config.range.max} min="1" max="9999" />
+				</label>
+			</div>
 		</div>
-	</div>
+	{/if}
 
-	<div class="config-section">
-		<span class="label">{t.range}</span>
-		<div class="range-inputs">
-			<label>
-				{t.rangeMin}
-				<input type="number" bind:value={config.range.min} min="0" max="999" />
-			</label>
-			<label>
-				{t.rangeMax}
-				<input type="number" bind:value={config.range.max} min="1" max="9999" />
-			</label>
-		</div>
-	</div>
-
-	<div class="config-section">
-		<span class="label">{t.blankPosition}</span>
+	{#if config.problemMode === 'normal'}
+		<div class="config-section">
+			<span class="label">{t.blankPosition}</span>
 		<div class="ratio-inputs">
 			<label>
 				{t.blankFirst}
@@ -162,6 +206,7 @@
 			</label>
 		</div>
 	</div>
+	{/if}
 
 	<div class="config-section">
 		<label>
@@ -174,6 +219,27 @@
 		<label>
 			{t.countPerPage}
 			<input type="number" bind:value={config.countPerPage} min="1" max="100" />
+		</label>
+	</div>
+
+	<div class="config-section">
+		<label>
+			{t.customTitle}
+			<input type="text" bind:value={config.customTitle} placeholder="数学练习" />
+		</label>
+	</div>
+
+	<div class="config-section">
+		<label>
+			{t.studentName}
+			<input type="text" bind:value={config.studentName} placeholder="请输入姓名" />
+		</label>
+	</div>
+
+	<div class="config-section">
+		<label class="checkbox-label">
+			<input type="checkbox" bind:checked={config.showDate} />
+			{t.showDate}
 		</label>
 	</div>
 
@@ -242,7 +308,8 @@
 	}
 
 	select,
-	input[type='number'] {
+	input[type='number'],
+	input[type='text'] {
 		padding: 0.5rem;
 		border: 1px solid #ddd;
 		border-radius: 4px;
