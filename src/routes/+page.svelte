@@ -7,9 +7,17 @@
 	import StatisticsPanel from '$lib/components/StatisticsPanel.svelte';
 	import { zh } from '$lib/i18n/zh';
 	import { trackVisit } from '$lib/services/statistics';
+	import { loadConfig, saveConfig } from '$lib/services/configStorage';
+	import { browser } from '$app/environment';
 
-	let config: ExerciseConfig = $state({ ...DEFAULT_CONFIG });
+	let config: ExerciseConfig = $state(browser ? loadConfig() : { ...DEFAULT_CONFIG });
 	let problems: Problem[] = $state([]);
+
+	$effect(() => {
+		if (browser) {
+			saveConfig(config);
+		}
+	});
 
 	function handleGenerate() {
 		problems = generateProblems(config);

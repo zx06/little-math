@@ -25,13 +25,16 @@ export const zh = {
 		showAnswerPage: '生成答案页',
 		customTitle: '自定义标题',
 		studentName: '学生姓名',
-		showDate: '显示日期'
+		showDate: '显示日期',
+		savePreset: '保存预设',
+		presetName: '预设名称'
 	},
 
 	// 按钮
 	buttons: {
 		generate: '生成',
-		print: '打印'
+		print: '打印',
+		savePreset: '保存当前配置'
 	},
 
 	// 打印
