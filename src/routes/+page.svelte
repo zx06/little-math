@@ -15,6 +15,11 @@
 
 	let config: ExerciseConfig = $state(browser ? loadConfig() : { ...DEFAULT_CONFIG });
 	let problems: (Problem | MakeTargetProblem | ChainProblem | CompareProblem)[] = $state([]);
+	let theme = $state('default');
+
+	function handleThemeChange(newTheme: string) {
+		theme = newTheme;
+	}
 
 	$effect(() => {
 		if (browser) {
@@ -75,7 +80,13 @@
 
 	<main class="app-main">
 		<aside class="sidebar no-print">
-			<ConfigPanel bind:config onGenerate={handleGenerate} onPrint={handlePrint} />
+			<ConfigPanel
+				bind:config
+				onGenerate={handleGenerate}
+				onPrint={handlePrint}
+				theme={theme}
+				onThemeChange={handleThemeChange}
+			/>
 		</aside>
 
 		<section class="preview">
@@ -89,6 +100,7 @@
 					customTitle={config.customTitle}
 					studentName={config.studentName}
 					showDate={config.showDate}
+					theme={theme}
 				/>
 
 				{#if config.showAnswerPage}
@@ -101,6 +113,7 @@
 						customTitle={config.customTitle}
 						studentName={config.studentName}
 						showDate={config.showDate}
+						theme={theme}
 					/>
 				{/if}
 			{:else}

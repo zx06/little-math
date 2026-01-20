@@ -1,17 +1,20 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { StatisticsData } from '$lib/types';
-	import { getStats, getLast7DaysStats, resetStats } from '$lib/services/statistics';
+	import { getStats, getLast7DaysStats, resetStats, getDailyProgress } from '$lib/services/statistics';
 	import { OP_NAMES } from '$lib/types';
+	import ProgressChart from '$lib/components/ProgressChart.svelte';
 
 	let stats: StatisticsData = $state<StatisticsData>(getStats());
 	let last7Days = $state(getLast7DaysStats());
+	let dailyProgress = $state(getDailyProgress());
 	let showPanel = $state(false);
 
 	onMount(() => {
 		const interval = setInterval(() => {
 			stats = getStats();
 			last7Days = getLast7DaysStats();
+			dailyProgress = getDailyProgress();
 		}, 1000);
 
 		return () => clearInterval(interval);
@@ -103,6 +106,10 @@
 							</div>
 						{/each}
 					</div>
+				</div>
+
+				<div class="stats-section">
+					<ProgressChart data={dailyProgress} />
 				</div>
 
 				<div class="stats-footer">

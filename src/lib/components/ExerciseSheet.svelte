@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { Problem, MakeTargetProblem, ChainProblem, CompareProblem } from '$lib/types';
+	import type { Problem, MakeTargetProblem, ChainProblem, CompareProblem, RemainderProblem } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 	import { zh } from '$lib/i18n/zh';
+	import { THEMES, getThemeById } from '$lib/config/themes';
 
-	type AnyProblem = Problem | MakeTargetProblem | ChainProblem | CompareProblem;
+	type AnyProblem = Problem | MakeTargetProblem | ChainProblem | CompareProblem | RemainderProblem;
 
 	interface Props {
 		problems: AnyProblem[];
@@ -14,6 +15,7 @@
 		customTitle?: string;
 		studentName?: string;
 		showDate?: boolean;
+		theme?: string;
 	}
 
 	let {
@@ -24,8 +26,11 @@
 		columns = 2,
 		customTitle = '',
 		studentName = '',
-		showDate = true
+		showDate = true,
+		theme = 'default'
 	}: Props = $props();
+
+	const currentTheme = $derived(getThemeById(theme));
 
 	function formatDate(): string {
 		const now = new Date();
@@ -56,6 +61,10 @@
 
 	function isCompareProblem(p: AnyProblem): p is CompareProblem {
 		return 'type' in p && p.type === 'compare';
+	}
+
+	function isRemainderProblem(p: AnyProblem): p is RemainderProblem {
+		return 'type' in p && p.type === 'remainder';
 	}
 
 	function getCompareDisplay(p: CompareProblem, showAnswer: boolean): { left: string; symbol: string; right: string } {
@@ -124,9 +133,43 @@
 
 		return parts.join(' ');
 	}
+
+	function getRemainderDisplay(p: RemainderProblem, showAnswer: boolean): {
+		dividend: string;
+		divisor: string;
+		quotient: string;
+		remainder: string;
+	} {
+		const blank = '(\u00a0\u00a0\u00a0\u00a0)';
+
+		let quotient: string;
+		let remainder: string;
+
+		if (p.blank === 'quotient') {
+			quotient = showAnswer ? `(${p.quotient})` : blank;
+			remainder = String(p.remainder);
+		} else if (p.blank === 'remainder') {
+			quotient = String(p.quotient);
+			remainder = showAnswer ? `(${p.remainder})` : blank;
+		} else {
+			// both
+			quotient = showAnswer ? `(${p.quotient})` : blank;
+			remainder = showAnswer ? `(${p.remainder})` : blank;
+		}
+
+		return {
+			dividend: String(p.dividend),
+			divisor: String(p.divisor),
+			quotient,
+			remainder
+		};
+	}
 </script>
 
-<div class="sheet-container">
+<div
+	class="sheet-container"
+	style="--theme-primary: {currentTheme.colors.primary}; --theme-secondary: {currentTheme.colors.secondary}; --theme-accent: {currentTheme.colors.accent}; --theme-background: {currentTheme.colors.background}; --theme-border: {currentTheme.colors.border};"
+>
 	{#each pages() as page, pageIndex}
 		<div class="page" class:answer-page={showAnswers}>
 			<div class="page-header">
@@ -158,40 +201,41 @@
 			{#if isVertical}
 				<div class="vertical-grid">
 					{#each page as problem, idx}
-						{#if !isMakeTargetProblem(problem) && !isChainProblem(problem) && !isCompareProblem(problem)}
+						{#if !isMakeTargetProblem(problem) && !isChainProblem(problem) && !isCompareProblem(problem) && !isRemainderProblem(problem)}
+							{@const p = problem as Problem}
 							{@const maxLen = Math.max(
-								String(problem.a).length,
-								String(problem.b).length,
-								String(problem.result).length
+								String(p.a).length,
+								String(p.b).length,
+								String(p.result).length
 							)}
 							<div class="vertical-problem">
 								<div class="problem-number">{pageIndex * countPerPage + idx + 1}.</div>
 								<div class="vertical-calc">
 									<div class="v-row top">
-										{#if problem.blank !== 'first'}
-											{padNumber(problem.a, maxLen)}
+										{#if p.blank !== 'first'}
+											{padNumber(p.a, maxLen)}
 										{:else if showAnswers}
-											<span class="v-answer">({padNumber(problem.a, maxLen)})</span>
+											<span class="v-answer">({padNumber(p.a, maxLen)})</span>
 										{:else}
 											<span class="v-blank">{' '.repeat(maxLen)}</span>
 										{/if}
 									</div>
 									<div class="v-row middle">
-										<span class="v-op">{OP_SYMBOLS[problem.op]}</span>
-										{#if problem.blank !== 'second'}
-											{padNumber(problem.b, maxLen)}
+										<span class="v-op">{OP_SYMBOLS[p.op]}</span>
+										{#if p.blank !== 'second'}
+											{padNumber(p.b, maxLen)}
 										{:else if showAnswers}
-											<span class="v-answer">({padNumber(problem.b, maxLen)})</span>
+											<span class="v-answer">({padNumber(p.b, maxLen)})</span>
 										{:else}
 											<span class="v-blank">{' '.repeat(maxLen)}</span>
 										{/if}
 									</div>
 									<div class="v-line"></div>
 									<div class="v-row bottom">
-										{#if problem.blank !== 'result'}
-											{padNumber(problem.result, maxLen)}
+										{#if p.blank !== 'result'}
+											{padNumber(p.result, maxLen)}
 										{:else if showAnswers}
-											<span class="v-answer">({padNumber(problem.result, maxLen)})</span>
+											<span class="v-answer">({padNumber(p.result, maxLen)})</span>
 										{:else}
 											<span class="v-blank">{' '.repeat(maxLen)}</span>
 										{/if}
@@ -216,6 +260,18 @@
 							<div class="problem chain-problem" class:problem-large={columns === 2}>
 								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
 								<span class="chain-expr">{getChainDisplay(problem, showAnswers)}</span>
+							</div>
+						{:else if isRemainderProblem(problem)}
+							{@const remainder = getRemainderDisplay(problem, showAnswers)}
+							<div class="problem remainder-problem" class:problem-large={columns === 2}>
+								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
+								<span class="remainder-dividend">{remainder.dividend}</span>
+								<span class="remainder-op">÷</span>
+								<span class="remainder-divisor">{remainder.divisor}</span>
+								<span class="remainder-eq">=</span>
+								<span class="remainder-quotient">{remainder.quotient}</span>
+								<span class="remainder-sep">...</span>
+								<span class="remainder-remainder">{remainder.remainder}</span>
 							</div>
 						{:else}
 							{@const parts = isMakeTargetProblem(problem)
@@ -247,7 +303,7 @@
 		padding: 2rem 2.5rem;
 		min-height: 100vh;
 		box-sizing: border-box;
-		background: linear-gradient(180deg, #fff9e6 0%, #ffffff 100%);
+		background: linear-gradient(180deg, var(--theme-background) 0%, #ffffff 100%);
 	}
 
 	.page-header {
@@ -259,8 +315,8 @@
 		font-size: 2rem;
 		font-weight: 700;
 		margin: 0 0 1rem;
-		color: #ff6b6b;
-		text-shadow: 2px 2px 0 #ffe066;
+		color: var(--theme-primary);
+		text-shadow: 2px 2px 0 var(--theme-secondary);
 		letter-spacing: 0.15em;
 	}
 
@@ -419,6 +475,26 @@
 
 	.compare-symbol.compare-answer {
 		color: #51cf66;
+	}
+
+	/* 有余数除法题目 */
+	.remainder-problem .remainder-dividend,
+	.remainder-problem .remainder-divisor,
+	.remainder-problem .remainder-quotient,
+	.remainder-problem .remainder-remainder {
+		color: #5c7cfa;
+		font-weight: 600;
+	}
+
+	.remainder-problem .remainder-op,
+	.remainder-problem .remainder-eq {
+		color: #ff922b;
+		font-weight: 700;
+	}
+
+	.remainder-problem .remainder-sep {
+		color: #999;
+		font-weight: 600;
 	}
 
 	/* 竖式网格 */

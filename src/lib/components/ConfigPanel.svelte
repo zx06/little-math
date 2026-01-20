@@ -9,6 +9,7 @@
 	} from '$lib/config/presets';
 	import { zh } from '$lib/i18n/zh';
 	import { track } from '$lib/actions/track';
+	import ThemeSelector from '$lib/components/ThemeSelector.svelte';
 
 	const MAKE_TARGET_OPTIONS: MakeTargetValue[] = [10, 20, 100];
 
@@ -16,9 +17,11 @@
 		config: ExerciseConfig;
 		onGenerate: () => void;
 		onPrint: () => void;
+		theme: string;
+		onThemeChange: (theme: string) => void;
 	}
 
-	let { config = $bindable(), onGenerate, onPrint }: Props = $props();
+	let { config = $bindable(), onGenerate, onPrint, theme, onThemeChange }: Props = $props();
 
 	const t = zh.config;
 
@@ -62,6 +65,10 @@
 
 <div class="config-panel">
 	<h2>配置</h2>
+
+	<div class="config-section">
+		<ThemeSelector selectedTheme={theme} onChange={onThemeChange} />
+	</div>
 
 	<div class="config-section">
 		<label>
