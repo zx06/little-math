@@ -618,5 +618,26 @@
 		.problem:hover {
 			background: transparent !important;
 		}
+
+		/* 强制恢复打印时的网格布局 */
+		.horizontal-grid.cols-2 {
+			grid-template-columns: repeat(2, 1fr) !important;
+			gap: 1.5rem 4rem !important;
+		}
+
+		.horizontal-grid.cols-3 {
+			grid-template-columns: repeat(3, 1fr) !important;
+			gap: 1rem 2rem !important;
+		}
+
+		.problem {
+			font-size: 1.3rem !important;
+			line-height: 1.8 !important;
+		}
+
+		.problem.problem-large {
+			font-size: 1.6rem !important;
+			line-height: 2.2 !important;
+		}
 	}
 </style>
