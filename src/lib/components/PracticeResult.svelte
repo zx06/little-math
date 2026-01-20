@@ -65,24 +65,22 @@
 			if (problem.type === 'remainder') {
 				const p = problem as RemainderProblem;
 				let str = '';
+				str += `${p.dividend} ÷ ${p.divisor} = `;
+				
 				if (p.blank === 'quotient' || p.blank === 'both') {
 					str += p.blank === 'quotient' ? '___' : p.quotient;
 				} else {
 					str += p.quotient;
 				}
-				str += ` ÷ ${p.divisor} = `;
+				
+				str += ' ... ';
+				
 				if (p.blank === 'remainder' || p.blank === 'both') {
 					str += p.blank === 'remainder' ? '___' : p.remainder;
 				} else {
 					str += p.remainder;
 				}
-				if (p.blank === 'quotient') {
-					str += ' ... ' + p.remainder;
-				} else if (p.blank === 'remainder') {
-					str += ' ... ' + p.quotient;
-				} else {
-					str += ' ... ___';
-				}
+				
 				return str;
 			}
 		}

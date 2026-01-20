@@ -179,18 +179,13 @@
 		// 构造用户答案字符串用于记录
 		const userAnswerStr =
 			problem.blank === 'both'
-				? `${answer.quotient}...${answer.remainder}`
+				? `商: ${answer.quotient}, 余数: ${answer.remainder}`
 				: problem.blank === 'quotient'
-					? `${answer.quotient}`
-					: `...${answer.remainder}`;
+					? `商: ${answer.quotient} (余数: ${problem.remainder})`
+					: `商: ${problem.quotient}, 余数: ${answer.remainder}`;
 
 		// 构造正确答案字符串
-		const correctAnswerStr =
-			problem.blank === 'both'
-				? `${problem.quotient}...${problem.remainder}`
-				: problem.blank === 'quotient'
-					? `${problem.quotient}`
-					: `...${problem.remainder}`;
+		const correctAnswerStr = `商: ${problem.quotient}, 余数: ${problem.remainder}`;
 
 		answerRecords.push({
 			problem: problems[currentIndex],
