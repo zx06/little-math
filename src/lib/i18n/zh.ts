@@ -27,7 +27,11 @@ export const zh = {
 		studentName: '学生姓名',
 		showDate: '显示日期',
 		savePreset: '保存预设',
-		presetName: '预设名称'
+		presetName: '预设名称',
+		problemMode: '练习模式',
+		normalMode: '普通计算',
+		makeTargetMode: '凑数练习',
+		makeTargetValue: '凑数目标'
 	},
 
 	// 按钮

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ExerciseConfig, Operation, BlankPosition } from '$lib/types';
+	import type { ExerciseConfig, Operation, BlankPosition, MakeTargetValue } from '$lib/types';
 	import { OP_NAMES } from '$lib/types';
 	import {
 		GRADE_PRESETS,
@@ -9,6 +9,8 @@
 	} from '$lib/config/presets';
 	import { zh } from '$lib/i18n/zh';
 	import { track } from '$lib/actions/track';
+
+	const MAKE_TARGET_OPTIONS: MakeTargetValue[] = [10, 20, 100];
 
 	interface Props {
 		config: ExerciseConfig;
@@ -74,6 +76,29 @@
 
 	<div class="config-section">
 		<label>
+			{t.problemMode}
+			<select bind:value={config.problemMode}>
+				<option value="normal">{t.normalMode}</option>
+				<option value="makeTarget">{t.makeTargetMode}</option>
+			</select>
+		</label>
+	</div>
+
+	{#if config.problemMode === 'makeTarget'}
+		<div class="config-section">
+			<label>
+				{t.makeTargetValue}
+				<select bind:value={config.makeTargetValue}>
+					{#each MAKE_TARGET_OPTIONS as value}
+						<option {value}>凑 {value}</option>
+					{/each}
+				</select>
+			</label>
+		</div>
+	{/if}
+
+	<div class="config-section">
+		<label>
 			{t.exerciseType}
 			<select bind:value={config.isVertical} onchange={handleVerticalChange}>
 				<option value={false}>{t.horizontal}</option>
@@ -94,38 +119,39 @@
 		</div>
 	{/if}
 
-	<div class="config-section">
-		<span class="label">{t.operations}</span>
-		<div class="checkbox-group">
-			{#each Object.entries(OP_NAMES) as [op, name]}
-				<label class="checkbox-label">
-					<input
-						type="checkbox"
-						checked={config.operations.includes(op as Operation)}
-						onchange={() => toggleOperation(op as Operation)}
-					/>
-					{name}
+	{#if config.problemMode === 'normal'}
+		<div class="config-section">
+			<span class="label">{t.operations}</span>
+			<div class="checkbox-group">
+				{#each Object.entries(OP_NAMES) as [op, name]}
+					<label class="checkbox-label">
+						<input
+							type="checkbox"
+							checked={config.operations.includes(op as Operation)}
+							onchange={() => toggleOperation(op as Operation)}
+						/>
+						{name}
+					</label>
+				{/each}
+			</div>
+		</div>
+
+		<div class="config-section">
+			<span class="label">{t.range}</span>
+			<div class="range-inputs">
+				<label>
+					{t.rangeMin}
+					<input type="number" bind:value={config.range.min} min="0" max="999" />
 				</label>
-			{/each}
+				<label>
+					{t.rangeMax}
+					<input type="number" bind:value={config.range.max} min="1" max="9999" />
+				</label>
+			</div>
 		</div>
-	</div>
 
-	<div class="config-section">
-		<span class="label">{t.range}</span>
-		<div class="range-inputs">
-			<label>
-				{t.rangeMin}
-				<input type="number" bind:value={config.range.min} min="0" max="999" />
-			</label>
-			<label>
-				{t.rangeMax}
-				<input type="number" bind:value={config.range.max} min="1" max="9999" />
-			</label>
-		</div>
-	</div>
-
-	<div class="config-section">
-		<span class="label">{t.blankPosition}</span>
+		<div class="config-section">
+			<span class="label">{t.blankPosition}</span>
 		<div class="ratio-inputs">
 			<label>
 				{t.blankFirst}
@@ -162,6 +188,7 @@
 			</label>
 		</div>
 	</div>
+	{/if}
 
 	<div class="config-section">
 		<label>

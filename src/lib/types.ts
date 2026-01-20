@@ -4,6 +4,21 @@ export type Operation = 'add' | 'sub' | 'mul' | 'div';
 /** 留空位置 */
 export type BlankPosition = 'first' | 'second' | 'result';
 
+/** 题目模式 */
+export type ProblemMode = 'normal' | 'makeTarget';
+
+/** 凑数目标 */
+export type MakeTargetValue = 10 | 20 | 100;
+
+/** 凑数练习题目 */
+export interface MakeTargetProblem {
+	type: 'makeTarget';
+	a: number;
+	target: number;
+	answer: number;
+	blankFirst: boolean;
+}
+
 /** 单道题目 */
 export interface Problem {
 	a: number;
@@ -34,6 +49,8 @@ export interface ExerciseConfig {
 	customTitle?: string;
 	studentName?: string;
 	showDate?: boolean;
+	problemMode: ProblemMode;
+	makeTargetValue: MakeTargetValue;
 }
 
 /** 运算符显示映射 */

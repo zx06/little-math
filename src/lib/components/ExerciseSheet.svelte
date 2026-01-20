@@ -1,10 +1,12 @@
 <script lang="ts">
-	import type { Problem } from '$lib/types';
+	import type { Problem, MakeTargetProblem } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 	import { zh } from '$lib/i18n/zh';
 
+	type AnyProblem = Problem | MakeTargetProblem;
+
 	interface Props {
-		problems: Problem[];
+		problems: AnyProblem[];
 		countPerPage: number;
 		showAnswers: boolean;
 		isVertical: boolean;
@@ -36,13 +38,31 @@
 	const t = zh.print;
 
 	const pages = $derived(() => {
-		const result: Problem[][] = [];
+		const result: AnyProblem[][] = [];
 		const perPage = countPerPage > 0 ? countPerPage : 20;
 		for (let i = 0; i < problems.length; i += perPage) {
 			result.push(problems.slice(i, i + perPage));
 		}
 		return result;
 	});
+
+	function isMakeTargetProblem(p: AnyProblem): p is MakeTargetProblem {
+		return 'type' in p && p.type === 'makeTarget';
+	}
+
+	function getMakeTargetParts(
+		p: MakeTargetProblem,
+		showAnswer: boolean
+	): { first: string; op: string; second: string; result: string } {
+		const blank = '(\u00a0\u00a0\u00a0\u00a0)';
+		const answerDisplay = showAnswer ? `(${p.answer})` : blank;
+
+		if (p.blankFirst) {
+			return { first: answerDisplay, op: '+', second: String(p.a), result: String(p.target) };
+		} else {
+			return { first: String(p.a), op: '+', second: answerDisplay, result: String(p.target) };
+		}
+	}
 
 	function getProblemParts(
 		p: Problem,
@@ -98,51 +118,55 @@
 			{#if isVertical}
 				<div class="vertical-grid">
 					{#each page as problem, idx}
-						{@const maxLen = Math.max(
-							String(problem.a).length,
-							String(problem.b).length,
-							String(problem.result).length
-						)}
-						<div class="vertical-problem">
-							<div class="problem-number">{pageIndex * countPerPage + idx + 1}.</div>
-							<div class="vertical-calc">
-								<div class="v-row top">
-									{#if problem.blank !== 'first'}
-										{padNumber(problem.a, maxLen)}
-									{:else if showAnswers}
-										<span class="v-answer">({padNumber(problem.a, maxLen)})</span>
-									{:else}
-										<span class="v-blank">{' '.repeat(maxLen)}</span>
-									{/if}
-								</div>
-								<div class="v-row middle">
-									<span class="v-op">{OP_SYMBOLS[problem.op]}</span>
-									{#if problem.blank !== 'second'}
-										{padNumber(problem.b, maxLen)}
-									{:else if showAnswers}
-										<span class="v-answer">({padNumber(problem.b, maxLen)})</span>
-									{:else}
-										<span class="v-blank">{' '.repeat(maxLen)}</span>
-									{/if}
-								</div>
-								<div class="v-line"></div>
-								<div class="v-row bottom">
-									{#if problem.blank !== 'result'}
-										{padNumber(problem.result, maxLen)}
-									{:else if showAnswers}
-										<span class="v-answer">({padNumber(problem.result, maxLen)})</span>
-									{:else}
-										<span class="v-blank">{' '.repeat(maxLen)}</span>
-									{/if}
+						{#if !isMakeTargetProblem(problem)}
+							{@const maxLen = Math.max(
+								String(problem.a).length,
+								String(problem.b).length,
+								String(problem.result).length
+							)}
+							<div class="vertical-problem">
+								<div class="problem-number">{pageIndex * countPerPage + idx + 1}.</div>
+								<div class="vertical-calc">
+									<div class="v-row top">
+										{#if problem.blank !== 'first'}
+											{padNumber(problem.a, maxLen)}
+										{:else if showAnswers}
+											<span class="v-answer">({padNumber(problem.a, maxLen)})</span>
+										{:else}
+											<span class="v-blank">{' '.repeat(maxLen)}</span>
+										{/if}
+									</div>
+									<div class="v-row middle">
+										<span class="v-op">{OP_SYMBOLS[problem.op]}</span>
+										{#if problem.blank !== 'second'}
+											{padNumber(problem.b, maxLen)}
+										{:else if showAnswers}
+											<span class="v-answer">({padNumber(problem.b, maxLen)})</span>
+										{:else}
+											<span class="v-blank">{' '.repeat(maxLen)}</span>
+										{/if}
+									</div>
+									<div class="v-line"></div>
+									<div class="v-row bottom">
+										{#if problem.blank !== 'result'}
+											{padNumber(problem.result, maxLen)}
+										{:else if showAnswers}
+											<span class="v-answer">({padNumber(problem.result, maxLen)})</span>
+										{:else}
+											<span class="v-blank">{' '.repeat(maxLen)}</span>
+										{/if}
+									</div>
 								</div>
 							</div>
-						</div>
+						{/if}
 					{/each}
 				</div>
 			{:else}
 				<div class="horizontal-grid" class:cols-2={columns === 2} class:cols-3={columns === 3}>
 					{#each page as problem, idx}
-						{@const parts = getProblemParts(problem, showAnswers)}
+						{@const parts = isMakeTargetProblem(problem)
+							? getMakeTargetParts(problem, showAnswers)
+							: getProblemParts(problem, showAnswers)}
 						<div class="problem" class:problem-large={columns === 2}>
 							<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
 							<span class="part first">{parts.first}</span>

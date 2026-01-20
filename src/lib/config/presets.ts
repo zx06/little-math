@@ -57,7 +57,9 @@ export const DEFAULT_CONFIG: ExerciseConfig = {
 	showAnswerPage: false,
 	customTitle: '',
 	studentName: '',
-	showDate: true
+	showDate: true,
+	problemMode: 'normal',
+	makeTargetValue: 10
 };
 
 /** 竖式默认每页题数 */
