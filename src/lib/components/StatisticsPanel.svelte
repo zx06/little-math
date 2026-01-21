@@ -475,8 +475,20 @@
 			font-size: 11px;
 		}
 
+		.footer-buttons {
+			flex-direction: column;
+			gap: 6px;
+		}
+
+		.export-btn {
+			width: 100%;
+			padding: 8px 10px;
+			font-size: 12px;
+		}
+
 		.reset-btn {
-			padding: 5px 10px;
+			width: 100%;
+			padding: 8px 10px;
 			font-size: 11px;
 		}
 	}
@@ -571,8 +583,21 @@
 			text-align: center;
 		}
 
+		.footer-buttons {
+			flex-direction: column;
+			gap: 6px;
+		}
+
+		.export-btn {
+			width: 100%;
+			padding: 8px 10px;
+			font-size: 12px;
+		}
+
 		.reset-btn {
 			width: 100%;
+			padding: 8px 10px;
+			font-size: 11px;
 		}
 	}
 
