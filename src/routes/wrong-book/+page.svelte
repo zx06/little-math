@@ -58,7 +58,10 @@
 			}
 		}
 		const p = problem as Problem;
-		return `${p.a} ${OP_SYMBOLS[p.op]} ${p.b} = ___`;
+		const first = p.blank === 'first' ? '___' : p.a;
+		const second = p.blank === 'second' ? '___' : p.b;
+		const result = p.blank === 'result' ? '___' : p.result;
+		return `${first} ${OP_SYMBOLS[p.op]} ${second} = ${result}`;
 	}
 
 	function formatAnswer(answer: number | string, problem: AnyProblem): string {
