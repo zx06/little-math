@@ -15,10 +15,13 @@ export function generateRemainderProblem(
 	// 确保除数在 2-9 之间，适合小学练习
 	const divisor = Math.floor(Math.random() * 8) + 2;
 
-	// 生成被除数，确保有合适的余数
-	// 余数应该在 1 到 divisor-1 之间
+	// 根据 min/max 计算商的范围
+	const minQuotient = Math.max(1, Math.floor(min / divisor));
+	const maxQuotient = Math.max(minQuotient, Math.floor(max / divisor));
+	const quotient = Math.floor(Math.random() * (maxQuotient - minQuotient + 1)) + minQuotient;
+
+	// 余数在 1 到 divisor-1 之间
 	const remainder = Math.floor(Math.random() * (divisor - 1)) + 1;
-	const quotient = Math.floor(Math.random() * 9) + 1; // 商在 1-9 之间
 	const dividend = divisor * quotient + remainder;
 
 	return {

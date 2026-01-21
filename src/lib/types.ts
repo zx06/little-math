@@ -111,6 +111,21 @@ export const OP_NAMES: Record<Operation, string> = {
 	div: '除法'
 };
 
+/** 练习进度记录 */
+export interface PracticeProgressRecord {
+	totalProblems: number;
+	correctProblems: number;
+	timeSpent: number;
+}
+
+/** 每日统计数据 */
+export interface DailyStatRecord {
+	visits: number;
+	generations: number;
+	prints: number;
+	practiceProgress?: PracticeProgressRecord[];
+}
+
 /** 统计数据接口 */
 export interface StatisticsData {
 	totalVisits: number;
@@ -119,7 +134,7 @@ export interface StatisticsData {
 	operationsCount: Record<Operation, number>;
 	gradePresetCount: Record<string, number>;
 	lastVisitDate: string;
-	dailyStats: Record<string, { visits: number; generations: number; prints: number }>;
+	dailyStats: Record<string, DailyStatRecord>;
 }
 
 /** 任意题目类型 */

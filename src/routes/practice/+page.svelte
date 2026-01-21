@@ -19,7 +19,7 @@
 	import { addWrongRecord, generateWrongReview } from '$lib/services/wrongBook';
 	import { checkAchievements, type Achievement } from '$lib/services/achievements';
 	import { speakProblem, stopSpeaking, isSpeechSupported } from '$lib/services/speech';
-	import { trackGeneration } from '$lib/services/statistics';
+	import { trackGeneration, getStats } from '$lib/services/statistics';
 	import AchievementToast from '$lib/components/AchievementToast.svelte';
 
 	interface AnswerRecord {
@@ -94,7 +94,7 @@
 		timerRef?.reset();
 
 		// 检查成就
-		const stats = { totalGenerations: 0, totalVisits: 0, totalPrints: 0, operationsCount: { add: 0, sub: 0, mul: 0, div: 0 }, gradePresetCount: {}, lastVisitDate: '', dailyStats: {} };
+		const stats = getStats();
 		const newAchievements = checkAchievements(stats);
 		if (newAchievements.length > 0) {
 			unlockedAchievements = [...unlockedAchievements, ...newAchievements];

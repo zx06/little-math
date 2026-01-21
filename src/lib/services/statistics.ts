@@ -1,4 +1,4 @@
-import type { StatisticsData, Operation } from '$lib/types';
+import type { StatisticsData, Operation, DailyStatRecord, PracticeProgressRecord } from '$lib/types';
 import { INITIAL_STATS } from '$lib/types';
 
 const STORAGE_KEY = 'little-math-stats';
@@ -114,29 +114,20 @@ export function getLast7DaysStats() {
 	return result;
 }
 
-/** 练习进度记录 */
-interface PracticeProgress {
-	date: string;
-	totalProblems: number;
-	correctProblems: number;
-	timeSpent: number; // 秒
-}
-
 /** 存储练习进度 */
-export function savePracticeProgress(progress: PracticeProgress): void {
+export function savePracticeProgress(progress: Omit<PracticeProgressRecord, 'date'> & { date?: string }): void {
 	const stats = getStats();
 	const today = getToday();
 
 	if (!stats.dailyStats[today]) {
-		stats.dailyStats[today] = { visits: 0, generations: 0, prints: 0 };
+		stats.dailyStats[today] = { visits: 0, generations: 0, prints: 0, practiceProgress: [] };
 	}
 
-	// 扩展 dailyStats 以包含练习进度
-	if (!('practiceProgress' in stats.dailyStats[today])) {
-		(stats.dailyStats[today] as any).practiceProgress = [];
+	if (!stats.dailyStats[today].practiceProgress) {
+		stats.dailyStats[today].practiceProgress = [];
 	}
 
-	(stats.dailyStats[today] as any).practiceProgress.push({
+	stats.dailyStats[today].practiceProgress!.push({
 		totalProblems: progress.totalProblems,
 		correctProblems: progress.correctProblems,
 		timeSpent: progress.timeSpent
@@ -169,12 +160,12 @@ export function getDailyProgress(days: number = 7): Array<{
 		date.setDate(date.getDate() - i);
 		const dateStr = date.toISOString().split('T')[0];
 
-		const dayStats = stats.dailyStats[dateStr] as any;
+		const dayStats = stats.dailyStats[dateStr];
 		const progressList = dayStats?.practiceProgress || [];
 
-		const totalProblems = progressList.reduce((sum: number, p: PracticeProgress) => sum + p.totalProblems, 0);
-		const correctProblems = progressList.reduce((sum: number, p: PracticeProgress) => sum + p.correctProblems, 0);
-		const timeSpent = progressList.reduce((sum: number, p: PracticeProgress) => sum + p.timeSpent, 0);
+		const totalProblems = progressList.reduce((sum, p) => sum + p.totalProblems, 0);
+		const correctProblems = progressList.reduce((sum, p) => sum + p.correctProblems, 0);
+		const timeSpent = progressList.reduce((sum, p) => sum + p.timeSpent, 0);
 
 		result.push({
 			date: dateStr,
