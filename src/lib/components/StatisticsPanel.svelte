@@ -410,6 +410,7 @@
 
 		.stats-content {
 			padding: 14px 16px;
+			overflow-y: auto;
 			max-height: calc(80vh - 55px);
 		}
 
@@ -523,6 +524,7 @@
 
 		.stats-content {
 			padding: 12px 14px;
+			overflow-y: auto;
 			max-height: calc(80vh - 50px);
 		}
 
