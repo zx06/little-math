@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { WrongRecord, AnyProblem, Problem, MakeTargetProblem, ChainProblem } from '$lib/types';
+	import type { WrongRecord, AnyProblem, Problem, MakeTargetProblem, ChainProblem, CompareProblem, RemainderProblem } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 	import {
 		getWrongRecords,
@@ -33,6 +33,28 @@
 					}
 				}
 				return str + ' = ___';
+			}
+			if (problem.type === 'compare') {
+				const p = problem as CompareProblem;
+				const left = `${p.left.a} ${OP_SYMBOLS[p.left.op]} ${p.left.b}`;
+				const right = `${p.right.a} ${OP_SYMBOLS[p.right.op]} ${p.right.b}`;
+				return `${left} ___ ${right}`;
+			}
+			if (problem.type === 'remainder') {
+				const p = problem as any;
+				let left = p.dividend + ' ÷ ' + p.divisor + ' = ';
+				if (p.blank === 'quotient' || p.blank === 'both') {
+					left += '___';
+				} else {
+					left += p.quotient;
+				}
+				left += ' ... ';
+				if (p.blank === 'remainder' || p.blank === 'both') {
+					left += '___';
+				} else {
+					left += p.remainder;
+				}
+				return left;
 			}
 		}
 		const p = problem as Problem;
