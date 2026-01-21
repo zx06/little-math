@@ -112,14 +112,14 @@
 				<div class="stats-section">
 					<ProgressChart data={dailyProgress} />
 				</div>
-
-				<div class="stats-footer">
-					<div class="last-visit">最后访问: {stats.lastVisitDate || '无'}</div>
-					<div class="footer-buttons">
-						<button class="export-btn" onclick={downloadStatisticsJSON}>导出 JSON</button>
-						<button class="export-btn" onclick={downloadStatisticsCSV}>导出 CSV</button>
-						<button class="reset-btn" onclick={handleReset}>重置统计</button>
-					</div>
+			</div>
+			
+			<div class="stats-footer">
+				<div class="last-visit">最后访问: {stats.lastVisitDate || '无'}</div>
+				<div class="footer-buttons">
+					<button class="export-btn" onclick={downloadStatisticsJSON}>导出 JSON</button>
+					<button class="export-btn" onclick={downloadStatisticsCSV}>导出 CSV</button>
+					<button class="reset-btn" onclick={handleReset}>重置统计</button>
 				</div>
 			</div>
 		</div>
@@ -166,6 +166,8 @@
 		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 		overflow: hidden;
 		animation: slideUp 0.3s ease;
+		display: flex;
+		flex-direction: column;
 	}
 
 	@keyframes slideUp {
@@ -217,7 +219,8 @@
 	.stats-content {
 		padding: 16px 20px;
 		overflow-y: auto;
-		max-height: calc(80vh - 60px);
+		flex: 1;
+		min-height: 0;
 	}
 
 	.stats-section {
