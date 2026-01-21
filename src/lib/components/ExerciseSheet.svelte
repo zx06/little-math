@@ -3,6 +3,7 @@
 	import { OP_SYMBOLS } from '$lib/types';
 	import { zh } from '$lib/i18n/zh';
 	import { THEMES, getThemeById } from '$lib/config/themes';
+	import GridPaper from '$lib/components/GridPaper.svelte';
 
 	type AnyProblem = Problem | MakeTargetProblem | ChainProblem | CompareProblem | RemainderProblem;
 
@@ -16,6 +17,8 @@
 		studentName?: string;
 		showDate?: boolean;
 		theme?: string;
+		enableGridPaper?: boolean;
+		gridPaperType?: 'tian' | 'mi';
 	}
 
 	let {
@@ -27,7 +30,9 @@
 		customTitle = '',
 		studentName = '',
 		showDate = true,
-		theme = 'default'
+		theme = 'default',
+		enableGridPaper = false,
+		gridPaperType = 'tian'
 	}: Props = $props();
 
 	const currentTheme = $derived(getThemeById(theme));
@@ -255,11 +260,21 @@
 								<span class="compare-left">{compare.left}</span>
 								<span class="compare-symbol" class:compare-answer={showAnswers}>{compare.symbol}</span>
 								<span class="compare-right">{compare.right}</span>
+								{#if enableGridPaper}
+									<div class="grid-paper-wrapper">
+										<GridPaper type={gridPaperType} size={60} />
+									</div>
+								{/if}
 							</div>
 						{:else if isChainProblem(problem)}
 							<div class="problem chain-problem" class:problem-large={columns === 2}>
 								<span class="problem-number">{String(pageIndex * countPerPage + idx + 1).padStart(2, ' ')}.</span>
 								<span class="chain-expr">{getChainDisplay(problem, showAnswers)}</span>
+								{#if enableGridPaper}
+									<div class="grid-paper-wrapper">
+										<GridPaper type={gridPaperType} size={60} />
+									</div>
+								{/if}
 							</div>
 						{:else if isRemainderProblem(problem)}
 							{@const remainder = getRemainderDisplay(problem, showAnswers)}
@@ -272,6 +287,11 @@
 								<span class="remainder-quotient">{remainder.quotient}</span>
 								<span class="remainder-sep">...</span>
 								<span class="remainder-remainder">{remainder.remainder}</span>
+								{#if enableGridPaper}
+									<div class="grid-paper-wrapper">
+										<GridPaper type={gridPaperType} size={60} />
+									</div>
+								{/if}
 							</div>
 						{:else}
 							{@const parts = isMakeTargetProblem(problem)
@@ -284,6 +304,11 @@
 								<span class="part second">{parts.second}</span>
 								<span class="part eq">=</span>
 								<span class="part result">{parts.result}</span>
+								{#if enableGridPaper}
+									<div class="grid-paper-wrapper">
+										<GridPaper type={gridPaperType} size={60} />
+									</div>
+								{/if}
 							</div>
 						{/if}
 					{/each}
@@ -495,6 +520,15 @@
 	.remainder-problem .remainder-sep {
 		color: #999;
 		font-weight: 600;
+	}
+
+	/* 田字格包装器 */
+	.grid-paper-wrapper {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: 0.5rem;
+		opacity: 0.7;
 	}
 
 	/* 竖式网格 */
