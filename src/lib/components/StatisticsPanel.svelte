@@ -390,7 +390,7 @@
 
 		.stats-panel {
 			width: 340px;
-			max-height: 75vh;
+			max-height: 85vh;
 			bottom: 55px;
 		}
 
@@ -508,7 +508,7 @@
 		.stats-panel {
 			width: calc(100vw - 20px);
 			max-width: 320px;
-			max-height: 70vh;
+			max-height: 85vh;
 			bottom: 50px;
 			right: -10px;
 		}
