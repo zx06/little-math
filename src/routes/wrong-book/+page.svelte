@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { WrongRecord, AnyProblem, Problem, MakeTargetProblem, ChainProblem } from '$lib/types';
+	import type { WrongRecord, AnyProblem, Problem, MakeTargetProblem, ChainProblem, CompareProblem, RemainderProblem } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
 	import {
 		getWrongRecords,
@@ -34,9 +34,58 @@
 				}
 				return str + ' = ___';
 			}
+			if (problem.type === 'compare') {
+				const p = problem as CompareProblem;
+				const left = `${p.left.a} ${OP_SYMBOLS[p.left.op]} ${p.left.b}`;
+				const right = `${p.right.a} ${OP_SYMBOLS[p.right.op]} ${p.right.b}`;
+				return `${left} ___ ${right}`;
+			}
+			if (problem.type === 'remainder') {
+				const p = problem as any;
+				let left = p.dividend + ' ÷ ' + p.divisor + ' = ';
+				if (p.blank === 'quotient' || p.blank === 'both') {
+					left += '___';
+				} else {
+					left += p.quotient;
+				}
+				left += ' ... ';
+				if (p.blank === 'remainder' || p.blank === 'both') {
+					left += '___';
+				} else {
+					left += p.remainder;
+				}
+				return left;
+			}
 		}
 		const p = problem as Problem;
-		return `${p.a} ${OP_SYMBOLS[p.op]} ${p.b} = ___`;
+		const first = p.blank === 'first' ? '___' : p.a;
+		const second = p.blank === 'second' ? '___' : p.b;
+		const result = p.blank === 'result' ? '___' : p.result;
+		return `${first} ${OP_SYMBOLS[p.op]} ${second} = ${result}`;
+	}
+
+	function formatAnswer(answer: number | string, problem: AnyProblem): string {
+		// 如果答案是字符串，直接返回（格式如：商: 1, 余数: 3）
+		if (typeof answer === 'string') {
+			return answer;
+		}
+
+		// 如果是数字，根据题目类型处理
+		if ('type' in problem && problem.type === 'remainder') {
+			const p = problem as any;
+			// 对于有余数除法，根据填空位置显示
+			if (p.blank === 'quotient') {
+				return `商: ${answer}`;
+			} else if (p.blank === 'remainder') {
+				return `余数: ${answer}`;
+			} else {
+				// both - 但这是旧数据，无法确定是商还是余数
+				return `${answer} (商或余数)`;
+			}
+		}
+
+		// 普通题目，直接返回数字
+		return String(answer);
 	}
 
 	function formatDate(timestamp: number): string {
@@ -90,8 +139,8 @@
 					<div class="record-card">
 						<div class="problem">{formatProblem(record.problem)}</div>
 						<div class="answers">
-							<span class="wrong">你的答案: {record.wrongAnswer}</span>
-							<span class="correct">正确答案: {record.correctAnswer}</span>
+							<span class="wrong">你的答案: {formatAnswer(record.wrongAnswer, record.problem)}</span>
+							<span class="correct">正确答案: {formatAnswer(record.correctAnswer, record.problem)}</span>
 						</div>
 						<div class="meta">
 							<span class="date">{formatDate(record.timestamp)}</span>

@@ -90,6 +90,30 @@
 		const result = p.blank === 'result' ? '___' : p.result;
 		return `${first} ${OP_SYMBOLS[p.op]} ${second} = ${result}`;
 	}
+
+	function formatAnswer(answer: number | CompareSymbol | string, problem: AnyProblem): string {
+		// 如果答案是字符串，直接返回（格式如：商: 1, 余数: 3）
+		if (typeof answer === 'string') {
+			return answer;
+		}
+
+		// 如果是数字，根据题目类型处理
+		if ('type' in problem && problem.type === 'remainder') {
+			const p = problem as any;
+			// 对于有余数除法，根据填空位置显示
+			if (p.blank === 'quotient') {
+				return `商: ${answer}`;
+			} else if (p.blank === 'remainder') {
+				return `余数: ${answer}`;
+			} else {
+				// both - 但这是旧数据，无法确定是商还是余数
+				return `${answer} (商或余数)`;
+			}
+		}
+
+		// 普通题目，直接返回数字
+		return String(answer);
+	}
 </script>
 
 <div class="result">
@@ -113,13 +137,17 @@
 		<h3>答题详情</h3>
 		<div class="records-list">
 			{#each records as record, idx}
-				<div class="record-item" class:correct={record.isCorrect} class:wrong={!record.isCorrect}>
-					<span class="index">{idx + 1}.</span>
-					<span class="problem">{formatProblem(record.problem)}</span>
-					<span class="status">{record.isCorrect ? '✓' : '✗'}</span>
+				<div class="record-card" class:correct={record.isCorrect} class:wrong={!record.isCorrect}>
+					<div class="record-header">
+						<span class="index">{idx + 1}.</span>
+						<span class="problem">{formatProblem(record.problem)}</span>
+						<span class="status">{record.isCorrect ? '✓' : '✗'}</span>
+					</div>
 					{#if !record.isCorrect}
-						<span class="your-answer">你的答案: {record.userAnswer}</span>
-						<span class="correct-answer">正确: {record.correctAnswer}</span>
+						<div class="answers">
+							<span class="wrong">你的答案: {formatAnswer(record.userAnswer, record.problem)}</span>
+							<span class="correct">正确答案: {formatAnswer(record.correctAnswer, record.problem)}</span>
+						</div>
 					{/if}
 				</div>
 			{/each}
@@ -198,48 +226,66 @@
 		margin-bottom: 1rem;
 	}
 	.records-list {
-		max-height: 300px;
+		max-height: 400px;
 		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
-	.record-item {
+	.record-card {
+		background: white;
+		border-radius: 12px;
+		padding: 1rem 1.5rem;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		border-left: 4px solid #ddd;
+	}
+	.record-card.correct {
+		border-left-color: #51cf66;
+	}
+	.record-card.wrong {
+		border-left-color: #ff6b6b;
+	}
+	.record-header {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		padding: 0.5rem 1rem;
-		border-radius: 8px;
 		margin-bottom: 0.5rem;
-		font-size: 1rem;
-	}
-	.record-item.correct {
-		background: #e8f5e9;
-	}
-	.record-item.wrong {
-		background: #ffebee;
 	}
 	.index {
 		color: #999;
-		width: 2rem;
+		font-weight: 600;
+		min-width: 2rem;
 	}
 	.problem {
 		flex: 1;
 		color: #333;
+		font-size: 1.1rem;
+		font-weight: 500;
 	}
 	.status {
-		font-size: 1.25rem;
+		font-size: 1.5rem;
+		font-weight: bold;
 	}
-	.record-item.correct .status {
+	.record-card.correct .status {
 		color: #51cf66;
 	}
-	.record-item.wrong .status {
+	.record-card.wrong .status {
 		color: #ff6b6b;
 	}
-	.your-answer {
-		color: #ff6b6b;
-		font-size: 0.875rem;
+	.answers {
+		display: flex;
+		gap: 2rem;
+		font-size: 0.9rem;
+		padding-top: 0.5rem;
+		border-top: 1px solid #f0f0f0;
 	}
-	.correct-answer {
+	.wrong {
+		color: #ff6b6b;
+		font-weight: 500;
+	}
+	.correct {
 		color: #51cf66;
-		font-size: 0.875rem;
+		font-weight: 500;
 	}
 
 	/* 移动端适配 */
@@ -290,14 +336,23 @@
 			font-size: 1.1rem;
 		}
 
-		.record-item {
-			font-size: 0.9rem;
-			padding: 0.4rem 0.75rem;
+		.records-list {
+			max-height: 350px;
+			gap: 0.75rem;
 		}
 
-		.your-answer,
-		.correct-answer {
-			font-size: 0.8rem;
+		.record-card {
+			padding: 0.875rem 1.25rem;
+		}
+
+		.problem {
+			font-size: 1rem;
+		}
+
+		.answers {
+			gap: 1.5rem;
+			font-size: 0.85rem;
+			flex-direction: column;
 		}
 	}
 
@@ -351,19 +406,36 @@
 			font-size: 1rem;
 		}
 
-		.record-item {
-			font-size: 0.85rem;
-			padding: 0.375rem 0.5rem;
+		.records-list {
+			max-height: 300px;
+			gap: 0.5rem;
+		}
+
+		.record-card {
+			padding: 0.75rem 1rem;
+		}
+
+		.record-header {
 			gap: 0.5rem;
 		}
 
 		.index {
-			width: 1.5rem;
+			min-width: 1.5rem;
+			font-size: 0.9rem;
 		}
 
-		.your-answer,
-		.correct-answer {
-			font-size: 0.75rem;
+		.problem {
+			font-size: 0.95rem;
+		}
+
+		.status {
+			font-size: 1.25rem;
+		}
+
+		.answers {
+			gap: 1rem;
+			font-size: 0.8rem;
+			flex-direction: column;
 		}
 	}
 </style>

@@ -4,6 +4,7 @@
 	import { getStats, getLast7DaysStats, resetStats, getDailyProgress } from '$lib/services/statistics';
 	import { OP_NAMES } from '$lib/types';
 	import ProgressChart from '$lib/components/ProgressChart.svelte';
+	import { downloadStatisticsJSON, downloadStatisticsCSV } from '$lib/services/export';
 
 	let stats: StatisticsData = $state<StatisticsData>(getStats());
 	let last7Days = $state(getLast7DaysStats());
@@ -111,9 +112,13 @@
 				<div class="stats-section">
 					<ProgressChart data={dailyProgress} />
 				</div>
-
-				<div class="stats-footer">
-					<div class="last-visit">最后访问: {stats.lastVisitDate || '无'}</div>
+			</div>
+			
+			<div class="stats-footer">
+				<div class="last-visit">最后访问: {stats.lastVisitDate || '无'}</div>
+				<div class="footer-buttons">
+					<button class="export-btn" onclick={downloadStatisticsJSON}>导出 JSON</button>
+					<button class="export-btn" onclick={downloadStatisticsCSV}>导出 CSV</button>
 					<button class="reset-btn" onclick={handleReset}>重置统计</button>
 				</div>
 			</div>
@@ -161,6 +166,8 @@
 		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 		overflow: hidden;
 		animation: slideUp 0.3s ease;
+		display: flex;
+		flex-direction: column;
 	}
 
 	@keyframes slideUp {
@@ -212,7 +219,8 @@
 	.stats-content {
 		padding: 16px 20px;
 		overflow-y: auto;
-		max-height: calc(80vh - 60px);
+		flex: 1;
+		min-height: 0;
 	}
 
 	.stats-section {
@@ -323,30 +331,61 @@
 
 	.stats-footer {
 		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding-top: 16px;
+		flex-direction: column;
+		gap: 12px;
+		padding: 16px 20px;
 		border-top: 1px solid #e9ecef;
+		background: #f8f9fa;
 	}
 
 	.last-visit {
 		font-size: 12px;
 		color: #999;
+		text-align: center;
+	}
+
+	.footer-buttons {
+		display: flex;
+		gap: 8px;
+		justify-content: center;
+	}
+
+	.export-btn {
+		flex: 1;
+		padding: 10px 16px;
+		background: #5c7cfa;
+		color: white;
+		border: none;
+		border-radius: 6px;
+		font-size: 13px;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s;
+		text-align: center;
+	}
+
+	.export-btn:hover {
+		background: #4263eb;
+		transform: translateY(-1px);
 	}
 
 	.reset-btn {
-		padding: 6px 12px;
+		flex: 1;
+		padding: 10px 16px;
 		background: #ff6b6b;
 		color: white;
 		border: none;
-		border-radius: 4px;
-		font-size: 12px;
+		border-radius: 6px;
+		font-size: 13px;
+		font-weight: 500;
 		cursor: pointer;
-		transition: background 0.2s;
+		transition: all 0.2s;
+		text-align: center;
 	}
 
 	.reset-btn:hover {
 		background: #fa5252;
+		transform: translateY(-1px);
 	}
 
 	/* 移动端适配 */
@@ -364,7 +403,7 @@
 
 		.stats-panel {
 			width: 340px;
-			max-height: 75vh;
+			max-height: 85vh;
 			bottom: 55px;
 		}
 
@@ -384,7 +423,8 @@
 
 		.stats-content {
 			padding: 14px 16px;
-			max-height: calc(75vh - 55px);
+			overflow-y: auto;
+			max-height: calc(80vh - 55px);
 		}
 
 		.stats-section {
@@ -442,16 +482,25 @@
 		}
 
 		.stats-footer {
-			padding-top: 14px;
+			padding: 14px 16px;
 		}
 
 		.last-visit {
 			font-size: 11px;
 		}
 
+		.footer-buttons {
+			gap: 6px;
+		}
+
+		.export-btn {
+			padding: 8px 12px;
+			font-size: 12px;
+		}
+
 		.reset-btn {
-			padding: 5px 10px;
-			font-size: 11px;
+			padding: 8px 12px;
+			font-size: 12px;
 		}
 	}
 
@@ -470,7 +519,7 @@
 		.stats-panel {
 			width: calc(100vw - 20px);
 			max-width: 320px;
-			max-height: 70vh;
+			max-height: 85vh;
 			bottom: 50px;
 			right: -10px;
 		}
@@ -485,7 +534,8 @@
 
 		.stats-content {
 			padding: 12px 14px;
-			max-height: calc(70vh - 50px);
+			overflow-y: auto;
+			max-height: calc(80vh - 50px);
 		}
 
 		.stats-grid {
@@ -536,17 +586,25 @@
 		}
 
 		.stats-footer {
-			flex-direction: column;
-			gap: 8px;
-			align-items: stretch;
+			padding: 12px 14px;
 		}
 
 		.last-visit {
-			text-align: center;
+			font-size: 10px;
+		}
+
+		.footer-buttons {
+			gap: 6px;
+		}
+
+		.export-btn {
+			padding: 8px 10px;
+			font-size: 12px;
 		}
 
 		.reset-btn {
-			width: 100%;
+			padding: 8px 10px;
+			font-size: 12px;
 		}
 	}
 
