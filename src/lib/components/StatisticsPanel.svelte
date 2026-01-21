@@ -333,49 +333,59 @@
 		display: flex;
 		flex-direction: column;
 		gap: 12px;
-		padding-top: 16px;
+		padding: 16px 20px;
 		border-top: 1px solid #e9ecef;
+		background: #f8f9fa;
 	}
 
 	.last-visit {
 		font-size: 12px;
 		color: #999;
+		text-align: center;
 	}
 
 	.footer-buttons {
 		display: flex;
 		gap: 8px;
-		flex-wrap: wrap;
+		justify-content: center;
 	}
 
 	.export-btn {
-		padding: 6px 12px;
+		flex: 1;
+		padding: 10px 16px;
 		background: #5c7cfa;
 		color: white;
 		border: none;
-		border-radius: 4px;
-		font-size: 12px;
+		border-radius: 6px;
+		font-size: 13px;
+		font-weight: 500;
 		cursor: pointer;
-		transition: background 0.2s;
+		transition: all 0.2s;
+		text-align: center;
 	}
 
 	.export-btn:hover {
 		background: #4263eb;
+		transform: translateY(-1px);
 	}
 
 	.reset-btn {
-		padding: 6px 12px;
+		flex: 1;
+		padding: 10px 16px;
 		background: #ff6b6b;
 		color: white;
 		border: none;
-		border-radius: 4px;
-		font-size: 12px;
+		border-radius: 6px;
+		font-size: 13px;
+		font-weight: 500;
 		cursor: pointer;
-		transition: background 0.2s;
+		transition: all 0.2s;
+		text-align: center;
 	}
 
 	.reset-btn:hover {
 		background: #fa5252;
+		transform: translateY(-1px);
 	}
 
 	/* 移动端适配 */
@@ -472,7 +482,7 @@
 		}
 
 		.stats-footer {
-			padding-top: 14px;
+			padding: 14px 16px;
 		}
 
 		.last-visit {
@@ -480,20 +490,17 @@
 		}
 
 		.footer-buttons {
-			flex-direction: column;
 			gap: 6px;
 		}
 
 		.export-btn {
-			width: 100%;
-			padding: 8px 10px;
+			padding: 8px 12px;
 			font-size: 12px;
 		}
 
 		.reset-btn {
-			width: 100%;
-			padding: 8px 10px;
-			font-size: 11px;
+			padding: 8px 12px;
+			font-size: 12px;
 		}
 	}
 
@@ -579,30 +586,25 @@
 		}
 
 		.stats-footer {
-			flex-direction: column;
-			gap: 8px;
-			align-items: stretch;
+			padding: 12px 14px;
 		}
 
 		.last-visit {
-			text-align: center;
+			font-size: 10px;
 		}
 
 		.footer-buttons {
-			flex-direction: column;
 			gap: 6px;
 		}
 
 		.export-btn {
-			width: 100%;
 			padding: 8px 10px;
 			font-size: 12px;
 		}
 
 		.reset-btn {
-			width: 100%;
 			padding: 8px 10px;
-			font-size: 11px;
+			font-size: 12px;
 		}
 	}
 
