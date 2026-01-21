@@ -410,7 +410,7 @@
 
 		.stats-content {
 			padding: 14px 16px;
-			max-height: calc(75vh - 55px);
+			max-height: calc(80vh - 55px);
 		}
 
 		.stats-section {
@@ -523,7 +523,7 @@
 
 		.stats-content {
 			padding: 12px 14px;
-			max-height: calc(70vh - 50px);
+			max-height: calc(80vh - 50px);
 		}
 
 		.stats-grid {
