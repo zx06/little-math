@@ -109,8 +109,6 @@
 					studentName={config.studentName}
 					showDate={config.showDate}
 					theme={theme}
-					enableGridPaper={config.enableGridPaper}
-					gridPaperType={config.gridPaperType}
 				/>
 
 				{#if config.showAnswerPage}
@@ -124,8 +122,6 @@
 						studentName={config.studentName}
 						showDate={config.showDate}
 						theme={theme}
-						enableGridPaper={config.enableGridPaper}
-						gridPaperType={config.gridPaperType}
 					/>
 				{/if}
 			{:else}

@@ -271,25 +271,6 @@
 		</label>
 	</div>
 
-	<div class="config-section">
-		<label class="checkbox-label">
-			<input type="checkbox" bind:checked={config.enableGridPaper} />
-			启用田字格
-		</label>
-	</div>
-
-	{#if config.enableGridPaper}
-		<div class="config-section">
-			<label>
-				格子类型
-				<select bind:value={config.gridPaperType}>
-					<option value="tian">田字格</option>
-					<option value="mi">米字格</option>
-				</select>
-			</label>
-		</div>
-	{/if}
-
 	<div class="button-group">
 		<button
 			class="btn primary"

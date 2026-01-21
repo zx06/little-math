@@ -61,9 +61,7 @@ export const DEFAULT_CONFIG: ExerciseConfig = {
 	problemMode: 'normal',
 	makeTargetValue: 10,
 	chainLength: 3,
-	remainderBlank: 'quotient',
-	enableGridPaper: false,
-	gridPaperType: 'tian'
+	remainderBlank: 'quotient'
 };
 
 /** 竖式默认每页题数 */
