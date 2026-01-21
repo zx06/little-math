@@ -128,8 +128,8 @@ export type AnyProblem = Problem | MakeTargetProblem | ChainProblem | ComparePro
 /** 错题记录 */
 export interface WrongRecord {
 	problem: AnyProblem;
-	wrongAnswer: number;
-	correctAnswer: number;
+	wrongAnswer: number | string;
+	correctAnswer: number | string;
 	timestamp: number;
 	reviewCount: number;
 }

@@ -61,6 +61,30 @@
 		return `${p.a} ${OP_SYMBOLS[p.op]} ${p.b} = ___`;
 	}
 
+	function formatAnswer(answer: number | string, problem: AnyProblem): string {
+		// 如果答案是字符串，直接返回（格式如：商: 1, 余数: 3）
+		if (typeof answer === 'string') {
+			return answer;
+		}
+
+		// 如果是数字，根据题目类型处理
+		if ('type' in problem && problem.type === 'remainder') {
+			const p = problem as any;
+			// 对于有余数除法，根据填空位置显示
+			if (p.blank === 'quotient') {
+				return `商: ${answer}`;
+			} else if (p.blank === 'remainder') {
+				return `余数: ${answer}`;
+			} else {
+				// both - 但这是旧数据，无法确定是商还是余数
+				return `${answer} (商或余数)`;
+			}
+		}
+
+		// 普通题目，直接返回数字
+		return String(answer);
+	}
+
 	function formatDate(timestamp: number): string {
 		return new Date(timestamp).toLocaleDateString('zh-CN');
 	}
@@ -112,8 +136,8 @@
 					<div class="record-card">
 						<div class="problem">{formatProblem(record.problem)}</div>
 						<div class="answers">
-							<span class="wrong">你的答案: {record.wrongAnswer}</span>
-							<span class="correct">正确答案: {record.correctAnswer}</span>
+							<span class="wrong">你的答案: {formatAnswer(record.wrongAnswer, record.problem)}</span>
+							<span class="correct">正确答案: {formatAnswer(record.correctAnswer, record.problem)}</span>
 						</div>
 						<div class="meta">
 							<span class="date">{formatDate(record.timestamp)}</span>
