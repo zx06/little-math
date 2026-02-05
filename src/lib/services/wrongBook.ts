@@ -29,8 +29,8 @@ function saveWrongRecords(records: WrongRecord[]): void {
 /** 添加错题记录 */
 export function addWrongRecord(
 	problem: AnyProblem,
-	wrongAnswer: number,
-	correctAnswer: number
+	wrongAnswer: number | string,
+	correctAnswer: number | string
 ): void {
 	const records = getWrongRecords();
 	records.push({

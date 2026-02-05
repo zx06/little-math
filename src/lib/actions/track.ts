@@ -1,11 +1,12 @@
 import type { Action } from 'svelte/action';
+import type { Operation } from '$lib/types';
 import { trackGeneration, trackPrint } from '$lib/services/statistics';
 
 type TrackType = 'generation' | 'print';
 type TrackOptions = {
 	type: TrackType;
 	data?: {
-		operations?: string[];
+		operations?: Operation[];
 		gradePreset?: string;
 	};
 };
@@ -13,11 +14,8 @@ type TrackOptions = {
 /** 统计埋点 action */
 export const track: Action<HTMLButtonElement, TrackOptions> = (node, options) => {
 	const handleClick = () => {
-		if (options.type === 'generation' && options.data) {
-			trackGeneration(
-				options.data.operations as any,
-				options.data.gradePreset || ''
-			);
+		if (options.type === 'generation' && options.data?.operations) {
+			trackGeneration(options.data.operations, options.data.gradePreset || '');
 		} else if (options.type === 'print') {
 			trackPrint();
 		}

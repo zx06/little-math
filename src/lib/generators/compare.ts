@@ -16,7 +16,7 @@ function generateExpression(
 			break;
 		case 'sub':
 			a = Math.floor(Math.random() * (max - min + 1)) + min;
-			b = Math.floor(Math.random() * Math.min(a, max - min + 1)) + min;
+			b = Math.floor(Math.random() * (a - min + 1)) + min;
 			if (b > a) [a, b] = [b, a];
 			result = a - b;
 			break;
