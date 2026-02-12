@@ -8,8 +8,8 @@
 
 	let quotient = $state('');
 	let remainder = $state('');
-	let quotientInput: HTMLInputElement | undefined;
-	let remainderInput: HTMLInputElement | undefined;
+	let quotientInput = $state<HTMLInputElement>();
+	let remainderInput = $state<HTMLInputElement>();
 
 	function handleSubmit() {
 		if (blank === 'quotient' || blank === 'both') {

@@ -97,6 +97,54 @@ export const THEMES: PrintTheme[] = [
 			headerEmoji: '🌸',
 			borderStyle: 'solid'
 		}
+	},
+	{
+		id: 'ocean',
+		name: '海洋',
+		icon: '🌊',
+		colors: {
+			primary: '#0984e3',
+			secondary: '#00cec9',
+			accent: '#fdcb6e',
+			background: '#e8f4f8',
+			border: '#0984e3'
+		},
+		decorations: {
+			headerEmoji: '🐠',
+			borderStyle: 'dashed'
+		}
+	},
+	{
+		id: 'candy',
+		name: '糖果',
+		icon: '🍬',
+		colors: {
+			primary: '#e84393',
+			secondary: '#fd79a8',
+			accent: '#a29bfe',
+			background: '#ffeaa7',
+			border: '#e84393'
+		},
+		decorations: {
+			headerEmoji: '🍭',
+			borderStyle: 'solid'
+		}
+	},
+	{
+		id: 'dinosaur',
+		name: '恐龙',
+		icon: '🦖',
+		colors: {
+			primary: '#00b894',
+			secondary: '#55efc4',
+			accent: '#fdcb6e',
+			background: '#f0fff0',
+			border: '#00b894'
+		},
+		decorations: {
+			headerEmoji: '🦕',
+			borderStyle: 'dotted'
+		}
 	}
 ];
 

@@ -83,6 +83,7 @@
 		<div class="header-links">
 			<a href="/practice" class="practice-link">🎯 在线练习</a>
 			<a href="/wrong-book" class="wrong-book-link">📕 错题本</a>
+			<a href="/favorites" class="favorites-link">⭐ 收藏题库</a>
 		</div>
 	</header>
 
@@ -184,10 +185,12 @@
 		gap: 1rem;
 		justify-content: center;
 		margin-top: 0.75rem;
+		flex-wrap: wrap;
 	}
 
 	.practice-link,
-	.wrong-book-link {
+	.wrong-book-link,
+	.favorites-link {
 		display: inline-block;
 		padding: 0.5rem 1.25rem;
 		background: rgba(255, 255, 255, 0.25);
@@ -199,7 +202,8 @@
 	}
 
 	.practice-link:hover,
-	.wrong-book-link:hover {
+	.wrong-book-link:hover,
+	.favorites-link:hover {
 		background: rgba(255, 255, 255, 0.4);
 	}
 

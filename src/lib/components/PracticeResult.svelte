@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { AnyProblem, Problem, MakeTargetProblem, ChainProblem, CompareProblem, RemainderProblem, CompareSymbol } from '$lib/types';
 	import { OP_SYMBOLS } from '$lib/types';
+	import { addFavorite, isFavorited } from '$lib/services/favorites';
 
 	interface AnswerRecord {
 		problem: AnyProblem;
@@ -12,7 +13,7 @@
 	interface Props {
 		total: number;
 		correct: number;
-		timeSpent: number; // 秒
+		timeSpent: number;
 		records: AnswerRecord[];
 		onRestart: () => void;
 		onBackHome: () => void;
@@ -21,10 +22,12 @@
 	let { total, correct, timeSpent, records, onRestart, onBackHome }: Props = $props();
 
 	let accuracy = $derived(total > 0 ? Math.round((correct / total) * 100) : 0);
+	let avgTime = $derived(total > 0 ? Math.round(timeSpent / total) : 0);
 
 	function formatTime(s: number): string {
 		const mins = Math.floor(s / 60);
 		const secs = s % 60;
+		if (mins === 0) return `${secs}秒`;
 		return `${mins}分${secs}秒`;
 	}
 
@@ -92,27 +95,27 @@
 	}
 
 	function formatAnswer(answer: number | CompareSymbol | string, problem: AnyProblem): string {
-		// 如果答案是字符串，直接返回（格式如：商: 1, 余数: 3）
 		if (typeof answer === 'string') {
 			return answer;
 		}
 
-		// 如果是数字，根据题目类型处理
 		if ('type' in problem && problem.type === 'remainder') {
 			const p = problem as any;
-			// 对于有余数除法，根据填空位置显示
 			if (p.blank === 'quotient') {
 				return `商: ${answer}`;
 			} else if (p.blank === 'remainder') {
 				return `余数: ${answer}`;
 			} else {
-				// both - 但这是旧数据，无法确定是商还是余数
 				return `${answer} (商或余数)`;
 			}
 		}
 
-		// 普通题目，直接返回数字
 		return String(answer);
+	}
+
+	function handleFavorite(problem: AnyProblem, e: Event) {
+		e.stopPropagation();
+		addFavorite(problem);
 	}
 </script>
 
@@ -129,8 +132,12 @@
 			<span class="value">{correct}/{total}</span>
 		</div>
 		<div class="stat">
-			<span class="label">用时</span>
+			<span class="label">总用时</span>
 			<span class="value">{formatTime(timeSpent)}</span>
+		</div>
+		<div class="stat">
+			<span class="label">平均用时</span>
+			<span class="value">{formatTime(avgTime)}/题</span>
 		</div>
 	</div>
 	<div class="details">
@@ -142,6 +149,9 @@
 						<span class="index">{idx + 1}.</span>
 						<span class="problem">{formatProblem(record.problem)}</span>
 						<span class="status">{record.isCorrect ? '✓' : '✗'}</span>
+						<button class="favorite-btn" onclick={(e) => handleFavorite(record.problem, e)} title="收藏此题">
+							{isFavorited(record.problem) ? '⭐' : '☆'}
+						</button>
 					</div>
 					{#if !record.isCorrect}
 						<div class="answers">
@@ -266,6 +276,17 @@
 		font-size: 1.5rem;
 		font-weight: bold;
 	}
+	.favorite-btn {
+		background: none;
+		border: none;
+		font-size: 1.25rem;
+		cursor: pointer;
+		padding: 0.25rem;
+		transition: transform 0.2s;
+	}
+	.favorite-btn:hover {
+		transform: scale(1.2);
+	}
 	.record-card.correct .status {
 		color: #51cf66;
 	}
@@ -305,8 +326,13 @@
 		}
 
 		.stats {
-			gap: 2rem;
+			gap: 1.5rem;
 			margin-bottom: 1.5rem;
+			flex-wrap: wrap;
+		}
+
+		.stat {
+			flex: 1 1 40%;
 		}
 
 		.label {
@@ -323,6 +349,7 @@
 		}
 
 		button {
+			flex: 1 1 40%;
 			padding: 0.625rem 1.5rem;
 			font-size: 1.1rem;
 		}
@@ -350,7 +377,7 @@
 		}
 
 		.answers {
-			gap: 1.5rem;
+			gap: 1rem;
 			font-size: 0.85rem;
 			flex-direction: column;
 		}
@@ -372,10 +399,13 @@
 		}
 
 		.stats {
-			gap: 1.5rem;
+			gap: 1rem;
 			margin-bottom: 1.25rem;
 			flex-direction: column;
-			align-items: center;
+		}
+
+		.stat {
+			flex: 1 1 100%;
 		}
 
 		.label {
@@ -433,7 +463,7 @@
 		}
 
 		.answers {
-			gap: 1rem;
+			gap: 0.75rem;
 			font-size: 0.8rem;
 			flex-direction: column;
 		}
