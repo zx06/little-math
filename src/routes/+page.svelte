@@ -12,6 +12,7 @@
 	import { zh } from '$lib/i18n/zh';
 	import { trackVisit } from '$lib/services/statistics';
 	import { loadConfig, saveConfig } from '$lib/services/configStorage';
+	import { exportElementToPdf } from '$lib/services/pdfExport';
 	import { browser } from '$app/environment';
 
 	let config: ExerciseConfig = $state(browser ? loadConfig() : { ...DEFAULT_CONFIG });
@@ -67,6 +68,16 @@
 		}, 100);
 	}
 
+	async function handleExportPdf() {
+		if (problems.length === 0) {
+			handleGenerate();
+		}
+		const element = document.getElementById('exercise-sheet');
+		if (element && browser) {
+			await exportElementToPdf('exercise-sheet');
+		}
+	}
+
 	trackVisit();
 	handleGenerate();
 </script>
@@ -93,6 +104,7 @@
 				bind:config
 				onGenerate={handleGenerate}
 				onPrint={handlePrint}
+				onExportPdf={handleExportPdf}
 				theme={theme}
 				onThemeChange={handleThemeChange}
 			/>
@@ -100,23 +112,11 @@
 
 		<section class="preview">
 			{#if problems.length > 0}
-				<ExerciseSheet
-					{problems}
-					countPerPage={config.countPerPage}
-					showAnswers={false}
-					isVertical={config.isVertical}
-					columns={config.columns}
-					customTitle={config.customTitle}
-					studentName={config.studentName}
-					showDate={config.showDate}
-					theme={theme}
-				/>
-
-				{#if config.showAnswerPage}
+				<div id="exercise-sheet">
 					<ExerciseSheet
 						{problems}
 						countPerPage={config.countPerPage}
-						showAnswers={true}
+						showAnswers={false}
 						isVertical={config.isVertical}
 						columns={config.columns}
 						customTitle={config.customTitle}
@@ -124,7 +124,21 @@
 						showDate={config.showDate}
 						theme={theme}
 					/>
-				{/if}
+
+					{#if config.showAnswerPage}
+						<ExerciseSheet
+							{problems}
+							countPerPage={config.countPerPage}
+							showAnswers={true}
+							isVertical={config.isVertical}
+							columns={config.columns}
+							customTitle={config.customTitle}
+							studentName={config.studentName}
+							showDate={config.showDate}
+							theme={theme}
+						/>
+					{/if}
+				</div>
 			{:else}
 				<div class="empty-state">
 					<p>点击「生成」按钮创建练习题</p>
@@ -227,6 +241,10 @@
 		border-radius: 8px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		overflow: hidden;
+	}
+
+	#exercise-sheet {
+		overflow: visible;
 	}
 
 	.empty-state {
