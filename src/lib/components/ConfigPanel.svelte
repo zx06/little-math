@@ -17,11 +17,13 @@
 		config: ExerciseConfig;
 		onGenerate: () => void;
 		onPrint: () => void;
+		onExportPdf?: () => void;
+		isExportingPdf?: boolean;
 		theme: string;
 		onThemeChange: (theme: string) => void;
 	}
 
-	let { config = $bindable(), onGenerate, onPrint, theme, onThemeChange }: Props = $props();
+	let { config = $bindable(), onGenerate, onPrint, onExportPdf, isExportingPdf = false, theme, onThemeChange }: Props = $props();
 
 	const t = zh.config;
 
@@ -285,6 +287,11 @@
 		<button class="btn secondary" onclick={onPrint} use:track={{ type: 'print' }}>
 			{zh.buttons.print}
 		</button>
+		{#if onExportPdf}
+			<button class="btn pdf" onclick={onExportPdf} disabled={isExportingPdf} use:track={{ type: 'pdf' }}>
+				{isExportingPdf ? '导出中...' : zh.buttons.exportPdf}
+			</button>
+		{/if}
 	</div>
 </div>
 
@@ -422,6 +429,24 @@
 	.btn.secondary:hover {
 		transform: translateY(-1px);
 		box-shadow: 0 4px 12px rgba(81, 207, 102, 0.5);
+	}
+
+	.btn.pdf {
+		background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+		color: white;
+		font-weight: 600;
+		box-shadow: 0 3px 8px rgba(231, 76, 60, 0.4);
+	}
+
+	.btn.pdf:hover:not(:disabled) {
+		transform: translateY(-1px);
+		box-shadow: 0 4px 12px rgba(231, 76, 60, 0.5);
+	}
+
+	.btn:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+		transform: none;
 	}
 
 	/* 移动端适配 */

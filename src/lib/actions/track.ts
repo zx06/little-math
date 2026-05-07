@@ -2,7 +2,7 @@ import type { Action } from 'svelte/action';
 import type { Operation } from '$lib/types';
 import { trackGeneration, trackPrint } from '$lib/services/statistics';
 
-type TrackType = 'generation' | 'print';
+type TrackType = 'generation' | 'print' | 'pdf';
 type TrackOptions = {
 	type: TrackType;
 	data?: {
