@@ -1,5 +1,3 @@
-import html2pdf from 'html2pdf.js';
-
 export interface PdfExportOptions {
 	filename?: string;
 	margin?: number;
@@ -20,6 +18,7 @@ export async function exportToPdf(
 	element: HTMLElement,
 	options: PdfExportOptions = {}
 ): Promise<void> {
+	const html2pdf = (await import('html2pdf.js')).default;
 	const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
 
 	await html2pdf()

@@ -7,7 +7,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
+		"prepare": "svelte-kit sync 2>/dev/null || true",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
@@ -30,6 +30,8 @@
 		"overrides": {
 			"cookie": "^0.7.0",
 			"tar": "^7.5.4"
-		}
+		},
+		"onlyBuiltDependencies": ["esbuild", "core-js"],
+		"neverBuiltDependencies": []
 	}
 }
