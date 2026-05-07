@@ -31,7 +31,6 @@
 			"cookie": "^0.7.0",
 			"tar": "^7.5.4"
 		},
-		"onlyBuiltDependencies": ["esbuild", "core-js"],
-		"neverBuiltDependencies": []
+		"onlyBuiltDependencies": ["esbuild", "core-js"]
 	}
 }
