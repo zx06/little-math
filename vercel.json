@@ -1,5 +1,9 @@
 {
-  "buildCommand": "pnpm build",
   "framework": "sveltekit",
-  "installCommand": "pnpm install"
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "outputDirectory": ".svelte-kit/output",
+  "env": {
+    "ENABLE_EXPERIMENTAL_COREPACK": "1"
+  }
 }
