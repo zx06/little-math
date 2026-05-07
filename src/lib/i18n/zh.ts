@@ -48,6 +48,7 @@ export const zh = {
 	buttons: {
 		generate: '生成',
 		print: '打印',
+		exportPdf: '导出PDF',
 		savePreset: '保存当前配置'
 	},
 

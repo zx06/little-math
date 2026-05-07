@@ -18,6 +18,7 @@
 	let config: ExerciseConfig = $state(browser ? loadConfig() : { ...DEFAULT_CONFIG });
 	let problems: (Problem | MakeTargetProblem | ChainProblem | CompareProblem | RemainderProblem)[] = $state([]);
 	let theme = $state('default');
+	let isExportingPdf = $state(false);
 
 	function handleThemeChange(newTheme: string) {
 		theme = newTheme;
@@ -73,8 +74,16 @@
 			handleGenerate();
 		}
 		const element = document.getElementById('exercise-sheet');
-		if (element && browser) {
-			await exportElementToPdf('exercise-sheet');
+		if (!element || !browser) return;
+
+		isExportingPdf = true;
+		try {
+			await exportElementToPdf(element);
+		} catch (error) {
+			console.error('PDF导出失败:', error);
+			alert('PDF导出失败，请重试');
+		} finally {
+			isExportingPdf = false;
 		}
 	}
 
@@ -105,6 +114,7 @@
 				onGenerate={handleGenerate}
 				onPrint={handlePrint}
 				onExportPdf={handleExportPdf}
+				isExportingPdf={isExportingPdf}
 				theme={theme}
 				onThemeChange={handleThemeChange}
 			/>

@@ -8,34 +8,29 @@ export interface PdfExportOptions {
 	jsPDF?: { unit: 'mm' | 'pt' | 'in'; format: string | [number, number]; orientation: 'portrait' | 'landscape' };
 }
 
+const DEFAULT_OPTIONS: PdfExportOptions = {
+	filename: `数学练习_${new Date().toISOString().slice(0, 10)}.pdf`,
+	margin: 5,
+	image: { type: 'jpeg', quality: 0.98 },
+	html2canvas: { scale: 2, useCORS: true },
+	jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+};
+
 export async function exportToPdf(
 	element: HTMLElement,
 	options: PdfExportOptions = {}
 ): Promise<void> {
-	const defaultOptions = {
-		filename: `数学练习_${new Date().toISOString().slice(0, 10)}.pdf`,
-		margin: 5,
-		image: { type: 'jpeg' as const, quality: 0.98 },
-		html2canvas: { scale: 2, useCORS: true },
-		jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const }
-	};
-
-	const mergedOptions = { ...defaultOptions, ...options };
+	const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
 
 	await html2pdf()
-		.set(mergedOptions as any)
+		.set(mergedOptions)
 		.from(element)
 		.save();
 }
 
 export async function exportElementToPdf(
-	elementId: string,
+	element: HTMLElement,
 	options: PdfExportOptions = {}
 ): Promise<void> {
-	const element = document.getElementById(elementId);
-	if (!element) {
-		console.error(`Element with id "${elementId}" not found`);
-		return;
-	}
 	await exportToPdf(element, options);
 }
