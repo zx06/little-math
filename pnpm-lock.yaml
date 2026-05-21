@@ -4,33 +4,29 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  cookie: ^0.7.0
-  tar: ^7.5.4
-
 importers:
 
   .:
     dependencies:
       '@vercel/analytics':
         specifier: ^1.6.1
-        version: 1.6.1(@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(svelte@5.55.5)
+        version: 1.6.1(@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(svelte@5.55.5)
       '@vercel/speed-insights':
         specifier: ^1.3.1
-        version: 1.3.1(@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(svelte@5.55.5)
+        version: 1.3.1(@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(svelte@5.55.5)
       html2pdf.js:
         specifier: ^0.14.0
         version: 0.14.0
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^7.0.0
-        version: 7.0.1(@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))
+        version: 7.0.1(@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))
       '@sveltejs/adapter-vercel':
         specifier: ^6.3.2
-        version: 6.3.3(@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(rollup@4.55.1)
+        version: 6.3.3(@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(rollup@4.55.1)
       '@sveltejs/kit':
-        specifier: ^2.57.1
-        version: 2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
+        specifier: ^2.60.1
+        version: 2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^6.2.1
         version: 6.2.4(svelte@5.55.5)(vite@7.3.2)
@@ -436,66 +432,79 @@ packages:
     resolution: {integrity: sha512-Rn3n+FUk2J5VWx+ywrG/HGPTD9jXNbicRtTM11e/uorplArnXZYsVifnPPqNNP5BsO3roI4n8332ukpY/zN7rQ==}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.55.1':
     resolution: {integrity: sha512-grPNWydeKtc1aEdrJDWk4opD7nFtQbMmV7769hiAaYyUKCT1faPRm2av8CX1YJsZ4TLAZcg9gTR1KvEzoLjXkg==}
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.55.1':
     resolution: {integrity: sha512-a59mwd1k6x8tXKcUxSyISiquLwB5pX+fJW9TkWU46lCqD/GRDe9uDN31jrMmVP3feI3mhAdvcCClhV8V5MhJFQ==}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.55.1':
     resolution: {integrity: sha512-puS1MEgWX5GsHSoiAsF0TYrpomdvkaXm0CofIMG5uVkP6IBV+ZO9xhC5YEN49nsgYo1DuuMquF9+7EDBVYu4uA==}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-loong64-gnu@4.55.1':
     resolution: {integrity: sha512-r3Wv40in+lTsULSb6nnoudVbARdOwb2u5fpeoOAZjFLznp6tDU8kd+GTHmJoqZ9lt6/Sys33KdIHUaQihFcu7g==}
     cpu: [loong64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-loong64-musl@4.55.1':
     resolution: {integrity: sha512-MR8c0+UxAlB22Fq4R+aQSPBayvYa3+9DrwG/i1TKQXFYEaoW3B5b/rkSRIypcZDdWjWnpcvxbNaAJDcSbJU3Lw==}
     cpu: [loong64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-ppc64-gnu@4.55.1':
     resolution: {integrity: sha512-3KhoECe1BRlSYpMTeVrD4sh2Pw2xgt4jzNSZIIPLFEsnQn9gAnZagW9+VqDqAHgm1Xc77LzJOo2LdigS5qZ+gw==}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-ppc64-musl@4.55.1':
     resolution: {integrity: sha512-ziR1OuZx0vdYZZ30vueNZTg73alF59DicYrPViG0NEgDVN8/Jl87zkAPu4u6VjZST2llgEUjaiNl9JM6HH1Vdw==}
     cpu: [ppc64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-riscv64-gnu@4.55.1':
     resolution: {integrity: sha512-uW0Y12ih2XJRERZ4jAfKamTyIHVMPQnTZcQjme2HMVDAHY4amf5u414OqNYC+x+LzRdRcnIG1YodLrrtA8xsxw==}
     cpu: [riscv64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-musl@4.55.1':
     resolution: {integrity: sha512-u9yZ0jUkOED1BFrqu3BwMQoixvGHGZ+JhJNkNKY/hyoEgOwlqKb62qu+7UjbPSHYjiVy8kKJHvXKv5coH4wDeg==}
     cpu: [riscv64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-s390x-gnu@4.55.1':
     resolution: {integrity: sha512-/0PenBCmqM4ZUd0190j7J0UsQ/1nsi735iPRakO8iPciE7BQ495Y6msPzaOmvx0/pn+eJVVlZrNrSh4WSYLxNg==}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.55.1':
     resolution: {integrity: sha512-a8G4wiQxQG2BAvo+gU6XrReRRqj+pLS2NGXKm8io19goR+K8lw269eTrPkSdDTALwMmJp4th2Uh0D8J9bEV1vg==}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.55.1':
     resolution: {integrity: sha512-bD+zjpFrMpP/hqkfEcnjXWHMw5BIghGisOKPj+2NaNDuVT+8Ds4mPf3XcPHuat1tz89WRL+1wbcxKY3WSbiT7w==}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-openbsd-x64@4.55.1':
     resolution: {integrity: sha512-eLXw0dOiqE4QmvikfQ6yjgkg/xDM+MdU9YJuP4ySTibXU0oAvnEWXt7UDJmD4UkYialMfOGFPJnIHSe/kdzPxg==}
@@ -530,6 +539,11 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
+  '@sveltejs/acorn-typescript@1.0.10':
+    resolution: {integrity: sha512-4WfKk68eTih+MiJD4fSbxN7E8kVBmTMPWHUPYjvl2N0rMs53YLTT8/YjKU5Dtnz5LqDjl7LEw4U7lXR2W3J5WA==}
+    peerDependencies:
+      acorn: ^8.9.0
+
   '@sveltejs/acorn-typescript@1.0.9':
     resolution: {integrity: sha512-lVJX6qEgs/4DOcRTpo56tmKzVPtoWAaVbL4hfO7t7NVwl9AAXzQR6cihesW1BmNMPl+bK6dreu2sOKBP2Q9CIA==}
     peerDependencies:
@@ -546,8 +560,8 @@ packages:
     peerDependencies:
       '@sveltejs/kit': ^2.4.0
 
-  '@sveltejs/kit@2.57.1':
-    resolution: {integrity: sha512-VRdSbB96cI1EnRh09CqmnQqP/YJvET5buj8S6k7CxaJqBJD4bw4fRKDjcarAj/eX9k2eHifQfDH8NtOh+ZxxPw==}
+  '@sveltejs/kit@2.60.1':
+    resolution: {integrity: sha512-mQjlkNo+rJvpln7V2IGY2j99BqhcFbS4UN0AQNKNYfhBAFZTuCDAdW3a1sgf330mvtNvsBXn3HpAhcmvdJTcIQ==}
     engines: {node: '>=18.13'}
     hasBin: true
     peerDependencies:
@@ -710,8 +724,8 @@ packages:
     resolution: {integrity: sha512-5IKcdX0nnYavi6G7TtOhwkYzyjfJlatbjMjuLSfE2kYT5pMDOilZ4OvMhi637CcDICTmz3wARPoyhqyX1Y+XvA==}
     engines: {node: ^14.18.0 || >=16.10.0}
 
-  cookie@0.7.2:
-    resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
+  cookie@0.6.0:
+    resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
     engines: {node: '>= 0.6'}
 
   core-js@3.49.0:
@@ -739,6 +753,9 @@ packages:
 
   devalue@5.7.1:
     resolution: {integrity: sha512-MUbZ586EgQqdRnC4yDrlod3BEdyvE4TapGYHMW2CiaW+KkkFmWEFqBUaLltEZCGi0iFXCEjRF0OjF0DV2QHjOA==}
+
+  devalue@5.8.1:
+    resolution: {integrity: sha512-4CXDYRBGqN+57wVJkuXBYmpAVUSg3L6JAQa/DFqm238G73E1wuyc/JhGQJzN7vUf/CMphYau2zXbfWzDR5aTEw==}
 
   dompurify@3.4.2:
     resolution: {integrity: sha512-lHeS9SA/IKeIFFyYciHBr2n0v1VMPlSj843HdLOwjb2OxNwdq9Xykxqhk+FE42MzAdHvInbAolSE4mhahPpjXA==}
@@ -1335,17 +1352,21 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
+  '@sveltejs/acorn-typescript@1.0.10(acorn@8.16.0)':
+    dependencies:
+      acorn: 8.16.0
+
   '@sveltejs/acorn-typescript@1.0.9(acorn@8.16.0)':
     dependencies:
       acorn: 8.16.0
 
-  '@sveltejs/adapter-auto@7.0.1(@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))':
+  '@sveltejs/adapter-auto@7.0.1(@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))':
     dependencies:
-      '@sveltejs/kit': 2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
+      '@sveltejs/kit': 2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
 
-  '@sveltejs/adapter-vercel@6.3.3(@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(rollup@4.55.1)':
+  '@sveltejs/adapter-vercel@6.3.3(@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(rollup@4.55.1)':
     dependencies:
-      '@sveltejs/kit': 2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
+      '@sveltejs/kit': 2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
       '@vercel/nft': 1.5.0(rollup@4.55.1)
       esbuild: 0.25.12
     transitivePeerDependencies:
@@ -1353,15 +1374,15 @@ snapshots:
       - rollup
       - supports-color
 
-  '@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)':
+  '@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)':
     dependencies:
       '@standard-schema/spec': 1.1.0
-      '@sveltejs/acorn-typescript': 1.0.9(acorn@8.16.0)
+      '@sveltejs/acorn-typescript': 1.0.10(acorn@8.16.0)
       '@sveltejs/vite-plugin-svelte': 6.2.4(svelte@5.55.5)(vite@7.3.2)
       '@types/cookie': 0.6.0
       acorn: 8.16.0
-      cookie: 0.7.2
-      devalue: 5.7.1
+      cookie: 0.6.0
+      devalue: 5.8.1
       esm-env: 1.2.2
       kleur: 4.1.5
       magic-string: 0.30.21
@@ -1401,9 +1422,9 @@ snapshots:
 
   '@types/trusted-types@2.0.7': {}
 
-  '@vercel/analytics@1.6.1(@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(svelte@5.55.5)':
+  '@vercel/analytics@1.6.1(@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(svelte@5.55.5)':
     optionalDependencies:
-      '@sveltejs/kit': 2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
+      '@sveltejs/kit': 2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
       svelte: 5.55.5
 
   '@vercel/nft@1.5.0(rollup@4.55.1)':
@@ -1425,9 +1446,9 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vercel/speed-insights@1.3.1(@sveltejs/kit@2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(svelte@5.55.5)':
+  '@vercel/speed-insights@1.3.1(@sveltejs/kit@2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2))(svelte@5.55.5)':
     optionalDependencies:
-      '@sveltejs/kit': 2.57.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
+      '@sveltejs/kit': 2.60.1(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.55.5)(vite@7.3.2))(svelte@5.55.5)(typescript@5.9.3)(vite@7.3.2)
       svelte: 5.55.5
 
   abbrev@3.0.1: {}
@@ -1480,7 +1501,7 @@ snapshots:
 
   consola@3.4.2: {}
 
-  cookie@0.7.2: {}
+  cookie@0.6.0: {}
 
   core-js@3.49.0:
     optional: true
@@ -1498,6 +1519,8 @@ snapshots:
   detect-libc@2.1.2: {}
 
   devalue@5.7.1: {}
+
+  devalue@5.8.1: {}
 
   dompurify@3.4.2:
     optionalDependencies:
