@@ -80,3 +80,25 @@ export async function expectNoOverflow(page: Page) {
 	}
 	return res;
 }
+
+
+/** 仅勾选给定运算（首页 ConfigPanel） */
+export async function setOpsOnly(page: Page, ops: Array<'add' | 'sub' | 'mul' | 'div'>) {
+	const all = ['add', 'sub', 'mul', 'div'] as const;
+	for (const op of all) {
+		const box = page.getByTestId(`op-${op}`);
+		if (ops.includes(op)) await box.check();
+		else await box.uncheck();
+	}
+}
+
+/** 读首页所有题目文本 */
+export async function problemTexts(page: Page): Promise<string[]> {
+	return page.locator('[data-testid=sheet-page] [data-testid=problem]').allInnerTexts();
+}
+
+/** 等预览稳定（无 stale banner） */
+export async function waitPreviewSettled(page: Page) {
+	await expect(page.getByTestId('stale-banner')).toHaveCount(0, { timeout: 3000 });
+	await page.waitForTimeout(200);
+}

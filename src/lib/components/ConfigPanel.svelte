@@ -123,7 +123,7 @@
 		<div class="config-section">
 			<label>
 				{t.remainderBlank}
-				<select bind:value={config.remainderBlank}>
+				<select bind:value={config.remainderBlank} data-testid="remainder-blank">
 					<option value="quotient">{t.remainderBlankQuotient}</option>
 					<option value="remainder">{t.remainderBlankRemainder}</option>
 					<option value="both">{t.remainderBlankBoth}</option>
@@ -148,7 +148,7 @@
 		<div class="config-section">
 			<label>
 				{t.makeTargetValue}
-				<select bind:value={config.makeTargetValue}>
+				<select bind:value={config.makeTargetValue} data-testid="make-target">
 					{#each MAKE_TARGET_OPTIONS as value}
 						<option {value}>凑 {value}</option>
 					{/each}
@@ -305,7 +305,7 @@
 	<div class="config-section">
 		<label>
 			{t.customTitle}
-			<input type="text" bind:value={config.customTitle} placeholder={autoTitle} maxlength="30" />
+			<input type="text" bind:value={config.customTitle} placeholder={autoTitle} maxlength="30" data-testid="custom-title" />
 		</label>
 		<p class="hint">留空则按设置自动生成：{autoTitle}</p>
 	</div>
@@ -313,20 +313,20 @@
 	<div class="config-section">
 		<label>
 			{t.studentName}
-			<input type="text" bind:value={config.studentName} placeholder="请输入姓名" />
+			<input type="text" bind:value={config.studentName} placeholder="请输入姓名" data-testid="student-name" />
 		</label>
 	</div>
 
 	<div class="config-section">
 		<label class="checkbox-label">
-			<input type="checkbox" bind:checked={config.showDate} />
+			<input type="checkbox" bind:checked={config.showDate} data-testid="show-date" />
 			{t.showDate}
 		</label>
 	</div>
 
 	<div class="config-section">
 		<label class="checkbox-label">
-			<input type="checkbox" bind:checked={config.showAnswerPage} data-testid="answer-page" />
+			<input type="checkbox" bind:checked={config.showAnswerPage} data-testid="show-answer-page" />
 			{t.showAnswerPage}
 		</label>
 	</div>

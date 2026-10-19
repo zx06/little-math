@@ -44,12 +44,12 @@
 </script>
 
 <div class="stats-container">
-	<button class="stats-toggle" onclick={() => (showPanel = !showPanel)} title="查看统计">
+	<button class="stats-toggle" onclick={() => (showPanel = !showPanel)} title="查看统计" data-testid="stats-toggle">
 		<span>📊</span>
 	</button>
 
 	{#if showPanel}
-		<div class="stats-panel">
+		<div class="stats-panel" data-testid="stats-panel">
 			<div class="stats-header">
 				<h3>📊 使用统计</h3>
 				<button class="close-btn" onclick={() => (showPanel = false)}>×</button>
@@ -59,15 +59,15 @@
 				<div class="stats-section">
 					<h4>总览</h4>
 					<div class="stats-grid">
-						<div class="stat-card">
+						<div class="stat-card" data-testid="stat-visits">
 							<div class="stat-value">{stats.totalVisits}</div>
 							<div class="stat-label">访问次数</div>
 						</div>
-						<div class="stat-card">
+						<div class="stat-card" data-testid="stat-generations">
 							<div class="stat-value">{stats.totalGenerations}</div>
 							<div class="stat-label">生成次数</div>
 						</div>
-						<div class="stat-card">
+						<div class="stat-card" data-testid="stat-prints">
 							<div class="stat-value">{stats.totalPrints}</div>
 							<div class="stat-label">打印次数</div>
 						</div>
@@ -117,9 +117,9 @@
 			<div class="stats-footer">
 				<div class="last-visit">最后访问: {stats.lastVisitDate || '无'}</div>
 				<div class="footer-buttons">
-					<button class="export-btn" onclick={downloadStatisticsJSON}>导出 JSON</button>
-					<button class="export-btn" onclick={downloadStatisticsCSV}>导出 CSV</button>
-					<button class="reset-btn" onclick={handleReset}>重置统计</button>
+					<button class="export-btn" onclick={downloadStatisticsJSON} data-testid="stats-export-json">导出 JSON</button>
+					<button class="export-btn" onclick={downloadStatisticsCSV} data-testid="stats-export-csv">导出 CSV</button>
+					<button class="reset-btn" onclick={handleReset} data-testid="stats-reset">重置统计</button>
 				</div>
 			</div>
 		</div>

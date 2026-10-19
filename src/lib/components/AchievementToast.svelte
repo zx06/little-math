@@ -22,7 +22,7 @@
 </script>
 
 {#if visible}
-	<div class="achievement-toast">
+	<div class="achievement-toast" data-testid="achievement-toast">
 		<div class="toast-content">
 			<div class="icon">{achievement.icon}</div>
 			<div class="text">

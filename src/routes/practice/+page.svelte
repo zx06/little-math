@@ -203,7 +203,7 @@
 					<div class="progress" data-testid="practice-progress">第 {currentIndex + 1} / {problems.length} 题</div>
 					<div class="top-bar-right">
 						{#if showSpeechButton}
-							<button class="speech-btn" onclick={() => speakProblem(problems[currentIndex])} title="读题">
+							<button class="speech-btn" onclick={() => speakProblem(problems[currentIndex])} title="读题" data-testid="speech-btn">
 								🔊
 							</button>
 						{/if}

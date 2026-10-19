@@ -77,13 +77,13 @@
 	}
 </script>
 
-<div class="result">
+<div class="result" data-testid="practice-result">
 	<div class="emoji">{getEmoji()}</div>
 	<h2>练习完成！</h2>
 	<div class="stats">
 		<div class="stat">
 			<span class="label">正确率</span>
-			<span class="value">{accuracy}%</span>
+			<span class="value" data-testid="result-accuracy">{accuracy}%</span>
 		</div>
 		<div class="stat">
 			<span class="label">正确/总题</span>

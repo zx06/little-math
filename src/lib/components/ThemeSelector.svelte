@@ -23,6 +23,7 @@
 				class:selected={selectedTheme === theme.id}
 				onclick={() => handleSelect(theme.id)}
 				title={theme.name}
+				data-testid={`theme-${theme.id}`}
 			>
 				<span class="theme-icon">{theme.icon}</span>
 				<span class="theme-name">{theme.name}</span>

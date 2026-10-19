@@ -50,7 +50,7 @@
 
 	<main>
 		{#if records.length === 0}
-			<div class="empty">
+			<div class="empty" data-testid="favorites-empty">
 				<div class="emoji">📚</div>
 				<p>还没有收藏的题目</p>
 				<p class="hint">在练习结果页面点击星星图标收藏题目</p>
@@ -66,11 +66,11 @@
 
 			<div class="records-list">
 				{#each records.slice().reverse() as record}
-					<div class="record-card">
+					<div class="record-card" data-testid="favorite-record">
 						<div class="problem">{formatProblem(record.problem)}</div>
 						<div class="meta">
 							<span class="date">{formatDate(record.timestamp)}</span>
-							<button class="remove-btn" onclick={() => handleRemove(record.timestamp)}>删除</button>
+							<button class="remove-btn" data-testid="favorite-remove" onclick={() => handleRemove(record.timestamp)}>删除</button>
 						</div>
 					</div>
 				{/each}

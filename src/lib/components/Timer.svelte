@@ -28,9 +28,9 @@
 	}
 </script>
 
-<div class="timer">
+<div class="timer" data-testid="timer">
 	<span class="icon">⏱️</span>
-	<span class="time">{formatTime(seconds)}</span>
+	<span class="time" data-testid="timer-value">{formatTime(seconds)}</span>
 </div>
 
 <style>

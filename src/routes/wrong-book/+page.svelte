@@ -78,14 +78,14 @@
 
 	<main>
 		{#if records.length === 0}
-			<div class="empty">
+			<div class="empty" data-testid="wrong-book-empty">
 				<div class="emoji">🎉</div>
 				<p>太棒了！没有错题记录</p>
 				<a href="/practice" class="start-link">去练习</a>
 			</div>
 		{:else}
 			<div class="actions">
-				<button class="review-btn" onclick={handleReview}>
+				<button class="review-btn" onclick={handleReview} data-testid="wrong-book-review">
 					📝 错题复习 ({records.length}题)
 				</button>
 				<button class="clear-btn" onclick={handleClear}>🗑️ 清空</button>
@@ -93,7 +93,7 @@
 
 			<div class="records-list">
 				{#each records.slice().reverse() as record}
-					<div class="record-card">
+					<div class="record-card" data-testid="wrong-record">
 						<div class="problem">{formatProblem(record.problem)}</div>
 						<div class="answers">
 							<span class="wrong">你的答案: {formatAnswer(record.wrongAnswer, record.problem)}</span>
