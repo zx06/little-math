@@ -36,3 +36,14 @@
 		padding-bottom: var(--mobile-fab-pad, 0);
 	}
 }
+
+@media print {
+	html[data-mobile-feature='1'] .app {
+		padding-bottom: 0 !important;
+	}
+
+	html[data-mobile-feature='1'] .ui-page,
+	html[data-mobile-feature='1'] main.practice-main {
+		padding-bottom: 0 !important;
+	}
+}
