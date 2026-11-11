@@ -56,10 +56,22 @@ export async function setConfig(page: Page, config: Record<string, unknown>) {
 }
 
 export async function openHome(page: Page) {
-	await page.goto('/');
-	await page.waitForSelector('[data-testid=sheet-page]');
+	const vp = page.viewportSize();
+	const mobile = vp != null && vp.width <= 768;
+	await page.goto(mobile ? '/print' : '/');
+	if (mobile) {
+		await page.getByTestId('generate').waitFor({ state: 'visible' });
+	} else {
+		await page.waitForSelector('[data-testid=sheet-page]');
+	}
 	await page.evaluate(() => document.fonts.ready);
 	await page.waitForTimeout(150);
+}
+
+/** 移动端 Hub 首页 */
+export async function openMobileHub(page: Page) {
+	await page.goto('/hub');
+	await expect(page.getByTestId('mobile-hub')).toBeVisible();
 }
 
 /** 检查每一页内容都没有溢出 A4、每道题都没有挤出自己的格子 */

@@ -701,7 +701,7 @@
 	/* 移动端适配 */
 	@media (max-width: 768px) {
 		.config-panel {
-			padding: 1rem;
+			padding: 1rem 1rem 11rem;
 			border-radius: 12px;
 		}
 
@@ -718,8 +718,17 @@
 		}
 
 		.button-group {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: calc(76px + env(safe-area-inset-bottom));
+			z-index: 90;
 			flex-direction: column;
-			gap: 0.5rem;
+			gap: 0.45rem;
+			padding: 0.5rem 1rem 0.35rem;
+			background: color-mix(in srgb, var(--c-surface) 94%, var(--ui-bg) 6%);
+			border-top: 1px dashed var(--c-border);
+			box-shadow: 0 -6px 20px rgba(40, 20, 30, 0.06);
 		}
 
 	}

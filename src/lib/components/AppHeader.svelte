@@ -1,20 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { zh } from '#lib/i18n/zh.js';
+	import { NAV_ITEMS, pathIsActive } from '#lib/config/navigation.js';
 	import UiThemeSwitcher from '#lib/components/UiThemeSwitcher.svelte';
 
-	/** 全站统一页头：品牌 + 大按钮导航 + 风格切换（打印时隐藏） */
-	const NAV = [
-		{ href: '/', icon: '📝', label: '打印题', testid: 'nav-home' },
-		{ href: '/practice', icon: '🎯', label: '做题', testid: 'nav-practice' },
-		{ href: '/wrong-book', icon: '📕', label: '错题本', testid: 'nav-wrong-book' },
-		{ href: '/favorites', icon: '⭐', label: '收藏', testid: 'nav-favorites' }
-	];
-
 	const path = $derived(page.url?.pathname ?? '/');
-	function active(href: string): boolean {
-		return href === '/' ? path === '/' : path.startsWith(href);
-	}
 </script>
 
 <header class="app-header no-print" data-testid="app-header">
@@ -24,13 +14,19 @@
 			<span class="ah-name">{zh.appName}</span>
 		</a>
 		<nav class="ah-nav" aria-label="主导航">
-			{#each NAV as item}
-				<a href={item.href} class="ah-link" class:on={active(item.href)} aria-current={active(item.href) ? 'page' : undefined} data-testid={item.testid}>
+			{#each NAV_ITEMS as item}
+				<a
+					href={item.href}
+					class="ah-link"
+					class:on={pathIsActive(path, item.href)}
+					aria-current={pathIsActive(path, item.href) ? 'page' : undefined}
+					data-testid={item.testid}
+				>
 					<span class="ah-icon" aria-hidden="true">{item.icon}</span>{item.label}
 				</a>
 			{/each}
 		</nav>
-		<UiThemeSwitcher />
+		<UiThemeSwitcher layout="desktop" />
 	</div>
 </header>
 
@@ -49,8 +45,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: 0.75rem 1.25rem;
+		flex-wrap: nowrap;
+		gap: 0.75rem 1rem;
 	}
 	.ah-brand {
 		display: inline-flex;
@@ -64,14 +60,18 @@
 		letter-spacing: var(--h-title-ls);
 		text-shadow: var(--h-title-shadow);
 		white-space: nowrap;
+		flex-shrink: 0;
 	}
 	.ah-brand::after {
 		content: var(--h-title-after);
 	}
 	.ah-nav {
 		display: flex;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 		gap: 0.5rem;
+		flex: 1 1 auto;
+		justify-content: center;
+		min-width: 0;
 	}
 	.ah-link {
 		display: inline-flex;
@@ -105,39 +105,27 @@
 		outline-offset: 2px;
 	}
 
-	@media (max-width: 1100px) {
-		.ah-inner {
-			justify-content: center;
+	@media (max-width: 768px) {
+		.app-header {
+			display: none !important;
 		}
 	}
-	@media (max-width: 640px) {
+
+	@media (min-width: 769px) and (max-width: 1100px) {
 		.ah-inner {
-			padding: 0.6rem 0.75rem 0.75rem;
+			padding-left: 1rem;
+			padding-right: 1rem;
 			gap: 0.5rem;
 		}
 		.ah-brand {
-			font-size: 1.4rem;
-			min-height: 44px;
-		}
-		.ah-nav {
-			display: grid;
-			grid-template-columns: repeat(4, minmax(0, 1fr));
-			width: 100%;
-			gap: 0.35rem;
+			font-size: 1.45rem;
 		}
 		.ah-link {
-			flex-direction: column;
-			justify-content: center;
-			gap: 0.1rem;
-			min-height: 56px;
-			padding: 0.25rem 0.2rem;
-			font-size: 0.85rem;
-			border-radius: 14px;
-		}
-		.ah-icon {
-			font-size: 1.3rem;
+			padding: 0 0.75rem;
+			font-size: 0.98rem;
 		}
 	}
+
 	@media print {
 		.app-header {
 			display: none !important;
