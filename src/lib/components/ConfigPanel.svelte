@@ -721,11 +721,11 @@
 			position: fixed;
 			left: 0;
 			right: 0;
-			bottom: calc(76px + env(safe-area-inset-bottom));
+			bottom: 0;
 			z-index: 90;
 			flex-direction: column;
 			gap: 0.45rem;
-			padding: 0.5rem 1rem 0.35rem;
+			padding: 0.5rem 1rem calc(0.35rem + env(safe-area-inset-bottom, 0px));
 			background: color-mix(in srgb, var(--c-surface) 94%, var(--ui-bg) 6%);
 			border-top: 1px dashed var(--c-border);
 			box-shadow: 0 -6px 20px rgba(40, 20, 30, 0.06);
@@ -735,7 +735,7 @@
 
 	@media (max-width: 480px) {
 		.config-panel {
-			padding: 0.75rem;
+			padding: 0.75rem 0.75rem 11rem;
 			border-radius: 8px;
 		}
 
