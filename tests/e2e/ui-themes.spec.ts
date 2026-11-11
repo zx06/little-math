@@ -239,7 +239,7 @@ for (const theme of ['a', 'b', 'c'] as const) {
 /* ---------- 三套主题版式完全一样：只换颜色，不换大小 / 位置 / 字号 / 对齐 ---------- */
 
 const LAYOUT_TARGETS: Record<string, string[]> = {
-	home: [
+	home_desktop: [
 		'[data-testid=app-header]',
 		'.ah-brand',
 		'.ah-name',
@@ -263,10 +263,36 @@ const LAYOUT_TARGETS: Record<string, string[]> = {
 		'[data-testid=app-footer]',
 		'[data-testid=app-footer] a'
 	],
-	practice: [
+	home_mobile: [
+		'[data-testid=mobile-app-header]',
+		'[data-testid=mobile-nav-back]',
+		'[data-testid=mobile-theme-open]',
+		'main h2',
+		'[data-testid=preset]',
+		'[data-testid=mode]',
+		'[data-testid=student-name]',
+		'[data-testid=generate]',
+		'[data-testid=print]',
+		'[data-testid=export-pdf]',
+		'[data-testid=app-footer]',
+		'[data-testid=app-footer] a'
+	],
+	practice_desktop: [
 		'[data-testid=app-header]',
 		'.ah-name',
 		'.ah-link',
+		'[data-testid=practice-area]',
+		'[data-testid=practice-progress]',
+		'.problem-display',
+		'[data-testid=answer-display]',
+		'[data-testid=numeric-keypad]',
+		'[data-testid=keypad-digit-1]',
+		'[data-testid=keypad-submit]',
+		'[data-testid=practice-exit]',
+		'[data-testid=app-footer]'
+	],
+	practice_mobile: [
+		'[data-testid=mobile-app-header]',
 		'[data-testid=practice-area]',
 		'[data-testid=practice-progress]',
 		'.problem-display',
@@ -333,7 +359,8 @@ for (const [device, viewport] of [
 			studentName: '小明'
 		});
 		await openHome(page);
-		await expectSameAcrossThemes(page, LAYOUT_TARGETS.home, `${device} 首页`);
+		const homeKey = device === '手机' ? 'home_mobile' : 'home_desktop';
+		await expectSameAcrossThemes(page, LAYOUT_TARGETS[homeKey], `${device} 首页`);
 	});
 
 	test(`三套主题版式一致（${device}）：口算练习题目和输入框`, async ({ page }) => {
@@ -342,7 +369,8 @@ for (const [device, viewport] of [
 		await page.goto('/practice');
 		await page.getByTestId('practice-start').click();
 		await page.waitForSelector('[data-testid=practice-area]');
-		await expectSameAcrossThemes(page, LAYOUT_TARGETS.practice, `${device} 练习`);
+		const practiceKey = device === '手机' ? 'practice_mobile' : 'practice_desktop';
+		await expectSameAcrossThemes(page, LAYOUT_TARGETS[practiceKey], `${device} 练习`);
 	});
 }
 

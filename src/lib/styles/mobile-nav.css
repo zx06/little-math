@@ -1,0 +1,29 @@
+/* 移动端 Hub 导航：功能页底部留白，避免被统计 FAB 挡住 */
+@media (max-width: 768px) {
+	html[data-mobile-feature='1'] .ui-page-title,
+	html[data-mobile-feature='1'] .list-page > .sub:first-of-type {
+		display: none;
+	}
+
+	html[data-mobile-feature='1'] body {
+		--mobile-fab-pad: calc(72px + env(safe-area-inset-bottom));
+	}
+
+	html[data-mobile-hub='1'] .app-footer,
+	html[data-mobile-feature='1'] .app-footer {
+		padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+	}
+
+	html[data-mobile-feature='1'] .stats-container {
+		bottom: calc(14px + env(safe-area-inset-bottom));
+	}
+
+	html[data-mobile-feature='1'] .app {
+		padding-bottom: var(--mobile-fab-pad, 0);
+	}
+
+	html[data-mobile-feature='1'] .ui-page,
+	html[data-mobile-feature='1'] main.practice-main {
+		padding-bottom: var(--mobile-fab-pad, 0);
+	}
+}

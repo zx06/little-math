@@ -223,7 +223,7 @@ test.describe('F. 成就', () => {
 test.describe('G. 移动端响应式', () => {
 	test('G1 viewport 390×844 首页与练习控件可见', async ({ page }) => {
 		await page.setViewportSize({ width: 390, height: 844 });
-		await page.goto('/');
+		await page.goto('/print');
 		await expect(page.getByTestId('generate')).toBeVisible();
 		await expect(page.getByTestId('print')).toBeVisible();
 		const overflowX = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
