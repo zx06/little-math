@@ -305,33 +305,6 @@
 		font-size: 1.15rem;
 	}
 
-	@media print {
-		.app {
-			min-height: auto !important;
-		}
-
-		.no-print {
-			display: none !important;
-		}
-
-		.app-main {
-			display: block !important;
-			padding: 0 !important;
-			margin: 0 !important;
-			max-width: none !important;
-		}
-
-		.preview {
-			display: block !important;
-			box-shadow: none !important;
-			border: none !important;
-			border-radius: 0 !important;
-			overflow: visible !important;
-			padding: 0 !important;
-			background: none !important;
-		}
-	}
-
 	@media (max-width: 768px) {
 		.app-main {
 			grid-template-columns: 1fr;
@@ -343,9 +316,22 @@
 			position: static;
 		}
 
-		/* 手机先露出出题区；卷面仍在 DOM 里供打印 / 导出 */
+		/* 手机首屏只露出出题区：预览移到屏外但保持 A4 版式，供 html2canvas / 打印排版 */
 		.preview {
-			display: none;
+			position: fixed;
+			left: -20000px;
+			top: 0;
+			width: max-content;
+			max-width: none;
+			overflow: visible;
+			pointer-events: none;
+			opacity: 0;
+			z-index: -1;
+			padding: 0;
+			margin: 0;
+			background: transparent;
+			border: none;
+			box-shadow: none;
 		}
 
 		.empty-state {
@@ -355,6 +341,61 @@
 		.app {
 			min-height: auto;
 		}
+	}
+
+	@media print {
+		.app {
+			min-height: auto !important;
+			padding-bottom: 0 !important;
+		}
+
+		.no-print {
+			display: none !important;
+		}
+
+		.app-main {
+			display: block !important;
+			padding: 0 !important;
+			margin: 0 !important;
+			max-width: none !important;
+			gap: 0 !important;
+		}
+
+		.preview {
+			display: block !important;
+			position: static !important;
+			left: auto !important;
+			width: auto !important;
+			max-width: none !important;
+			clip-path: none !important;
+			opacity: 1 !important;
+			z-index: auto !important;
+			pointer-events: auto !important;
+			box-shadow: none !important;
+			border: none !important;
+			border-radius: 0 !important;
+			overflow: visible !important;
+			padding: 0 !important;
+			background: none !important;
+		}
+	}
+
+	/* PDF 导出：html2canvas 需要卷面参与正常 A4 排版（仍叠在页面底层，用户看不到） */
+	:global(html[data-capture='pdf']) .print-worksheet .preview {
+		position: fixed !important;
+		left: 0 !important;
+		top: 0 !important;
+		display: block !important;
+		width: max-content !important;
+		max-width: none !important;
+		clip-path: none !important;
+		opacity: 1 !important;
+		z-index: -9999 !important;
+		pointer-events: none !important;
+		box-shadow: none !important;
+		border: none !important;
+		padding: 0 !important;
+		background: #fff !important;
 	}
 
 	@media (max-width: 480px) {

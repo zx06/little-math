@@ -26,6 +26,9 @@ export interface PdfExportOptions {
 
 const A4_W = 210;
 const A4_H = 297;
+/** 与 ExerciseSheet `.page` 的 210mm × 297mm 在 96dpi 下一致 */
+const A4_W_PX = Math.round((A4_W / 25.4) * 96);
+const A4_H_PX = Math.round((A4_H / 25.4) * 96);
 
 export async function exportPagesToPdf(
 	root: HTMLElement,
@@ -42,22 +45,26 @@ export async function exportPagesToPdf(
 	// 必须加在原文档上：html2canvas 在 onclone 之前就读取了 ::before / ::after 等伪元素样式。
 	const html = document.documentElement;
 	const hadInk = html.hasAttribute('data-ink');
+	const hadCapture = html.hasAttribute('data-capture');
 	if (!hadInk) html.setAttribute('data-ink', 'print');
+	if (!hadCapture) html.setAttribute('data-capture', 'pdf');
 	try {
 		// 等自托管字体（Nunito / 快乐体）下载完再截图，避免用后备字体
 		await document.fonts?.ready;
 		for (let i = 0; i < pages.length; i++) {
 			const page = pages[i];
+			const w = page.offsetWidth > 0 ? page.offsetWidth : A4_W_PX;
+			const h = page.offsetHeight > 0 ? page.offsetHeight : A4_H_PX;
 			const canvas = await html2canvas(page, {
 				scale,
 				useCORS: true,
 				backgroundColor: '#ffffff',
 				logging: false,
-				width: page.offsetWidth,
-				height: page.offsetHeight,
+				width: w,
+				height: h,
 				scrollX: 0,
 				scrollY: 0,
-				windowWidth: Math.max(document.documentElement.clientWidth, page.offsetWidth + 40),
+				windowWidth: Math.max(document.documentElement.clientWidth, w + 40),
 				onclone: (doc, el) => {
 					// 克隆出来的页面去掉预览用的阴影和外边距
 					el.style.margin = '0';
@@ -70,6 +77,7 @@ export async function exportPagesToPdf(
 			pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, A4_W, A4_H, undefined, 'FAST');
 		}
 	} finally {
+		if (!hadCapture) html.removeAttribute('data-capture');
 		if (!hadInk) html.removeAttribute('data-ink');
 	}
 
