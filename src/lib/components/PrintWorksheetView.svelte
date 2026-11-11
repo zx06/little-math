@@ -172,7 +172,7 @@
 	<meta name="description" content={zh.appSubtitle} />
 </svelte:head>
 
-<div class="app">
+<div class="app print-worksheet">
 	<main class="app-main">
 		<aside class="sidebar no-print">
 			<ConfigPanel

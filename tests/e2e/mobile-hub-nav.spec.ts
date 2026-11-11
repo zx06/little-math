@@ -53,6 +53,30 @@ test.describe('移动端 Hub 导航（方案二）', () => {
 		await page.goto('/print');
 		await expect(page.getByTestId('stats-toggle')).toBeVisible();
 	});
+
+	test('打印页：操作栏贴底，末项可滚到操作栏上方', async ({ page }) => {
+		await setConfig(page, {});
+		await page.goto('/print');
+		await expect(page.locator('html')).toHaveAttribute('data-mobile-feature', '1');
+
+		const bar = page.locator('.button-group');
+		await expect(bar).toBeVisible();
+		const barBox = await bar.boundingBox();
+		expect(barBox).toBeTruthy();
+		const vp = page.viewportSize()!;
+		expect(barBox!.y + barBox!.height).toBeGreaterThan(vp.height - 4);
+		expect(barBox!.y + barBox!.height).toBeLessThan(vp.height + 2);
+
+		const answerOpt = page.getByText('加一张答案', { exact: true });
+		await answerOpt.scrollIntoViewIfNeeded();
+		const optBox = await answerOpt.boundingBox();
+		expect(optBox).toBeTruthy();
+		expect(optBox!.y + optBox!.height).toBeLessThanOrEqual(barBox!.y + 1);
+
+		const statsBox = await page.getByTestId('stats-toggle').boundingBox();
+		expect(statsBox).toBeTruthy();
+		expect(statsBox!.y + statsBox!.height).toBeLessThanOrEqual(barBox!.y + 2);
+	});
 });
 
 test.describe('桌面顶栏中等宽度', () => {

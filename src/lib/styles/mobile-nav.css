@@ -18,6 +18,15 @@
 		bottom: calc(14px + env(safe-area-inset-bottom));
 	}
 
+	/* 打印页：底部固定操作栏（无 Tab），页脚与 📊 须在其上方 */
+	html[data-mobile-feature='1']:has(.print-worksheet) .app-footer {
+		padding-bottom: calc(11rem + env(safe-area-inset-bottom, 0px));
+	}
+
+	html[data-mobile-feature='1']:has(.print-worksheet) .stats-container {
+		bottom: calc(9.5rem + env(safe-area-inset-bottom, 0px));
+	}
+
 	html[data-mobile-feature='1'] .app {
 		padding-bottom: var(--mobile-fab-pad, 0);
 	}
